@@ -1,0 +1,38 @@
+[
+    {
+        "model": "Vote",
+        "data": {
+            "id": 1,
+            "score": 1,
+            "idea_id": 1,
+            "user_id": 1
+        }
+    },
+    {
+        "model": "Vote",
+        "data": {
+            "id": 2,
+            "score": 1,
+            "idea_id": 2,
+            "user_id": 1
+        }
+    },
+    {
+        "model": "Vote",
+        "data": {
+            "id": 3,
+            "score": -1,
+            "idea_id": 1,
+            "user_id": 2
+        }
+    },
+    {
+        "model": "Vote",
+        "data": {
+            "id": 4,
+            "score": 1,
+            "idea_id": 3,
+            "user_id": 2
+        }
+    }
+]

@@ -1,0 +1,29 @@
+<h2>{{title}}</h2>
+
+<form action="{{action}}?_method={{method}}" method="POST">
+    <div class="form-group">
+        <label for="firstname">* First Name:</label>
+        <input type="text" id="firstname" name="firstname" aria-required="true" value="{{#if user}}{{user.firstname}}{{else}} {{/if}}"/>
+    </div>
+    <div class="form-group">
+        <label for="lastname">* Last Name:</label>
+        <input type="text" id="lastname" name="lastname" aria-required="true" value="{{#if user}}{{user.lastname}}{{else}} {{/if}}"/>
+    </div>
+    <div class="form-group">
+        <label for="netid">* NetID:</label>
+        <input type="text" id="netid" name="netid" aria-required="true" value="{{#if user}}{{user.netid}}{{else}} {{/if}}"/>
+    </div>
+    <div class="form-group">
+        <label for=admin">Admin:</label>
+        <input type="checkbox" id="admin" name="admin" value="true"{{#if user}}{{checked user.admin}}{{/if}}/>
+    </div>
+    <div class="form-group">
+        <label for="commentMod">Comment Moderator:</label>
+        <input type="checkbox" id="commentMod" name="commentMod" value="true" {{#if user}}{{checked user.commentMod}}{{/if}}/>
+    </div>
+    <div class="form-group">
+        <label for="ideaMod">Idea Moderator:</label>
+        <input type="checkbox" id="ideaMod" name="ideaMod" value="true" {{#if user}}{{checked user.ideaMod}}{{/if}}/>
+    </div>
+    <button type="submit">Save</button>
+</form>

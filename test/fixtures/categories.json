@@ -1,0 +1,23 @@
+[
+    {
+        "model": "Category",
+        "data": {
+            "id": 1,
+            "name": "Gato"
+        }
+    },
+    {
+        "model": "Category",
+        "data": {
+            "id": 2,
+            "name": "TRACS"
+        }
+    },
+    {
+        "model": "Category",
+        "data": {
+            "id": 3,
+            "name": "Signup"
+        }
+    }
+]

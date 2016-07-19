@@ -1,0 +1,38 @@
+[
+    {
+        "model": "Idea",
+        "data": {
+            "id": 1,
+            "title": "Add Music to Gato",
+            "text": "I would like to be able to play a song when people visit my page.",
+            "views": "8",
+            "creator": 4,
+            "stage_id": 3,
+            "categories": [1]
+        }
+    },
+    {
+        "model": "Idea",
+        "data": {
+            "id": 2,
+            "title": "Create TRACS accounts for pets",
+            "text": "I would to list my dog as my co-instructor.",
+            "views": "36",
+            "creator": 3,
+            "stage_id": 1,
+            "categories": [2]
+        }
+    },
+    {
+        "model": "Idea",
+        "data": {
+            "id": 3,
+            "title": "Another Gato Idea",
+            "text": "I'm not feeling very creative right now.  Any new feature would be great.",
+            "views": "17",
+            "creator": 1,
+            "stage_id": 2,
+            "categories": [1,3]
+        }
+    }
+]

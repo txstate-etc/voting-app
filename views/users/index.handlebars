@@ -1,0 +1,30 @@
+<a class="btn btn-default" href="/users/new">Add User</a>
+<br>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>NetID</th>
+            <th>Admin?</th>
+            <th>Comment Moderator?</th>
+            <th>Idea Moderator?</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{#each users}}
+        <tr>
+            <td>{{this.firstname}}</td>
+            <td>{{this.lastname}}</td>
+            <td>{{this.netid}}</td>
+            <td>{{this.admin}}</td>
+            <td>{{this.commentMod}}</td>
+            <td>{{this.ideaMod}}</td>
+            <td><a href="/users/{{this.id}}/edit">Edit</a></td>
+            <td><a href="/users/{{this.id}}" class="resource-delete" data-resource-type="users" data-resource-id="{{this.id}}">Delete</a></td>
+        <tr>
+    {{/each}}
+    </tbody>
+</table>

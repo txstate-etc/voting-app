@@ -1,0 +1,25 @@
+{{#if notice}}
+    <span class="success-notice">{{notice}}</span>
+    <br>
+{{/if}}
+
+<a class="btn btn-default" href="/categories/new">Add Category</a>
+<br>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Categories</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{#each categories}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td><a href="/categories/{{this.id}}/edit">Edit</a></td>
+            <td><a href="/categories/{{this.id}}" class="resource-delete" data-resource-type="categories" data-resource-id="{{this.id}}">Delete</a></td>
+        <tr>
+    {{/each}}
+    </tbody>
+</table>

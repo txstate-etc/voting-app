@@ -1,0 +1,23 @@
+[
+    {
+        "model": "Stage",
+        "data": {
+            "id": 1,
+            "name": "Accepted"
+        }
+    },
+    {
+        "model": "Stage",
+        "data": {
+            "id": 2,
+            "name": "In Progress"
+        }
+    },
+    {
+        "model": "Stage",
+        "data": {
+            "id": 3,
+            "name": "Declined"
+        }
+    }
+]

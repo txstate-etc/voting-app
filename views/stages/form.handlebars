@@ -1,0 +1,9 @@
+<h2>{{title}}</h2>
+
+<form class="form-inline" action="{{action}}?_method={{method}}" method="POST">
+    <div class="form-group">
+        <label for "stage_name">* Name:</label>
+        <input type="text" id="name" name="name" aria-required="true" value="{{#if stage}}{{stage.name}}{{else}} {{/if}}"/>
+    </div>
+    <button type="submit">Save</button>
+</form>

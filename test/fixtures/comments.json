@@ -1,0 +1,42 @@
+[
+    {
+        "model": "Comment",
+        "data": {
+            "id": 1,
+            "approved": 1,
+            "text": "A comment on this idea.",
+            "user_id": 1,
+            "idea_id": 1
+        }
+    },
+    {
+        "model": "Comment",
+        "data": {
+            "id": 2,
+            "approved": 1,
+            "text": "I am also commenting on this idea.",
+            "user_id": 2,
+            "idea_id": 1
+        }
+    },
+    {
+        "model": "Comment",
+        "data": {
+            "id": 3,
+            "approved": 1,
+            "text": "I am adding another comment that is not a reply to your comment.",
+            "user_id": 1,
+            "idea_id": 1
+        }
+    },
+    {
+        "model": "Comment",
+        "data": {
+            "id": 4,
+            "approved": 0,
+            "text": "This is a comment on a different idea",
+            "user_id": 1,
+            "idea_id": 2
+        }
+    }
+]
