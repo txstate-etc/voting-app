@@ -21,3 +21,5 @@ npm run dev
 # Run API tests
 npm test
 ```
+
+> The server will be available at localhost:3000
