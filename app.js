@@ -31,6 +31,7 @@ var users = require('./routes/users');
 var ideas = require('./routes/ideas');
 var votes = require('./routes/votes');
 var comments = require('./routes/comments');
+var replies = require('./routes/replies');
 
 var app = express(); 
 
@@ -96,6 +97,8 @@ app.use('/users', users);
 app.use('/ideas', ideas);
 app.use('/votes', votes);
 app.use('/comments', comments);
+app.use('/replies', replies);
+
 
 //this could be used to make it a single-page application.
 //There would need to be some client side routing
@@ -115,7 +118,6 @@ app.get('*', function(req, res) {
         res.status(404).send('Not found') 
       }
     });
-    
 });
 
 // catch 404 and forward to error handler

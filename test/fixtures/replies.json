@@ -1,0 +1,42 @@
+[
+    {
+        "model": "Reply",
+        "data": {
+            "id": 1,
+            "approved": 1,
+            "text": "Replying to a comment.  Great idea!",
+            "user_id": 2,
+            "comment_id": 1
+        }
+    },
+    {
+        "model": "Reply",
+        "data": {
+            "id": 2,
+            "approved": 0,
+            "text": "I have an opinion about this too.",
+            "user_id": 3,
+            "comment_id": 1
+        }
+    },
+    {
+        "model": "Reply",
+        "data": {
+            "id": 3,
+            "approved": 1,
+            "text": "I am replying to my own comment.  It happens on FB all the time.",
+            "user_id": 1,
+            "comment_id": 4
+        }
+    },
+    {
+        "model": "Reply",
+        "data": {
+            "id": 4,
+            "approved": 0,
+            "text": "This reply is not approved yet.",
+            "user_id": 3,
+            "comment_id": 2
+        }
+    }
+]
