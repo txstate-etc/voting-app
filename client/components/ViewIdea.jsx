@@ -1,6 +1,7 @@
 import React from 'react';
 import VoteBlockContainer from './VoteBlockContainer.jsx';
 import {testing} from '../IconGenerator';
+import CommentList from './CommentList.jsx';
 
 class ViewIdea extends React.Component {
 
@@ -8,6 +9,7 @@ class ViewIdea extends React.Component {
         testing();
         var idea = this.props.idea;
         var date = new Date(idea.created_at);
+        console.log("*** " + idea.comments)
         return(
             <div className="container">
                 <h2>{idea.title}</h2>
@@ -32,35 +34,9 @@ class ViewIdea extends React.Component {
                 <div><textarea rows="5" className="form-control" placeholder="Tell us what you think"></textarea></div>
                 <button className="btn btn-warning pull-right">Save Comment</button>
                 <div className="comment-list">
-                    <ul className="media-list">
-                        <li className="media">
-                            <div className="media-left">
-                              <i className="fa fa-meh-o comment-icon"></i>
-                            </div>
-                            <div className="media-body">
-                              <div className="media-heading">
-                                <p className="comment-title">Staff</p>
-                                <span className="comment-age">3 hours ago</span>
-                              </div>
-                              <p>This comment is hard-coded, not pulled from the DB</p>
-                              <a href="#" className="pull-right">Reply</a>
-                            </div>
-                        </li>
-                        <li className="media">
-                            <div className="media-left">
-                              <i className="fa fa-meh-o comment-icon"></i>
-                            </div>
-                            <div className="media-body">
-                              <div className="media-heading">
-                                <p className="comment-title">Student</p>
-                                <span className="comment-age">5 hours ago</span>
-                              </div>
-                              <p>This comment is hard-coded, not pulled from the DB</p>
-                              <a href="#" className="pull-right">Reply</a>
-                            </div>
-                        </li>
-                    </ul>
-
+                    <CommentList
+                        commentList = {idea.comments}
+                    />
                 </div>
             </div> 
         );
