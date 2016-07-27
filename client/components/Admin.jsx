@@ -11,8 +11,14 @@ class Admin extends React.Component {
     render(){
         return(
             <div className="container">
-                <SearchBar/>
-                <AddNew />
+                <div className="row top-buffer">
+                  <div className="col-md-6">
+                    <SearchBar/>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="pull-right"><AddNew /></div>
+                  </div>
+                </div>
                 <br/>
                 <SelectCategoryContainer
                   updateCategory = {this.props.updateCategory}
