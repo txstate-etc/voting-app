@@ -111,7 +111,10 @@ router.param('idea_id', function(req, res, next, value){
         where: {
             id: req.params.idea_id
         },
-        include: [{model: models.user},{model: models.stage},{model: models.category}]
+        include: [{model: models.user},
+                  {model: models.stage},
+                  {model: models.category},
+                  {model: models.comment, include: [{model: models.reply}]}]
     }).then(function(idea){
         if(idea){
             req.idea = idea;
