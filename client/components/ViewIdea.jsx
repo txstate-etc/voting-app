@@ -3,7 +3,7 @@ import VoteBlockContainer from './VoteBlockContainer.jsx';
 import {testing} from '../IconGenerator';
 
 class ViewIdea extends React.Component {
-    
+
     render(){
         testing();
         var idea = this.props.idea;
@@ -14,7 +14,7 @@ class ViewIdea extends React.Component {
                 <span>
                     {date.toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})} |
                     <i className="fa fa-eye"></i> {idea.views} views | 
-                    <a href="#"><i className="fa fa-comment-o"></i> XXX comments</a>
+                    <i className="fa fa-comment-o"></i> {this.props.commentCount} comments
                 </span>
                 <div className="media idea idea-detail">
                     <div className="media-left media-top">

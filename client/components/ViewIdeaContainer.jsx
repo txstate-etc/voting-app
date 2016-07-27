@@ -11,6 +11,17 @@ class ViewIdeaContainer extends React.Component {
         };
     }
 
+    sumComments(comments){
+        if(comments){
+            var sum=comments.length;
+            for(var i=0; i<comments.length; i++){
+                sum += comments[i].replies.length;
+            }
+            return sum;
+        }
+        return 0;
+    }
+
     componentDidMount() {
         var _this = this;
         var url = "/ideas/" + this.props.params.ideaId
@@ -25,6 +36,7 @@ class ViewIdeaContainer extends React.Component {
             <ViewIdea
                 idea = {this.state.idea}
                 id = {this.props.params.ideaId}
+                commentCount = {this.sumComments(this.state.idea.comments)}
             />
         );
     }
