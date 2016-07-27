@@ -6,8 +6,11 @@ router.route('/')
     .get(function(req, res, next) {
         var filter = {};
         if(req.query.user) filter.user_id = req.query.user;
-        if(req.query.idea) filter.idea_id = req.query.idea;  
-        models.comment.findAll({ where: filter })
+        if(req.query.idea) filter.idea_id = req.query.idea;
+        var findOptions = {};
+        findOptions.where = filter;
+        if(req.query.replies && req.query.replies == "true") findOptions.include = [{model: models.reply}];
+        models.comment.findAll(findOptions)
         .then(function(comments){
             res.format({
                 'text/html': function(){
