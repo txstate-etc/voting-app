@@ -1,6 +1,7 @@
 import React from 'react';
 import ReplyList from './ReplyList.jsx';
 import AddReplyContainer from './AddReplyContainer.jsx';
+import {dateToElapsedTime} from '../util'
 
 class Comment extends React.Component {
 
@@ -28,10 +29,11 @@ class Comment extends React.Component {
         var replyBlock = "";
         if(this.state.repliesOpen){
           var replyList  = "";
-          if(comment.replies.length > 0) replyList = <ReplyList replies={comment.replies} />;
-          replyBlock = [replyList,<AddReplyContainer comment_id={comment.id}/>];
+          if(comment.replies.length > 0) replyList = <ReplyList key="replylist" replies={comment.replies} />;
+          replyBlock = [replyList,<AddReplyContainer key={comment.id} comment_id={comment.id}/>];
         }
 
+        var timeElapsed = dateToElapsedTime(comment.updated_at);
 
         return(
             <li className="media">
@@ -41,7 +43,7 @@ class Comment extends React.Component {
                 <div className="media-body">
                   <div className="media-heading">
                     <p className="comment-title">Student|Faculty|Staff</p>
-                    <span className="comment-age">3 hours ago</span>
+                    <span className="comment-age">{timeElapsed}</span>
                   </div>
                   <p>{comment.text}</p>
                   <div className="pull-right">
