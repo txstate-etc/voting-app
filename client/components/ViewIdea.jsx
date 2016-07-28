@@ -2,6 +2,7 @@ import React from 'react';
 import VoteBlockContainer from './VoteBlockContainer.jsx';
 import {testing} from '../IconGenerator';
 import CommentList from './CommentList.jsx';
+import AddCommentContainer from './AddCommentContainer.jsx';
 
 class ViewIdea extends React.Component {
 
@@ -31,8 +32,9 @@ class ViewIdea extends React.Component {
                 </div>
                 <hr/>
                 Comments
-                <div><textarea rows="5" className="form-control" placeholder="Tell us what you think"></textarea></div>
-                <button className="btn btn-warning pull-right">Save Comment</button>
+                <AddCommentContainer
+                    ideaID = {this.props.id}
+                />
                 <div className="comment-list">
                     <CommentList
                         commentList = {idea.comments}
