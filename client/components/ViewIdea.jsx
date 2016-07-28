@@ -7,10 +7,9 @@ import AddCommentContainer from './AddCommentContainer.jsx';
 class ViewIdea extends React.Component {
 
     render(){
-        testing();
+        //testing();
         var idea = this.props.idea;
         var date = new Date(idea.created_at);
-        console.log("*** " + idea.comments)
         return(
             <div className="container">
                 <h2>{idea.title}</h2>
