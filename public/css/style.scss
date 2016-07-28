@@ -85,6 +85,13 @@ header{
   .comment-icon{
     font-size: 3rem;
   }
+
+  .reply-link{
+    cursor: pointer;
+    .fa{
+      margin-right: 3px;
+    }
+  }
 }
 
 .top-buffer{
