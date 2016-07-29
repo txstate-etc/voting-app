@@ -21,6 +21,7 @@ class Main extends React.Component {
         <br/>
         <p>{this.props.numIdeas} Result{((this.props.numIdeas == 1) ? "" : "s")}</p>
         <SelectCategoryContainer
+          addAllOption = {true}
           updateCategory = {this.props.updateCategory}
         /> Select Category
         <hr/>

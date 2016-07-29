@@ -12,7 +12,10 @@ class SelectCategoryContainer extends React.Component{
     componentDidMount() {
         var _this = this;
         $.ajax({url: "/categories", dataType: "json", success: function(result){
-            result.unshift({"id": 0, "name": "All"});
+            if(_this.props.addAllOption)
+                result.unshift({"id": 0, "name": "All"});
+            else
+                result.unshift({"id": 0, "name": "- select -"})
             _this.setState({options: result});
         }});
     }
