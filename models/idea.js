@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         Idea.belongsToMany(models.category,{ through: models.categories_ideas});
         Idea.belongsTo(models.user, {foreignKey: 'creator'});
-        Idea.belongsTo(models.stage);
+        Idea.belongsTo(models.stage, {constraints: false});
         Idea.hasMany(models.vote);
         Idea.hasMany(models.comment);
         Idea.hasMany(models.file, {foreignKey: 'owner_id', constraints: false, scope: {owner_type: 'idea'}});
