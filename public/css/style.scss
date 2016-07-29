@@ -48,6 +48,15 @@ header{
 
 .idea{
     margin-top: 2rem !important;
+    .idea-stats{
+      .fa{
+        margin-right: 3px;
+        margin-left: 3px;
+      }
+      .creation-date{
+        margin-left: 3px;
+      }
+    }
 }
 .vote-count-box{
    background: $lavender;

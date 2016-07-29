@@ -29,7 +29,17 @@ router.route('/')
                                {model: models.stage, where: stageFilter, required: stageRequired}, 
                                {model: models.category, through: {where: categoryFilter, attributes:[]},required: categoryRequired}];
         if(req.query.votes && req.query.votes == "true") eagerLoadModels.push({model: models.vote});
-        if(req.query.comments && req.query.comments == "true") eagerLoadModels.push({model: models.comment});
+        if(req.query.comments && req.query.comments == "true") {
+            eagerLoadModels.push({model: models.comment, include: [{model: models.reply}]});
+        }
+        else{
+            //Even if they don't want the comments/replies, they might want the comment count.  This will just return the IDs of 
+            //the comments and replies so they can be counted but there isn't as much unneeded information being returned.
+            //TODO: Return the comment count instead of the comments.  A method to do this is discussed here:
+            //https://github.com/sequelize/sequelize/issues/222  but will multiply the comment count by the number of categories
+            //for ideas in multiple categories.
+            eagerLoadModels.push({model: models.comment, attributes: ['id'], include: [{model: models.reply, attributes: ['id']}]});
+        }
         models.idea.findAll({include: eagerLoadModels})
         .then(function(ideas){
             res.format({

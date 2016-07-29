@@ -1,5 +1,6 @@
 import React from 'react';
 import VoteBlockContainer from './VoteBlockContainer.jsx';
+import {sumCommentsAndReplies} from '../util';
 
 class Idea extends React.Component {
     
@@ -7,6 +8,9 @@ class Idea extends React.Component {
         var idea = this.props.idea;
         var date = new Date(idea.created_at);
         var detailUrl = "/view/" + idea.id;
+
+        var numComments = sumCommentsAndReplies(idea.comments);
+        var commentCountText = (numComments == 1) ? "1 comment" : (numComments + " comments");
         return(
             <div className="media idea">
                 <div className="media-left media-top">
@@ -17,13 +21,13 @@ class Idea extends React.Component {
                 <div className="media-body idea-description">
                     <h4 className="media-heading"><a href={detailUrl}>{idea.title}</a></h4>
                     <p>{idea.text}</p>
-                    <span>
+                    <span className="idea-stats">
                         <i className="fa fa-eye"></i> {idea.views} views | 
-                        <a href="#">
+                        <a href={detailUrl}>
                             <i className="fa fa-comment-o"></i> 
-                            XXX comments
+                            {commentCountText}
                         </a> |
-                        {date.toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})}
+                        <span className="creation-date">{date.toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})}</span>
                     </span>
                 </div>
             </div>

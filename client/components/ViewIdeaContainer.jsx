@@ -1,6 +1,7 @@
 import React from 'react';
 import ViewIdea from './ViewIdea.jsx';
 import $ from 'jquery';
+import {sumCommentsAndReplies} from '../util';
 
 class ViewIdeaContainer extends React.Component {
 
@@ -11,17 +12,6 @@ class ViewIdeaContainer extends React.Component {
                 comments: []
             }
         };
-    }
-
-    sumComments(comments){
-        if(comments){
-            var sum=comments.length;
-            for(var i=0; i<comments.length; i++){
-                sum += comments[i].replies.length;
-            }
-            return sum;
-        }
-        return 0;
     }
 
     componentDidMount() {
@@ -38,7 +28,7 @@ class ViewIdeaContainer extends React.Component {
             <ViewIdea
                 idea = {this.state.idea}
                 id = {this.props.params.ideaId}
-                commentCount = {this.sumComments(this.state.idea.comments)}
+                commentCount = {sumCommentsAndReplies(this.state.idea.comments)}
             />
         );
     }
