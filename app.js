@@ -10,7 +10,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var cas = require('grand_master_cas'); 
+var cas = require('./cas'); 
 
 //for server-side React rendering
 var ReactDOMServer = require('react-dom/server');
@@ -24,6 +24,7 @@ var exphbs  = require('express-handlebars');
 //handlebars helpers
 var helpers = require('./lib/helpers');
 
+var login = require('./routes/login');
 var routes = require('./routes/index');
 var stages = require('./routes/stages');
 var categories = require('./routes/categories');
@@ -81,7 +82,7 @@ cas.configure({
   casHost: "llavero.its.txstate.edu",   
   casPath: "/cas",                
   ssl: true,                        
-  service: "http://localhost:3000", // your site
+  service: "http://localhost:3000/login", // your site
   sessionName: "cas_user",          // the cas user_name will be at req.session.cas_user (this is the default)
   renew: false,                     // true or false, false is the default
   redirectUrl: '/'            // the route that cas.blocker will send to if not authed. Defaults to '/'
@@ -99,25 +100,16 @@ app.use('/votes', votes);
 app.use('/comments', comments);
 app.use('/replies', replies);
 
+app.use('/login', cas.bouncer, login);
+app.use('/logout', function(req, res, next){
+                      res.clearCookie('user');
+                      next();
+                    }, cas.logout);
 
-//this could be used to make it a single-page application.
-//There would need to be some client side routing
+
+//all non-api routes go here
 app.get('*', function(req, res) {
-    match({routes:clientRoutes.default, location: req.url}, (error, redirectLocation, renderProps) => {
-      if (error) {
-        res.status(500).send(error.message)
-      } else if (redirectLocation) {
-        res.redirect(302, redirectLocation.pathname + redirectLocation.search)
-      } else if (renderProps) {
-        // You can also check renderProps.components or renderProps.routes for
-        // your "not found" component or route respectively, and send a 404 as
-        // below, if you're using a catch-all route.
-        var rendered = ReactDOMServer.renderToString(React.createElement(RouterContext, renderProps));
-        res.status(200).render('index', {'app-content': rendered})
-      } else {
-        res.status(404).send('Not found') 
-      }
-    });
+  res.render('index')
 });
 
 // catch 404 and forward to error handler

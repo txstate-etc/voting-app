@@ -1,5 +1,5 @@
 "use strict";
-
+//Do we really need the first and last names?
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define("user", {
     firstname: DataTypes.STRING(),
@@ -15,6 +15,9 @@ module.exports = function(sequelize, DataTypes) {
          User.hasMany(models.file, {foreignKey: 'creator'});
          User.hasMany(models.vote);
          User.hasMany(models.comment);
+       },
+       findByNetId: function(id){
+          return this.find({where: {netid: id}})
        }
     }
   });

@@ -3,6 +3,7 @@ import SearchBar from './SearchBar.jsx';
 import AddNew from './AddNew.jsx';
 import SelectCategoryContainer from './SelectCategoryContainer.jsx';
 import IdeaList from './IdeaList.jsx';
+import {isLoggedIn} from '../auth';
 
 class Main extends React.Component {
 
@@ -15,7 +16,7 @@ class Main extends React.Component {
             <SearchBar/>
           </div>
           <div className="col-md-6">
-            <div className="pull-right"><AddNew /></div>
+            <div className="pull-right">{isLoggedIn() ? <AddNew /> : ""}</div>
           </div>
         </div>
         <br/>

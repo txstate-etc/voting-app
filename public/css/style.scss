@@ -15,6 +15,18 @@ th {
     float: right;
 }
 
+.log-out{
+  font-size: 1.5rem;
+  font-weight: normal;
+}
+
+.admin-link{
+  font-size: 1.5rem;
+  .fa{
+    margin-right: 5px;
+  }
+}
+
 header{
     background: $lavender;
     color: black;

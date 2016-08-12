@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Login from './Login.jsx'; 
 
 class Layout extends React.Component {
     
@@ -7,7 +8,7 @@ class Layout extends React.Component {
         return(
             <div className="app">
                 <header>
-                <a className="btn btn-warning log-in">Log In</a>
+                <Login/>
                 <div className="container">
                     <i className="logo fa fa-check-square-o"></i>
                     <Link to="/" className="app-title">Voting Application</Link>

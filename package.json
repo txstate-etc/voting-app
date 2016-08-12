@@ -27,6 +27,7 @@
     "morgan": "~1.6.1",
     "mysql": "^2.10.2",
     "react": "^15.1.0",
+    "react-cookie": "^0.4.7",
     "react-dom": "^15.1.0",
     "react-router": "^2.5.0",
     "sequelize": "^3.23.2",
