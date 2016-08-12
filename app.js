@@ -70,10 +70,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 //POST with _method=PUT in the query string, it will be treated as a PUT
 app.use(methodOverride('_method'));
 
-/********************************************************************/
-// Set up an Express session, which is required for CASAuthentication. 
+
+// Set up an Express session, which is required for CASAuthentication.
+// Some of the examples get the location of the config file from an environment variable
+var config = require('./config.js');
+var SequelizeStore = require('connect-session-sequelize')(session.Store);
+var db = require("./models").sequelize;
+
 app.use( session({
-    secret            : 'cas hates me',
+    secret            : config.secret,
+    store: new SequelizeStore({
+      db: db
+    }),
     resave            : false,
     saveUninitialized : true  //need to figure out why this option breaks supertest
 }));
@@ -88,8 +96,6 @@ cas.configure({
   redirectUrl: '/'            // the route that cas.blocker will send to if not authed. Defaults to '/'
 });
 
-//app.use(cas.bouncer);
-/********************************************************************/
 
 //routes
 app.use('/stages', stages);
