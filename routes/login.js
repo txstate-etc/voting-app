@@ -18,6 +18,7 @@ router.route('/')
                                 ideaMod: user.ideaMod,
                                 designation: 'student'});
                 res.cookie("user", jsonValue)
+                req.session['user_id'] = user.id;
                 res.redirect('/'); 
             }
             else{
@@ -39,6 +40,7 @@ router.route('/')
                                 ideaMod: user.ideaMod,
                                 designation: 'student'})
                     res.cookie("user", jsonValue)
+                    req.session['user_id'] = user.id;
                     res.redirect('/'); 
                 });
             } 

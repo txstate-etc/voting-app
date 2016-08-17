@@ -1,6 +1,7 @@
 $lavender: #ece6ff;
 $linkColor: #004865;
 $accent: #f0ad4e;
+$dark-accent-complement: darken(complement($accent), 20%);
 
 a{
   color: #00B7FF
@@ -87,6 +88,10 @@ header{
     margin-top: 5px;
     .btn{
         margin: 2px;
+        &.selected{
+          color: $dark-accent-complement;
+          border: 2px solid $dark-accent-complement;
+        }
     }
 }
 

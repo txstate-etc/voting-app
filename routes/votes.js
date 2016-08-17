@@ -3,6 +3,8 @@ var router = express.Router();
 var models = require('../models');
 var Sequelize = require('sequelize');
 
+//A user should only be able to modify or delete a vote if it is their vote. or they are an admin?
+
 router.route('/')
     .get(function(req, res, next) {
       var filter = {};
@@ -22,21 +24,29 @@ router.route('/')
     })
 
     .post(function(req,res,next){
-        models.vote.createOrUpdateVote(req.body.idea_id, req.body.user_id, req.body.score)
-        .then(function(voteCreated){
-            var status = voteCreated ? 201 : 200;
-            res.format({
-                'text/html': function(){
-                   res.status(status).end();
-                },
-                'application/json': function(){
-                    res.status(status).json(voteCreated);
-                }
-            }); 
-        })
-        .catch(function (err) {
-            next(error);
-        });
+        var user_id = req.session["user_id"];
+        if(user_id){
+            models.vote.createOrUpdateVote(req.body.idea_id, user_id, req.body.score)
+            .then(function(voteCreated){
+                var status = voteCreated ? 201 : 200;
+                res.format({
+                    'text/html': function(){
+                       res.status(status).end();
+                    },
+                    'application/json': function(){
+                        res.status(status).json(voteCreated);
+                    }
+                });
+                return null;
+            })
+            .catch(function (err) {
+                next(error);
+            });
+        }
+        else{
+            console.log("user is not logged in")
+            res.status(302).json({message: "Login required"});
+        }
     });
 
 router.param('vote_id', function(req, res, next, value){
@@ -62,6 +72,7 @@ router.param('vote_id', function(req, res, next, value){
             }); 
             
         }
+        return null;
     }).catch(function(error){
         next(error);
     });
@@ -103,12 +114,13 @@ router.route('/:vote_id')
             }).then(function(vote){
                 res.format({
                     'text/html': function(){
-                    res.render('votes/index', {notice: "Vote successfully deleted"});
+                        res.status(200).end()
                     },
                     'application/json': function(){
-                        res.json(vote);
+                        res.status(200).json({message: "vote deleted"});
                     }
                 });
+                return null;
             }).catch(function(error){
                 next(error);
             });

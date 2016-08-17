@@ -12,4 +12,8 @@ function getNetId(){
     return cookie.load('user').netid;
 }
 
-export {isLoggedIn, isAdmin, getNetId};
+function getUserId(){
+    return cookie.load('user').id;
+}
+
+export {isLoggedIn, isAdmin, getNetId, getUserId};
