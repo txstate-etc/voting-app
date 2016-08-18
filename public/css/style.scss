@@ -1,14 +1,28 @@
-$lavender: #ece6ff;
+
+
+$hue: 35;
+$first-color: hsl($hue, 100%, 50%);
+$second-color: complement($first-color);
+
+$first-neutral: mix($second-color, $first-color, 15%);
+$first-neutral-highlight: lighten($first-neutral, 40);
+$first-neutral-shadow: darken($first-neutral, 30);
+
+$second-neutral: mix($first-color, $second-color, 30%);
+$second-neutral-highlight: lighten($second-neutral, 40);
+$second-neutral-shadow: darken($second-neutral, 30);
+
+
+//TODO: Calculate accent color and pick a different link color
 $linkColor: #004865;
 $accent: #f0ad4e;
-$dark-accent-complement: darken(complement($accent), 20%);
 
 a{
   color: #00B7FF
 }
 
 th {
-    background-color: $lavender;
+    background-color: $second-neutral-highlight;
     color: black;
 }
 
@@ -19,24 +33,36 @@ th {
 .log-out{
   font-size: 1.5rem;
   font-weight: normal;
+  color: white;
 }
 
 .admin-link{
+  color: white;
   font-size: 1.5rem;
   .fa{
     margin-right: 5px;
   }
+  &:hover{
+    color: white;
+  }
 }
 
 header{
-    background: $lavender;
+    background: $second-neutral-shadow;
     color: black;
-    font-size: 3rem;
-    font-weight: bold;
-    padding: 15px;
-    .app-title{
-      color: black;
-    }
+    padding: 10px;
+}
+
+.title-bar{
+  background: $second-neutral-highlight;
+  text-align: center;
+  padding: 15px 0px;
+  color: $second-neutral-shadow;
+  font-size: 3.5rem;
+  font-weight: bold;
+  .app-title{
+    color: $second-neutral-shadow;
+  }
 }
 
 .search-bar{
@@ -72,7 +98,7 @@ header{
     }
 }
 .vote-count-box{
-   background: $lavender;
+   background: $second-neutral-highlight;
    line-height: 60px;
    width: 60px;
    text-align:center;
@@ -87,10 +113,18 @@ header{
 .voting-buttons{
     margin-top: 5px;
     .btn{
+        background-color: $second-neutral-highlight;
+        border-color: darken($second-neutral-highlight, 5%);
+        color: #2f486a;
         margin: 2px;
         &.selected{
-          color: $dark-accent-complement;
-          border: 2px solid $dark-accent-complement;
+          background-color: $accent;
+          color: black;
+          border: 2px solid darken($accent, 5%);
+          &:hover{
+            background-color: darken($accent, 10%);
+            border-color: darken(darken($accent, 5%), 12%);
+          }
         }
     }
 }
@@ -122,4 +156,30 @@ header{
 
 .top-buffer{
   margin-top: 2rem;
+}
+
+.new-indicator{
+  border: 2px solid $accent;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.create-date{
+  font-size: 1rem;
+  margin-left: 3px;
+}
+
+.item-list{
+  border-right: 1px solid #ccc;
+  .hidden{
+    visibility: hidden;
+  }
+}
+
+//bootstrap overrides
+.btn-warning{
+  color: black;
+  &:hover{
+    color: black;
+  }
 }

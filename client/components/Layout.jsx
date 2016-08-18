@@ -9,12 +9,12 @@ class Layout extends React.Component {
             <div className="app">
                 <header>
                 <Login/>
-                <div className="container">
+                </header>
+                <div className="title-bar">
                     <i className="logo fa fa-check-square-o"></i>
                     <Link to="/" className="app-title">Voting Application</Link>
                     <br/>
                 </div>
-                </header>
                 {this.props.children}
             </div>
         )
