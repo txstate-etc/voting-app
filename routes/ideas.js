@@ -54,32 +54,39 @@ router.route('/')
     })
 
     .post(function(req, res, next){
-        models.idea.create({firstname: req.body.firstname, 
-                        title: req.body.title, 
-                        text: req.body.text, 
-                        views: 0, 
-                        creator: req.body.creator,  
-                        stage_id: req.body.stage})
-        .then(function(idea){
-            //need to add category too (idea has and belongs to many categories)
-            return idea.addCategories(req.body.category)
-            .then(function(cat){
-                res.format({
-                    'text/html': function(){
-                        res.redirect('/ideas');  //somehow want to redirect to the tab they were on...
-                    },
-                    'application/json': function(){
-                        res.status(201).json(idea);
-                    }
+        var creator = req.session["user_id"];
+        if(creator){
+            models.idea.create({firstname: req.body.firstname, 
+                            title: req.body.title, 
+                            text: req.body.text, 
+                            views: 0, 
+                            creator: creator,  
+                            stage_id: req.body.stage})
+            .then(function(idea){
+                //need to add category too (idea has and belongs to many categories)
+                return idea.addCategories(req.body.category)
+                .then(function(cat){
+                    res.format({
+                        'text/html': function(){
+                            res.redirect('/ideas');  //somehow want to redirect to the tab they were on...
+                        },
+                        'application/json': function(){
+                            res.status(201).json(idea);
+                        }
+                    });
+                })
+                .catch(function(error){
+                    next(error);
                 });
             })
             .catch(function(error){
                 next(error);
             });
-        })
-        .catch(function(error){
-            next(error);
-        });
+        }
+        else{
+            console.log("user is not logged in")
+            res.status(302).json({message: "Login required"});
+        }
     });
 
 /* get NEW idea page */

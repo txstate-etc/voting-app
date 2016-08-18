@@ -1,6 +1,8 @@
 import React from 'react';
 import AddIdea from './AddIdea.jsx';
 import $ from 'jquery';
+import {isLoggedIn,getUserId} from '../auth';
+import { browserHistory } from 'react-router';
 
 class AddIdeaContainer extends React.Component {
 
@@ -12,18 +14,22 @@ class AddIdeaContainer extends React.Component {
     }
 
     submit(formData){
-        //TODO: Get the user ID from somewhere.  The cookie?  Redux?
         var data = {
             title: formData.title,
             text: formData.text,
             category: formData.categories,
-            views: 0,
-            creator: 17
+            views: 0
         };
         //Without this, jQuery sends the categories as "category[]"
         $.ajaxSettings.traditional = true;
         $.post( "/ideas", data, function( result ) {
-            //display a message that the idea will be displayed after it has been approved
+            browserHistory.push('/new/confirm')
+        })
+        .fail(function(xhr, status, err){
+            //this should never happen because the user can't see this page unless they are logged in
+            if(xhr.status == 302){
+                browserHistory.push('/login')
+            }
         });
     }
 
