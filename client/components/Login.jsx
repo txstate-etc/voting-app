@@ -10,7 +10,7 @@ class Login extends React.Component{
                         {isAdmin() ? <a className="admin-link" href="/admin"><i className="fa fa-cog"></i>Admin</a>  : ""}
                           <div className="pull-right log-out">
                             Logged in as {getNetId()} (<a href="/logout">Log Out</a>)
-                          </div>;
+                          </div>
                         </div>;
         }
         return(
