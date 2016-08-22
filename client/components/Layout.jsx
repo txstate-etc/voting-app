@@ -16,6 +16,12 @@ class Layout extends React.Component {
                     <br/>
                 </div>
                 {this.props.children}
+                <footer>
+                    <a href="#">
+                        <i className="fa fa-question"></i>
+                         Help
+                    </a>
+                </footer>
             </div>
         )
     }
