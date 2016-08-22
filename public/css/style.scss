@@ -179,6 +179,7 @@ footer{
   border: 2px solid $accent;
   padding: 3px;
   border-radius: 5px;
+  display:inline-block;
 }
 
 .create-date{
@@ -187,9 +188,50 @@ footer{
 }
 
 .item-list{
+  .media.selected{
+    background-color: $second-neutral-highlight;
+  }
   border-right: 1px solid #ccc;
   .hidden{
     visibility: hidden;
+  }
+}
+
+//admin
+.idea-detail-category{
+  font-size: 1.5rem;
+  margin-left: 5px;
+  font-weight: normal;
+}
+
+.idea-detail-creator{
+  font-size: 1.5rem;
+}
+
+.idea-detail-age{
+  margin-left: 5px;
+  font-size: 1rem;
+}
+
+.idea-detail-description{
+  margin-top: 0.5rem;
+}
+
+.edit-idea, .approve-idea {
+  .fa{
+    margin-right: 5px;
+  }
+}
+
+.approve-idea{
+  margin-top: 4rem;
+}
+
+.contact-user{
+  margin-top: 2rem;
+  p{
+    font-weight: bold;
+    font-size: 1.5rem;
   }
 }
 
