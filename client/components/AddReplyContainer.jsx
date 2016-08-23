@@ -8,8 +8,7 @@ class AddReplyContainer extends React.Component {
       //TODO: Get the user ID from somewhere.  
       var data = {
         text: formData.text,
-        comment_id: this.props.comment_id,
-        user_id: 17 
+        comment_id: this.props.comment_id
       };
       $.post( "/replies", data, function( result ) {
         //display a message that the comment will be displayed after it has been approved

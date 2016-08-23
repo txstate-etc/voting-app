@@ -17,6 +17,13 @@ class Comment extends React.Component {
       this.setState({repliesOpen: !currentState})
     }
 
+    getIcon(user_id){
+        var userIcon = this.props.iconList.find(icon => {
+            return icon.id == user_id;
+        }) || {id:0, color: 'color1', icon: 'fa-circle'}; 
+        return userIcon;
+    }
+
     render(){
         var comment = this.props.comment;
         var replyText = "Reply";
@@ -29,16 +36,18 @@ class Comment extends React.Component {
         var replyBlock = "";
         if(this.state.repliesOpen){
           var replyList  = "";
-          if(comment.replies.length > 0) replyList = <ReplyList key="replylist" replies={comment.replies} />;
+          if(comment.replies.length > 0) replyList = <ReplyList key="replylist" replies={comment.replies} iconList={this.props.iconList} />;
           replyBlock = [replyList,<AddReplyContainer key={comment.id} comment_id={comment.id}/>];
         }
 
         var timeElapsed = dateToElapsedTime(comment.updated_at);
 
+        var icon = this.getIcon(comment.user_id);
+
         return(
             <li className="media">
                 <div className="media-left">
-                  <i className="fa fa-meh-o comment-icon"></i>
+                  <i className={"avatar fa " + icon.icon + " " + icon.color }></i>
                 </div>
                 <div className="media-body">
                   <div className="media-heading">

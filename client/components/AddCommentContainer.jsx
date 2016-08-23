@@ -8,8 +8,7 @@ class AddCommentContainer extends React.Component {
       //TODO: Get the user ID from somewhere.  The cookie?  Redux?
       var data = {
         text: formData.text,
-        idea_id: this.props.ideaID,
-        user_id: 17 
+        idea_id: this.props.ideaID
       };
       $.post( "/comments", data, function( result ) {
         //display a message that the comment will be displayed after it has been approved

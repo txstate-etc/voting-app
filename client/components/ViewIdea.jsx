@@ -1,13 +1,11 @@
 import React from 'react';
 import VoteBlockContainer from './VoteBlockContainer.jsx';
-import {testing} from '../IconGenerator';
 import CommentList from './CommentList.jsx';
 import AddCommentContainer from './AddCommentContainer.jsx';
 
 class ViewIdea extends React.Component {
 
     render(){
-        //testing();
         var idea = this.props.idea;
         var date = new Date(idea.created_at);
         return(
@@ -37,6 +35,7 @@ class ViewIdea extends React.Component {
                 <div className="comment-list">
                     <CommentList
                         commentList = {idea.comments}
+                        iconList = {this.props.iconList}
                     />
                 </div>
             </div> 
