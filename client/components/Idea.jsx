@@ -11,6 +11,7 @@ class Idea extends React.Component {
 
         var numComments = sumCommentsAndReplies(idea.comments);
         var commentCountText = (numComments == 1) ? "1 comment" : (numComments + " comments");
+        var viewCountText = (idea.views == 1) ? "1 view" : (idea.views + " views");
         return(
             <div className="media idea">
                 <div className="media-left media-top">
@@ -22,7 +23,7 @@ class Idea extends React.Component {
                     <h4 className="media-heading"><a href={detailUrl}>{idea.title}</a></h4>
                     <p>{idea.text}</p>
                     <span className="idea-stats">
-                        <i className="fa fa-eye"></i> {idea.views} views | 
+                        <i className="fa fa-eye"></i> {viewCountText} | 
                         <a href={detailUrl}>
                             <i className="fa fa-comment-o"></i> 
                             {commentCountText}

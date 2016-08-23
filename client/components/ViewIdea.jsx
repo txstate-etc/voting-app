@@ -8,12 +8,13 @@ class ViewIdea extends React.Component {
     render(){
         var idea = this.props.idea;
         var date = new Date(idea.created_at);
+        var viewCountText = (idea.views == 1) ? "1 view" : (idea.views + " views");
         return(
             <div className="container">
                 <h2>{idea.title}</h2>
                 <span>
                     {date.toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})} |
-                    <i className="fa fa-eye"></i> {idea.views} views | 
+                    <i className="fa fa-eye"></i> {viewCountText} | 
                     <i className="fa fa-comment-o"></i> {this.props.commentCount} comments
                 </span>
                 <div className="media idea idea-detail">
