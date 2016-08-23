@@ -24,24 +24,31 @@ router.route('/')
     })
 
     .post(function(req,res,next){
-        models.comment.create({text: req.body.text,
-                                approved: req.body.approved,
-                                user_id: req.body.user_id,
-                                idea_id: req.body.idea_id
-        })
-        .then(function(comment){
-            res.format({
-                'text/html': function(){
-                   
-                },
-                'application/json': function(){
-                    res.status(201).json(comment);
-                }
-            }); 
-        })
-        .catch(function(error){
-            next(error);
-        });
+        var author = req.session["user_id"];
+        if(author){
+            models.comment.create({text: req.body.text,
+                                    approved: req.body.approved,
+                                    user_id: author,
+                                    idea_id: req.body.idea_id
+            })
+            .then(function(comment){
+                res.format({
+                    'text/html': function(){
+                       
+                    },
+                    'application/json': function(){
+                        res.status(201).json(comment);
+                    }
+                }); 
+            })
+            .catch(function(error){
+                next(error);
+            });
+        }
+        else{
+            console.log("user is not logged in")
+            res.status(302).json({message: "Login required"});
+        }
     });
 
 router.param('comment_id', function(req, res, next, value){

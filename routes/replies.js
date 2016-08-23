@@ -20,24 +20,31 @@ router.route('/')
     })
 
     .post(function(req,res,next){
-        models.reply.create({text: req.body.text,
-                            approved: req.body.approved,
-                            user_id: req.body.user_id,
-                            comment_id: req.body.comment_id
-        })
-        .then(function(reply){
-            res.format({
-                'text/html': function(){
-                   
-                },
-                'application/json': function(){
-                    res.status(201).json(reply);
-                }
-            }); 
-        })
-        .catch(function(error){
-            next(error);
-        });
+        var author = req.session["user_id"];
+        if(author){
+            models.reply.create({text: req.body.text,
+                                approved: req.body.approved,
+                                user_id: author,
+                                comment_id: req.body.comment_id
+            })
+            .then(function(reply){
+                res.format({
+                    'text/html': function(){
+                       
+                    },
+                    'application/json': function(){
+                        res.status(201).json(reply);
+                    }
+                }); 
+            })
+            .catch(function(error){
+                next(error);
+            });
+        }
+        else{
+            console.log("user is not logged in")
+            res.status(302).json({message: "Login required"});
+        }
     });
 
 
