@@ -10,7 +10,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var cas = require('./cas'); 
+var cas = require('./cas');
+var cors = require('cors');
 
 //for server-side React rendering
 var ReactDOMServer = require('react-dom/server');
@@ -77,25 +78,27 @@ var config = require('./config.js');
 var SequelizeStore = require('connect-session-sequelize')(session.Store);
 var db = require("./models").sequelize;
 
-app.use( session({
-    secret            : config.secret,
-    store: new SequelizeStore({
-      db: db
-    }),
-    resave            : false,
-    saveUninitialized : true  //need to figure out why this option breaks supertest
-}));
+//use a fake session for testing
+if(app.get('env') === 'test'){
+  app.use(function(req,res,next){
+    req.session = {};
+    req.session.user_id = "1";
+    next();
+  })
+}
+else{
+  app.use( session({
+      secret            : config.secret,
+      store: new SequelizeStore({
+        db: db
+      }),
+      maxAge: 1000 * 60 * 60 * 2, //2 hours
+      resave            : false,
+      saveUninitialized : true  //need to figure out why this option breaks supertest
+  }));
+}
 
-cas.configure({
-  casHost: "llavero.its.txstate.edu",   
-  casPath: "/cas",                
-  ssl: true,                        
-  service: "http://localhost:3000/login", // your site
-  sessionName: "cas_user",          // the cas user_name will be at req.session.cas_user (this is the default)
-  renew: false,                     // true or false, false is the default
-  redirectUrl: '/'            // the route that cas.blocker will send to if not authed. Defaults to '/'
-});
-
+app.use(cors());
 
 //routes
 app.use('/stages', stages);
@@ -109,6 +112,7 @@ app.use('/replies', replies);
 app.use('/login', cas.bouncer, login);
 app.use('/logout', function(req, res, next){
                       res.clearCookie('user');
+                      delete req.session['user_id'];
                       next();
                     }, cas.logout);
 

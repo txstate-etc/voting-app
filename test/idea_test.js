@@ -157,7 +157,9 @@ describe('Idea',function(){
         .set('Accept', 'application/json')
         .expect(200)
         .end(function(err, res){
-            expect(res.body[0]).not.to.have.property('comments');
+            for(var i=0; i<res.body.length; i++){
+                expect(res.body[i]).not.to.have.deep.property('comments[0].text');
+            }
             done();
         });
 
@@ -169,7 +171,9 @@ describe('Idea',function(){
         .set('Accept', 'application/json')
         .expect(200)
         .end(function(err, res){
-            expect(res.body[0]).not.to.have.property('comments');
+            for(var i=0; i<res.body.length; i++){
+                expect(res.body[i]).not.to.have.deep.property('comments[0].text');
+            }
             done();
         });
     });
