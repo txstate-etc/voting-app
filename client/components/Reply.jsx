@@ -8,7 +8,7 @@ class Reply extends React.Component {
         return(
             <div className="media">
                 <div className="media-left">
-                  <i className={"avatar fa " + this.props.icon.icon + " " + this.props.icon.color }></i>
+                  <i aria-label={"Reply from user " + this.props.reply.user_id}className={"avatar fa " + this.props.icon.icon + " " + this.props.icon.color }></i>
                 </div>
                 <div className="media-body">
                     <div className="media-heading">

@@ -47,7 +47,7 @@ class Comment extends React.Component {
         return(
             <li className="media">
                 <div className="media-left">
-                  <i className={"avatar fa " + icon.icon + " " + icon.color }></i>
+                  <i aria-label={"Comment by user " + comment.user_id} className={"avatar fa " + icon.icon + " " + icon.color }></i>
                 </div>
                 <div className="media-body">
                   <div className="media-heading">
