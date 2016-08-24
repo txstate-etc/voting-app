@@ -113,6 +113,7 @@ app.use('/login', cas.bouncer, login);
 app.use('/logout', function(req, res, next){
                       res.clearCookie('user');
                       delete req.session['user_id'];
+                      delete req.session['admin'];
                       next();
                     }, cas.logout);
 
