@@ -1,5 +1,5 @@
 import React from 'react';
-import AddIdea from './AddIdea.jsx';
+import IdeaForm from './IdeaForm.jsx';
 import $ from 'jquery';
 import {isLoggedIn,getUserId} from '../auth';
 import { browserHistory } from 'react-router';
@@ -42,9 +42,10 @@ class AddIdeaContainer extends React.Component {
 
     render(){
         return (
-            <AddIdea
+            <IdeaForm
                 categories= {this.state.categories}
                 onIdeaSubmit = {this.submit.bind(this)}
+                editMode = {false}
             />
         );
     }

@@ -3,6 +3,7 @@ import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import Layout from './components/Layout.jsx';
 import MainContainer from './components/MainContainer.jsx';
 import AddIdeaContainer from './components/AddIdeaContainer.jsx';
+import EditIdeaContainer from './components/EditIdeaContainer.jsx';
 import ViewIdeaContainer from './components/ViewIdeaContainer.jsx';
 import AdminContainer from './components/AdminContainer.jsx';
 import LoginRedirect from './components/LoginRedirect.jsx';
@@ -26,6 +27,7 @@ export default (
             <Route path="/new" component={AddIdeaContainer} onEnter={requireAuth}/>
             <Route path="/new/confirm" component={ConfirmNewIdea}/>
             <Route path="/view/:ideaId" component={ViewIdeaContainer}/>
+            <Route path="/edit/:ideaId" component={EditIdeaContainer} onEnter={requireAuth}/>
             <Route path="/admin" component={AdminContainer} onEnter={requireAuth}/>
             <Route path="/login" component={LoginRedirect}/>
         </Route>

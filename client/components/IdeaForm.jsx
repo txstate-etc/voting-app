@@ -1,16 +1,38 @@
 import React from 'react';
 import SelectCategoryContainer from './SelectCategoryContainer.jsx';
+import $ from 'jquery';
 
-class AddIdea extends React.Component {
+class IdeaForm extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             title: "",
             text: "",
-            categories: []
+            categories: [],
+            stage: 0
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount(){
+        var _this = this;
+        if(this.props.editMode){
+            $.ajax({url: "/ideas/" + _this.props.ideaId, dataType: "json", success: function(result){
+                _this.setState({title: result.title,
+                                text: result.text,
+                                categories: _this.formatCategories(result.categories),
+                                stage: result.stage_id || 0
+                                });
+            }});
+        }
+    }
+
+    formatCategories(categories){
+        var cat= categories.map(function(obj){
+            return obj.id.toString();
+        });
+        return cat;
     }
 
     handleTitleChange(e) {
@@ -22,15 +44,21 @@ class AddIdea extends React.Component {
     }
 
     handleCheckbox(e){
+        var categories = this.state.categories.slice(0);
         if(e.target.checked){
-            this.state.categories.push(e.target.value);
+            categories.push(e.target.value);
         }
         else{
-            var index = this.state.categories.indexOf(e.target.value);
+            var index = categories.indexOf(e.target.value);
             if(index > -1){
-                this.state.categories.splice(index, 1);
+                categories.splice(index, 1);
             }
         }
+        this.setState({categories: categories});
+    }
+
+    handleStageChange(e){
+        this.setState({stage: e.target.value});
     }
 
     handleSubmit(e){
@@ -47,17 +75,23 @@ class AddIdea extends React.Component {
         if(!categories){
             return;
         }
-        this.props.onIdeaSubmit(
-            {
+        var stage=this.state.stage;
+        if((this.props.editMode && !stage)){
+            if(stage ==0)
+                return;
+        }
+        var data = {
                 title: title,
                 text: text,
                 categories: categories
-            }
-        );
+        };
+        if(this.props.editMode) data.stage = stage;
+        this.props.onIdeaSubmit(data);
         this.setState({text: ''});
     }
 
     render(){
+        var editMode = this.props.editMode;
         return (
             <div className="container">
                 <form action="" onSubmit={this.handleSubmit}>
@@ -72,7 +106,7 @@ class AddIdea extends React.Component {
                                 return (
                                     <div key={category.id} className="col-xs-6 col-sm-4 col-md-3">
                                         <label htmlFor={"category" + category.id}>
-                                            <input type="checkbox" name="categories" value={category.id} id={"category" + category.id} onChange={this.handleCheckbox.bind(this)}/>{category.name}
+                                            <input type="checkbox" name="categories" value={category.id} id={"category" + category.id} checked={(this.state.categories.indexOf(category.id.toString()) > -1)? "checked" : ""} onChange={this.handleCheckbox.bind(this)}/>{category.name}
                                         </label>
                                     </div>
                                 )
@@ -88,7 +122,23 @@ class AddIdea extends React.Component {
                         <textarea id="text" rows="15" className="form-control" placeholder="Describe feature..." value={this.state.text} onChange={this.handleTextChange.bind(this)}>
                         </textarea>
                     </div>
-
+                    {this.props.editMode ? 
+                        <div className="form-group">
+                            <label htmlFor="stage">Stage</label>
+                            <select id="stage" onChange={this.handleStageChange.bind(this)} value={this.state.stage}>
+                                <option key="0" value="0">Please Select</option>
+                                {this.props.stages.map(option => {
+                                    return (
+                                        <option key={option.id} value={option.id}>
+                                            {option.name}
+                                        </option>
+                                    )
+                                })}
+                            </select>
+                        </div>
+                        :
+                        ""
+                    }
                     <button type="submit" className="btn btn-warning pull-right">Submit Feature</button>
                 </form>
             </div>
@@ -96,4 +146,4 @@ class AddIdea extends React.Component {
     }
 }
 
-export default AddIdea;
+export default IdeaForm;
