@@ -29,6 +29,19 @@ class ViewIdeaContainer extends React.Component {
             return returnObject;
            });
            _this.setState({iconList: iconAssignments});
+           //update views
+           $.ajax({
+                url: url,
+                dataType: "json",
+                type: "PUT",
+                data: {views: parseInt(result.views) + 1},
+                success: function(){
+                    console.log("views updated");
+                },
+                error: function(xhr, status, err){
+                    console.log("there was an error")
+                }
+            })
         }});
     }
 

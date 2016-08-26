@@ -19,7 +19,6 @@ class EditIdeaContainer extends React.Component {
             title: formData.title,
             text: formData.text,
             category: formData.categories,
-            views: 0, 
             stage_id: formData.stage
         };
         //Without this, jQuery sends the categories as "category[]"

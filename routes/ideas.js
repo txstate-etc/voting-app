@@ -157,17 +157,13 @@ router.param('idea_id', function(req, res, next, value){
 
 router.route('/:idea_id')
     .get(function(req, res, next) {
-        //update the view count
-        req.idea.increment('views')
-        .then(function(){
-            res.format({
-                'text/html': function(){
-                    res.render('ideas/show', {layout: 'admin', idea: req.idea });
-                },
-                'application/json': function(){
-                    res.json(req.idea);
-                }
-            }); 
+        res.format({
+            'text/html': function(){
+                res.render('ideas/show', {layout: 'admin', idea: req.idea });
+            },
+            'application/json': function(){
+                res.json(req.idea);
+            }
         });
     })
 
@@ -175,13 +171,19 @@ router.route('/:idea_id')
      .put(function(req,res,next){
         req.idea.updateAttributes(req.body)
         .then(function(idea){
-            return idea.setCategories(req.body.category)
-            .then(function(cat){
-                res.json(idea);
-            })
-            .catch(function(error){
-                next(error);
-            });
+            if(req.body.category){
+                return idea.setCategories(req.body.category)
+                .then(function(cat){
+                    res.json(idea);
+                })
+                .catch(function(error){
+                    next(error);
+                });
+            }
+            else{
+                res.json(idea)
+            }
+            return null;
         })
         .catch(function(error){
             next(error);
