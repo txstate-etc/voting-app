@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models');
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
+
 
 router.route('/')
     .get(function(req, res, next) {
@@ -40,6 +43,9 @@ router.route('/')
             //for ideas in multiple categories.
             eagerLoadModels.push({model: models.comment, attributes: ['id'], include: [{model: models.reply, attributes: ['id']}]});
         }
+        if(req.query.files && req.query.files == "true") {
+            eagerLoadModels.push({model: models.file}); 
+        }
         models.idea.findAll({include: eagerLoadModels})
         .then(function(ideas){
             res.format({
@@ -52,8 +58,8 @@ router.route('/')
             }); 
         });
     })
-
-    .post(function(req, res, next){
+    //this will only handle one attachment.  There is a way to do more.
+    .post(upload.single('attachment'), function(req, res, next){
         var creator = req.session["user_id"];
         if(creator){
             models.idea.create({firstname: req.body.firstname, 
@@ -66,14 +72,26 @@ router.route('/')
                 //need to add category too (idea has and belongs to many categories)
                 return idea.addCategories(req.body.category)
                 .then(function(cat){
-                    res.format({
-                        'text/html': function(){
-                            res.redirect('/ideas');  //somehow want to redirect to the tab they were on...
-                        },
-                        'application/json': function(){
-                            res.status(201).json(idea);
-                        }
-                    });
+                    //handle attachments
+                    if(req.file){
+                        return models.file.saveAttachment(idea.id, creator, "IDEA", req.file)
+                        .then(function(file){
+                            res.format({
+                                'text/html': function(){
+                                    res.redirect('/ideas');  //somehow want to redirect to the tab they were on...
+                                },
+                                'application/json': function(){
+                                    res.status(201).json(idea);
+                                }
+                            });
+                        })
+                        .catch(function(err){
+                            next(error);
+                        })
+                    }
+                    else{
+                        res.status(201).json(idea);
+                    }
                 })
                 .catch(function(error){
                     next(error);
@@ -84,7 +102,6 @@ router.route('/')
             });
         }
         else{
-            console.log("user is not logged in")
             res.status(302).json({message: "Login required"});
         }
     });
@@ -131,7 +148,8 @@ router.param('idea_id', function(req, res, next, value){
         include: [{model: models.user},
                   {model: models.stage},
                   {model: models.category},
-                  {model: models.comment, include: [{model: models.reply}]}]
+                  {model: models.comment, include: [{model: models.reply}]},
+                  {model: models.file}]
     }).then(function(idea){
         if(idea){
             req.idea = idea;

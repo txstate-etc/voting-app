@@ -32,6 +32,8 @@ npm-debug.log
 # Ignore bundle.js
 public/js/bundle.js
 
+uploads
+
 .DS_Store
 .sass-cache
 

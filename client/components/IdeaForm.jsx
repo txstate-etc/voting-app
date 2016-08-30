@@ -10,7 +10,8 @@ class IdeaForm extends React.Component {
             title: "",
             text: "",
             categories: [],
-            stage: 0
+            stage: 0,
+            attachment: ""
         };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -57,6 +58,10 @@ class IdeaForm extends React.Component {
         this.setState({categories: categories});
     }
 
+    handleAttachment(e){
+        this.setState({attachment: e.target.files[0]})  //will we allow more than one attachment?
+    }
+
     handleStageChange(e){
         this.setState({stage: e.target.value});
     }
@@ -83,7 +88,8 @@ class IdeaForm extends React.Component {
         var data = {
                 title: title,
                 text: text,
-                categories: categories
+                categories: categories,
+                attachment: this.state.attachment
         };
         if(this.props.editMode) data.stage = stage;
         this.props.onIdeaSubmit(data);
@@ -115,7 +121,7 @@ class IdeaForm extends React.Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="attachFile">Add Attachments</label>
-                        <input type="file" id="attachFile"/>
+                        <input type="file" id="attachFile" onChange={this.handleAttachment.bind(this)}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="text">Description</label>

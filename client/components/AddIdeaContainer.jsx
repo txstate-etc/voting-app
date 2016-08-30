@@ -14,23 +14,32 @@ class AddIdeaContainer extends React.Component {
     }
 
     submit(formData){
-        var data = {
-            title: formData.title,
-            text: formData.text,
-            category: formData.categories,
-            views: 0
-        };
+        var fd = new FormData();
+        fd.append('title', formData.title);
+        fd.append('text', formData.text);
+        fd.append('category', formData.categories);
+        fd.append('views', 0);
+        if(formData.attachment)
+            fd.append('attachment', formData.attachment, formData.attachment.name);
+        
         //Without this, jQuery sends the categories as "category[]"
         $.ajaxSettings.traditional = true;
-        $.post( "/ideas", data, function( result ) {
-            browserHistory.push('/new/confirm')
-        })
-        .fail(function(xhr, status, err){
-            //this should never happen because the user can't see this page unless they are logged in
-            if(xhr.status == 302){
-                browserHistory.push('/login')
+        $.ajax({
+            url: "/ideas",
+            method: "POST",
+            contentType: false,
+            processData: false,
+            data: fd,
+            success: function(result){
+                browserHistory.push('/new/confirm');
+            },
+            error: function(xhr, status, err){
+                //this should never happen because the user can't see this page unless they are logged in
+                if(xhr.status == 302){
+                    browserHistory.push('/login')
+                }
             }
-        });
+        }) 
     }
 
     componentDidMount() {
