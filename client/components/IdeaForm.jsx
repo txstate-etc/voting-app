@@ -59,7 +59,7 @@ class IdeaForm extends React.Component {
     }
 
     handleAttachment(e){
-        this.setState({attachment: e.target.files[0]})  //will we allow more than one attachment?
+        this.setState({attachment: e.target.files})  //will we allow more than one attachment?
     }
 
     handleStageChange(e){
@@ -119,14 +119,14 @@ class IdeaForm extends React.Component {
                             })}
                         </div>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="attachFile">Add Attachments</label>
-                        <input type="file" id="attachFile" onChange={this.handleAttachment.bind(this)}/>
-                    </div>
-                    <div className="form-group">
+                     <div className="form-group">
                         <label htmlFor="text">Description</label>
                         <textarea id="text" rows="15" className="form-control" placeholder="Describe feature..." value={this.state.text} onChange={this.handleTextChange.bind(this)}>
                         </textarea>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="attachFile">Add Attachments</label>
+                        <input type="file" multiple="multiple" id="attachFile" onChange={this.handleAttachment.bind(this)}/>
                     </div>
                     {this.props.editMode ? 
                         <div className="form-group">

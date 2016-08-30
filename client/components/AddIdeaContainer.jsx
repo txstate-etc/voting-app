@@ -20,7 +20,9 @@ class AddIdeaContainer extends React.Component {
         fd.append('category', formData.categories);
         fd.append('views', 0);
         if(formData.attachment)
-            fd.append('attachment', formData.attachment, formData.attachment.name);
+            for(var i=0; i<formData.attachment.length; i++){
+                fd.append('attachment', formData.attachment[i], formData.attachment[i].name);
+            }
         
         //Without this, jQuery sends the categories as "category[]"
         $.ajaxSettings.traditional = true;

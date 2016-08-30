@@ -59,7 +59,7 @@ router.route('/')
         });
     })
     //this will only handle one attachment.  There is a way to do more.
-    .post(upload.single('attachment'), function(req, res, next){
+    .post(upload.array('attachment'), function(req, res, next){
         var creator = req.session["user_id"];
         if(creator){
             models.idea.create({firstname: req.body.firstname, 
@@ -73,8 +73,8 @@ router.route('/')
                 return idea.addCategories(req.body.category)
                 .then(function(cat){
                     //handle attachments
-                    if(req.file){
-                        return models.file.saveAttachment(idea.id, creator, "IDEA", req.file)
+                    if(req.files){
+                        return models.file.saveAttachment(idea.id, creator, "idea", req.files)
                         .then(function(file){
                             res.format({
                                 'text/html': function(){
