@@ -15,19 +15,30 @@ class EditIdeaContainer extends React.Component {
     }
 
     submit(formData){
-        var data = {
-            title: formData.title,
-            text: formData.text,
-            category: formData.categories,
-            stage_id: formData.stage
-        };
+        var data = new FormData();
+        data.append('title', formData.title);
+        data.append('text', formData.text);
+        data.append('category', formData.categories);
+        data.append('stage_id', formData.stage);
+        if(formData.attachments){
+            for(var i=0; i<formData.attachments.length; i++){
+                data.append('attachments', formData.attachments[i], formData.attachments[i].name);
+            }
+        }
+        if(formData.deleteAttachments.length > 0){
+            data.append('deleteAttachments', formData.deleteAttachments);
+        }
+
         //Without this, jQuery sends the categories as "category[]"
         var _this = this;
         $.ajaxSettings.traditional = true;
         $.ajax({
             url: "/ideas/" + _this.props.params.ideaId,
             type: 'PUT',
+            contentType: false,
+            processData: false,
             data: data,
+            dataType: 'json',
             success: function(){
                 browserHistory.push('/admin')
             },
@@ -39,7 +50,6 @@ class EditIdeaContainer extends React.Component {
             }   
         });
     }
-
     componentDidMount() {
         var _this = this;
         $.ajax({url: "/categories", dataType: "json", success: function(result){

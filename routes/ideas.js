@@ -59,7 +59,7 @@ router.route('/')
         });
     })
     //this will only handle one attachment.  There is a way to do more.
-    .post(upload.array('attachment'), function(req, res, next){
+    .post(upload.array('attachments'), function(req, res, next){
         var creator = req.session["user_id"];
         if(creator){
             models.idea.create({firstname: req.body.firstname, 
@@ -70,7 +70,7 @@ router.route('/')
                             stage_id: req.body.stage})
             .then(function(idea){
                 //need to add category too (idea has and belongs to many categories)
-                return idea.addCategories(req.body.category)
+                return idea.addCategories((typeof req.body.category === "string") ? req.body.category.split(',') : req.body.category )
                 .then(function(cat){
                     //handle attachments
                     if(req.files){
@@ -96,6 +96,7 @@ router.route('/')
                 .catch(function(error){
                     next(error);
                 });
+                return null;
             })
             .catch(function(error){
                 next(error);
@@ -186,13 +187,46 @@ router.route('/:idea_id')
     })
 
     
-     .put(function(req,res,next){
+     .put(upload.array('attachments'), function(req,res,next){
         req.idea.updateAttributes(req.body)
         .then(function(idea){
             if(req.body.category){
-                return idea.setCategories(req.body.category)
+                return idea.setCategories((typeof req.body.category === "string") ? req.body.category.split(',') : req.body.category )
                 .then(function(cat){
-                    res.json(idea);
+                    if(req.files){
+                        //TODO: the creator should probably be the person logged in, not necessarily the
+                        //person who created the idea in the first place
+                        return models.file.saveAttachment(idea.id, idea.creator, "idea", req.files)
+                        .then(function(file){
+                            if(req.body.deleteAttachments){
+                                models.file.removeAttachments(req.body.deleteAttachments)
+                                .then(function(arg){
+                                    res.status(201).json(idea);
+                                    return null;
+                                })
+                                .catch(function(error){
+                                    next(error)
+                                })
+                            }
+                            else{
+                                res.format({
+                                    'text/html': function(){
+                                        res.redirect('/ideas');  //don't really need this?
+                                    },
+                                    'application/json': function(){
+                                        res.status(201).json(idea);
+                                    }
+                                });
+                            }
+                            return null;
+                        })
+                        .catch(function(error){
+                            next(error);
+                        })
+                    }
+                    else{
+                        res.json(idea);
+                    }
                 })
                 .catch(function(error){
                     next(error);

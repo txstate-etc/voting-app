@@ -33,6 +33,17 @@ module.exports = function(sequelize, DataTypes) {
           return File.bulkCreate(attachments).then(function(){
             return File.findAll({where: {owner_id: id}})
           })
+       },
+       removeAttachments: function(fileIDs){
+          var arrFileIDs = fileIDs.split(',');
+          //TODO:  Actually remove the file from the file system
+          var filesToDelete = [];
+          arrFileIDs.forEach(function(id){
+            //TODO: check if the file is used by someone else before removing it.
+            //this just removes the entry in the files table, not the actual file
+            filesToDelete.push(id);
+          });
+          return File.destroy({where: { id: { $in: filesToDelete } } })
        }
     },
     instanceMethods: {

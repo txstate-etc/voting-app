@@ -48,9 +48,16 @@ th {
 }
 
 header{
+    
+    display: none;
+} 
+@media only screen and (min-width : 768px) {
+  header{
+    display: block;
     background: $second-neutral-shadow;
     color: black;
     padding: 10px;
+  }
 }
 
 footer{
@@ -79,6 +86,30 @@ footer{
   font-weight: bold;
   .app-title{
     color: $second-neutral-shadow;
+  }
+  .hamburger{
+    display: none
+  }
+  @media (max-width : 768px) {
+    & {
+      text-align: left;
+      font-size: 3rem;
+      padding: 12px;
+      .hamburger{
+        display: block;
+        padding: 5px;
+      }
+    }
+  }
+  @media (max-width : 480px) {
+    & {
+      text-align: left;
+      font-size: 2.5rem;
+      padding: 10px;
+      .hamburger{
+        padding: 5px;
+      }
+    }
   }
 }
 
@@ -234,6 +265,17 @@ footer{
     font-size: 1.5rem;
   }
 }
+
+.attachment-dropzone{
+  border: 2px dashed darkgray;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.attachment-header{
+  font-weight: bold;
+}
+
 
 //bootstrap overrides
 .btn-warning{

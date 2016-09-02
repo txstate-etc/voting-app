@@ -19,9 +19,9 @@ class AddIdeaContainer extends React.Component {
         fd.append('text', formData.text);
         fd.append('category', formData.categories);
         fd.append('views', 0);
-        if(formData.attachment)
-            for(var i=0; i<formData.attachment.length; i++){
-                fd.append('attachment', formData.attachment[i], formData.attachment[i].name);
+        if(formData.attachments)
+            for(var i=0; i<formData.attachments.length; i++){
+                fd.append('attachments', formData.attachments[i], formData.attachments[i].name);
             }
         
         //Without this, jQuery sends the categories as "category[]"

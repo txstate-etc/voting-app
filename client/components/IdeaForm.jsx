@@ -1,6 +1,7 @@
 import React from 'react';
 import SelectCategoryContainer from './SelectCategoryContainer.jsx';
 import $ from 'jquery';
+import Dropzone from 'react-dropzone';
 
 class IdeaForm extends React.Component {
 
@@ -11,7 +12,9 @@ class IdeaForm extends React.Component {
             text: "",
             categories: [],
             stage: 0,
-            attachment: ""
+            attachmentsToUpload: [],
+            attachmentsAlreadyUploaded: [],
+            attachmentsToDelete: []
         };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -19,12 +22,13 @@ class IdeaForm extends React.Component {
     componentDidMount(){
         var _this = this;
         if(this.props.editMode){
-            $.ajax({url: "/ideas/" + _this.props.ideaId, dataType: "json", success: function(result){
+            $.ajax({url: "/ideas/" + _this.props.ideaId + "?files=true", dataType: "json", success: function(result){
                 _this.setState({title: result.title,
                                 text: result.text,
                                 categories: _this.formatCategories(result.categories),
-                                stage: result.stage_id || 0
-                                });
+                                stage: result.stage_id || 0,
+                                attachmentsAlreadyUploaded: result.files
+                            });
             }});
         }
     }
@@ -58,12 +62,22 @@ class IdeaForm extends React.Component {
         this.setState({categories: categories});
     }
 
-    handleAttachment(e){
-        this.setState({attachment: e.target.files})  //will we allow more than one attachment?
-    }
-
     handleStageChange(e){
         this.setState({stage: e.target.value});
+    }
+
+    updateAttachments(files){
+        this.setState({attachmentsToUpload: files })
+    }
+
+    clearSelectedAttachments(){
+        this.setState({attachmentsToUpload: []})
+    }
+
+    deleteSavedAttachment(id, e){
+        var deleteList = this.state.attachmentsToDelete.slice(0);
+        deleteList.push(id);
+        this.setState({attachmentsToDelete: deleteList});
     }
 
     handleSubmit(e){
@@ -89,7 +103,8 @@ class IdeaForm extends React.Component {
                 title: title,
                 text: text,
                 categories: categories,
-                attachment: this.state.attachment
+                attachments: this.state.attachmentsToUpload,
+                deleteAttachments: this.state.attachmentsToDelete
         };
         if(this.props.editMode) data.stage = stage;
         this.props.onIdeaSubmit(data);
@@ -97,7 +112,42 @@ class IdeaForm extends React.Component {
     }
 
     render(){
+        var selectedAttachments = [];
+        for(var i=0; i<this.state.attachmentsToUpload.length; i++){
+            selectedAttachments.push(
+                <div key={i}>{this.state.attachmentsToUpload[i].name}</div>
+            )
+        }
+        var savedAttachments = [];
+        for(var i=0; i<this.state.attachmentsAlreadyUploaded.length; i++){
+            savedAttachments.push(
+                <div className="row" key={i}>
+                    <div className="col-xs-6">
+                        {this.state.attachmentsAlreadyUploaded[i].filename}
+                    </div>
+                    <div className="col-xs-6">
+                        <input type="checkbox" value={this.state.attachmentsAlreadyUploaded[i].id} onClick={this.deleteSavedAttachment.bind(this,this.state.attachmentsAlreadyUploaded[i].id)}></input>
+                    </div>
+                </div>
+            )
+        }
+        // for(var i=0; i<this.state.attachmentsAlreadyUploaded.length; i++){
+        //     if($.inArray(this.state.attachmentsAlreadyUploaded[i].id, this.state.attachmentsToDelete) == -1) {
+        //         savedAttachments.push(
+        //             <div className="row" key={i}>
+        //                 <div className="col-xs-6">
+        //                     {this.state.attachmentsAlreadyUploaded[i].filename}
+        //                 </div>
+        //                 <div className="col-xs-6">
+        //                     <a href="#" onClick={this.deleteSavedAttachment.bind(this,this.state.attachmentsAlreadyUploaded[i].id)}><i className="fa fa-trash" aria-label="Delete attachment"></i></a>
+        //                 </div>
+        //             </div>
+        //         )
+        //     }
+        // }
+
         var editMode = this.props.editMode;
+        var displaySavedFiles = this.props.editMode && this.state.attachmentsAlreadyUploaded.length > 0;
         return (
             <div className="container">
                 <form action="" onSubmit={this.handleSubmit}>
@@ -124,10 +174,6 @@ class IdeaForm extends React.Component {
                         <textarea id="text" rows="15" className="form-control" placeholder="Describe feature..." value={this.state.text} onChange={this.handleTextChange.bind(this)}>
                         </textarea>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="attachFile">Add Attachments</label>
-                        <input type="file" multiple="multiple" id="attachFile" onChange={this.handleAttachment.bind(this)}/>
-                    </div>
                     {this.props.editMode ? 
                         <div className="form-group">
                             <label htmlFor="stage">Stage</label>
@@ -145,6 +191,50 @@ class IdeaForm extends React.Component {
                         :
                         ""
                     }
+                    <div className="form-group">
+                        <label htmlFor="attachFile">Attachments</label>
+                        <div className="row">
+                            {(displaySavedFiles) ?
+                                    <div className="col-md-4"> 
+                                        <div className="attachment-header">Saved Files:</div>
+                                        <div className="row">
+                                            <div className="col-xs-6">
+                                            </div>
+                                            <div className="col-xs-6">
+                                                <div className="attachment-header">Delete</div>
+                                            </div>
+                                        </div>
+                                        {savedAttachments}
+                                    </div>
+                                    :
+                                    ""
+                            }
+                            <div className={displaySavedFiles? "col-md-4" : "col-md-4"}>
+                                <Dropzone className="attachment-dropzone" onDrop={this.updateAttachments.bind(this)}>
+                                  <div>Drop files here or click to select files</div>
+                                </Dropzone>
+                                {
+                                    (this.state.attachmentsToUpload.length > 0) ?
+                                        <button className="btn" onClick={this.clearSelectedAttachments.bind(this)}>Remove Selected Files</button>
+                                        :
+                                        ""
+                                }
+                            </div>
+                            <div className={displaySavedFiles? "col-md-4" : "col-md-8"}>
+                                {(this.state.attachmentsToUpload.length > 0) ?
+                                    <div> 
+                                    <div className="attachment-header">Files to Upload:</div>
+                                    {selectedAttachments}
+                                    </div>
+                                    :
+                                    ""
+                                }
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                    
                     <button type="submit" className="btn btn-warning pull-right">Submit Feature</button>
                 </form>
             </div>
