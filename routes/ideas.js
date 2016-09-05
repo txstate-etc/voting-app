@@ -84,6 +84,7 @@ router.route('/')
                                     res.status(201).json(idea);
                                 }
                             });
+                            return null;
                         })
                         .catch(function(err){
                             next(error);

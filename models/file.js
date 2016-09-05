@@ -1,6 +1,6 @@
 "use strict";
-var md5 = require('md5-file');
 var fs = require('fs');
+var hashFiles = require('hash-files');
 
 //think about some sort of reference counter.
 
@@ -23,12 +23,12 @@ module.exports = function(sequelize, DataTypes) {
           var attachments = [];
           for(var i=0; i<files.length; i++){
             attachments.push({
-                              filename: files[i].originalname,
-                              hash: md5.sync(files[i].path),
-                              creator: creator,
-                              owner_type: type.toLowerCase(),
-                              owner_id: id
-                             })
+                  filename: files[i].originalname,
+                  hash: hashFiles.sync({files: files[i].path, algorithm: 'sha1'}),
+                  creator: creator,
+                  owner_type: type.toLowerCase(),
+                  owner_id: id
+                 })
           }
           return File.bulkCreate(attachments).then(function(){
             return File.findAll({where: {owner_id: id}})
