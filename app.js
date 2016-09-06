@@ -2,6 +2,7 @@
 require('babel-register')({
     presets: ['es2015', 'react']
 });
+require('dotenv').config();
 var express = require('express');
 var session = require('express-session');
 var path = require('path');

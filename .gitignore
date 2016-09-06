@@ -33,6 +33,7 @@ npm-debug.log
 public/js/bundle.js
 
 uploads
+.env
 
 .DS_Store
 .sass-cache
