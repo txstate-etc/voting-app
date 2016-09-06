@@ -28,23 +28,29 @@ module.exports = function(sequelize, DataTypes) {
           var chunkSize=3;
           var depth = 3;
           for(var i=0; i<files.length; i++){
+            var file = files[i]
             //it doesn't seem like there is any reason to do this asynchronously
-            var hash = hashFiles.sync({files: files[i].path, algorithm: 'sha1'});
+            var hash = hashFiles.sync({files: file.path, algorithm: 'sha1'});
             var attachment_path = process.env.ATTACHMENTS_DIR;
             for(var j=0; j<depth; j++){
               attachment_path = path.join(attachment_path, hash.substring((j*chunkSize),((j+1)*chunkSize)));
             }
             var fileName = hash.substring( chunkSize * depth );
             //create the directory where the file will be stored
-            mkdirp.sync(attachment_path);
-            fs.renameSync( files[i].path, path.join( attachment_path,fileName ) );
-            attachments.push({
-                  filename: files[i].originalname,
+            try{
+              mkdirp.sync(attachment_path);
+              fs.renameSync( files[i].path, path.join( attachment_path,fileName ));
+              attachments.push({
+                  filename: file.originalname,
                   hash: hash,
                   creator: creator,
                   owner_type: type.toLowerCase(),
                   owner_id: id
                  })
+            }
+            catch(e){
+              console.error("Unable to upload file")
+            }
           }
           return File.bulkCreate(attachments).then(function(){
             return File.findAll({where: {owner_id: id}})
