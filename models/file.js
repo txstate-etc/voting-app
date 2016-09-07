@@ -4,7 +4,20 @@ var hashFiles = require('hash-files');
 var mkdirp = require('mkdirp');
 var path = require('path');
 
-//think about some sort of reference counter.
+const CHUNK_SIZE = 3;
+const DEPTH = 3;
+
+function buildAttachmentPath(hash){
+  var attachment_path = process.env.ATTACHMENTS_DIR;
+  for(var j=0; j<DEPTH; j++){
+    attachment_path = path.join(attachment_path, hash.substring((j*CHUNK_SIZE),((j+1)*CHUNK_SIZE)));
+  }
+  return attachment_path;
+}
+
+function getFileName(hash){
+  return hash.substring( CHUNK_SIZE * DEPTH );
+}
 
 module.exports = function(sequelize, DataTypes) {
   var File = sequelize.define("file", {
@@ -22,24 +35,18 @@ module.exports = function(sequelize, DataTypes) {
        },
        saveAttachment: function(id, creator, type, files){
           //need to move the attachment to it's new location and save it in the Files
-          //table only if that move/rename is successful.  bulkCreate won't work
+          //table only if that move/rename is successful.  
           var attachments = [];
           //storing the files in a directory structure based on a hash of the file
-          var chunkSize=3;
-          var depth = 3;
           for(var i=0; i<files.length; i++){
             var file = files[i]
             //it doesn't seem like there is any reason to do this asynchronously
-            var hash = hashFiles.sync({files: file.path, algorithm: 'sha1'});
-            var attachment_path = process.env.ATTACHMENTS_DIR;
-            for(var j=0; j<depth; j++){
-              attachment_path = path.join(attachment_path, hash.substring((j*chunkSize),((j+1)*chunkSize)));
-            }
-            var fileName = hash.substring( chunkSize * depth );
-            //create the directory where the file will be stored
+            var hash = hashFiles.sync({files: file.path, algorithm: 'sha1'});            
             try{
-              mkdirp.sync(attachment_path);
-              fs.renameSync( files[i].path, path.join( attachment_path,fileName ));
+              //create the directory where the file will be stored
+              var attachmentPath = buildAttachmentPath(hash);
+              mkdirp.sync(attachmentPath);
+              fs.renameSync( files[i].path, path.join(attachmentPath, getFileName(hash)));
               attachments.push({
                   filename: file.originalname,
                   hash: hash,
@@ -49,7 +56,7 @@ module.exports = function(sequelize, DataTypes) {
                  })
             }
             catch(e){
-              console.error("Unable to upload file")
+              console.error("Unable to upload file: " + e)
             }
           }
           return File.bulkCreate(attachments).then(function(){
@@ -57,16 +64,49 @@ module.exports = function(sequelize, DataTypes) {
           })
        },
        removeAttachments: function(fileIDs){
+          //for each file ID, remove it from the 
+          //file system if it is only used in this one 
+          //idea/comment/reply and delete the entry from the file table;
           var arrFileIDs = fileIDs.split(',');
-          //TODO:  Actually remove the file from the file system
           var filesToDelete = [];
+          var promises = [];
+
+          var handleFile = function(id){
+            var attachment;
+            return File.findById(id)
+            .then(function(file){
+              attachment = file;
+              return File.count({where: {hash: attachment.hash}})
+            })
+            .then(function(count){
+              //fs uses callbacks, not promises so wrap it in a promise
+              return new Promise(function(resolve, reject){
+                if(count < 2){
+                  //this file is not used anywhere else, remove it
+                  var filepath = path.join( buildAttachmentPath(attachment.hash), getFileName(attachment.hash) );
+                  fs.unlink(filepath, function(err){
+                    if(err) reject()
+                    else resolve();
+                  })
+                }
+                else{
+                  //this file is used by others, don't remove it
+                  resolve();
+                }
+              })
+            })
+          }
+
           arrFileIDs.forEach(function(id){
-            //TODO: check if the file is used by someone else before removing it.
-            //this just removes the entry in the files table, not the actual file
-            filesToDelete.push(id);
+            promises.push(handleFile(id));
           });
-          return File.destroy({where: { id: { $in: filesToDelete } } })
-       }
+
+          return Promise.all(promises).then(function(data){
+            return File.destroy({where: { id: { $in: arrFileIDs } } })
+          })
+        }
+
+        
     },
     instanceMethods: {
       attachable: function(){
