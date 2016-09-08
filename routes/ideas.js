@@ -58,50 +58,41 @@ router.route('/')
             }); 
         });
     })
-    //this will only handle one attachment.  There is a way to do more.
+
+    //if the idea is inserted but adding attachments fails, should the idea be removed?
     .post(upload.array('attachments'), function(req, res, next){
         var creator = req.session["user_id"];
+        var newIdea;
         if(creator){
-            models.idea.create({firstname: req.body.firstname, 
-                            title: req.body.title, 
-                            text: req.body.text, 
-                            views: 0, 
-                            creator: creator,  
-                            stage_id: req.body.stage})
+            models.idea.create({firstname: req.body.firstname,
+                                title: req.body.title,
+                                text: req.body.text,
+                                views: 0,
+                                creator: creator,
+                                stage_id: req.body.stage})
             .then(function(idea){
+                newIdea = idea;
                 //need to add category too (idea has and belongs to many categories)
                 return idea.addCategories((typeof req.body.category === "string") ? req.body.category.split(',') : req.body.category )
-                .then(function(cat){
-                    //handle attachments
-                    if(req.files){
-                        return models.file.saveAttachment(idea.id, creator, "idea", req.files)
-                        .then(function(file){
-                            res.format({
-                                'text/html': function(){
-                                    res.redirect('/ideas');  //somehow want to redirect to the tab they were on...
-                                },
-                                'application/json': function(){
-                                    res.status(201).json(idea);
-                                }
-                            });
-                            return null;
-                        })
-                        .catch(function(err){
-                            next(error);
-                        })
-                    }
-                    else{
-                        res.status(201).json(idea);
-                    }
-                })
-                .catch(function(error){
-                    next(error);
-                });
-                return null;
             })
-            .catch(function(error){
-                next(error);
-            });
+            .then(function(category){
+                //handle attachments if they included any
+                if(req.files && req.files.length > 0){
+                    return models.file.saveAttachment(newIdea.id, creator, "idea", req.files)
+                }
+                else{
+                    //no files to save
+                    return Promise.resolve();
+                }
+            })
+            .then(function(){
+                res.status(201).json(newIdea);
+                return null; 
+            })
+            .catch(function(err){
+                console.error(err);
+                next(err);
+            })
         }
         else{
             res.status(302).json({message: "Login required"});
@@ -187,62 +178,46 @@ router.route('/:idea_id')
         });
     })
 
-    
-     .put(upload.array('attachments'), function(req,res,next){
+    .put(upload.array('attachments'), function(req,res,next){
+        var editedIdea;
         req.idea.updateAttributes(req.body)
         .then(function(idea){
+            editedIdea = idea;
             if(req.body.category){
                 return idea.setCategories((typeof req.body.category === "string") ? req.body.category.split(',') : req.body.category )
-                .then(function(cat){
-                    if(req.files){
-                        //TODO: the creator should probably be the person logged in, not necessarily the
-                        //person who created the idea in the first place
-                        return models.file.saveAttachment(idea.id, idea.creator, "idea", req.files)
-                        .then(function(file){
-                            if(req.body.deleteAttachments){
-                                models.file.removeAttachments(req.body.deleteAttachments)
-                                .then(function(arg){
-                                    res.status(201).json(idea);
-                                    return null;
-                                })
-                                .catch(function(error){
-                                    next(error)
-                                })
-                            }
-                            else{
-                                res.format({
-                                    'text/html': function(){
-                                        res.redirect('/ideas');  //don't really need this?
-                                    },
-                                    'application/json': function(){
-                                        res.status(201).json(idea);
-                                    }
-                                });
-                            }
-                            return null;
-                        })
-                        .catch(function(error){
-                            next(error);
-                        })
-                    }
-                    else{
-                        res.json(idea);
-                    }
-                })
-                .catch(function(error){
-                    next(error);
-                });
             }
             else{
-                res.json(idea)
+                return Promise.resolve();
             }
+        })
+        .then(function(category){
+            if(req.files && req.files.length > 0){
+                //TODO: the creator should probably be the person logged in, not necessarily the
+                //person who created the idea in the first place
+                return models.file.saveAttachment(editedIdea.id, editedIdea.creator, "idea", req.files)
+            }
+            else{
+                return Promise.resolve();
+            }
+        })
+        .then(function(file){
+            if(req.body.deleteAttachments){
+                return models.file.removeAttachments(req.body.deleteAttachments)
+            }
+            else{
+                return Promise.resolve();
+            }
+        })
+        .then(function(arg){
+            res.status(201).json(editedIdea);
             return null;
         })
-        .catch(function(error){
-            next(error);
-        });
-     })
-
+        .catch(function(err){
+            console.error(err);
+            next(err);
+        })
+    })
+     
     .delete(function(req,res,next){
         models.idea.destroy({
                 where: {
