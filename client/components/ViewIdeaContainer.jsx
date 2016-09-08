@@ -10,15 +10,16 @@ class ViewIdeaContainer extends React.Component {
         super(props);
         this.state = {
             idea: {
-                comments: []
+                comments: [],
+                files: []
             },
-            iconList: []
+            iconList: [],
         };
     }
 
     componentDidMount() {
         var _this = this;
-        var url = "/ideas/" + this.props.params.ideaId
+        var url = "/ideas/" + this.props.params.ideaId + "?files=true";
         $.ajax({url: url, dataType: "json", success: function(result){
            _this.setState({idea: result})
            var contributors = _this.getUniqueContributors(result.comments);

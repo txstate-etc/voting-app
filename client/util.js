@@ -15,4 +15,24 @@ function sumCommentsAndReplies(comments){
     return 0;
 }
 
-export {dateToElapsedTime, sumCommentsAndReplies};
+function getAttachmentIcon(filename){
+    var extension = filename.substr(filename.lastIndexOf('.')+1).toLowerCase();
+    switch(extension){
+        case 'jpg':
+        case 'png':
+        case 'jpeg':
+            return "fa-file-image-o";
+        case 'pdf':
+            return "fa-file-pdf-o";
+        case 'xls':
+        case 'xlsx':
+            return "fa-file-excel-o";
+        case 'doc':
+        case 'docx':
+            return "fa-file-word-o";
+        default:
+            return "fa-file-o";
+    }
+}
+
+export {dateToElapsedTime, sumCommentsAndReplies, getAttachmentIcon};

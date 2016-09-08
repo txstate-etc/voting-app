@@ -2,6 +2,7 @@ import React from 'react';
 import VoteBlockContainer from './VoteBlockContainer.jsx';
 import CommentList from './CommentList.jsx';
 import AddCommentContainer from './AddCommentContainer.jsx';
+import AttachmentList from './AttachmentList.jsx';
 
 class ViewIdea extends React.Component {
 
@@ -28,6 +29,10 @@ class ViewIdea extends React.Component {
                         <p>{idea.text}</p>
                     </div>
                 </div>
+                Attachments
+                <AttachmentList
+                    attachments = {idea.files}
+                />
                 <hr/>
                 Comments
                 <AddCommentContainer
