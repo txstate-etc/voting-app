@@ -1,4 +1,5 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import SelectCategoryContainer from './SelectCategoryContainer.jsx';
 import $ from 'jquery';
 import Dropzone from 'react-dropzone';
@@ -9,9 +10,13 @@ class IdeaForm extends React.Component {
         super(props);
         this.state = {
             title: "",
+            titleErr: "",
             text: "",
+            textErr: "",
             categories: [],
+            catErr: "",
             stage: 0,
+            stageErr: "",
             attachmentsToUpload: [],
             attachmentsAlreadyUploaded: [],
             attachmentsToDelete: []
@@ -42,10 +47,14 @@ class IdeaForm extends React.Component {
 
     handleTitleChange(e) {
         this.setState({title: e.target.value});
+        if(e.target.value.length > 0)
+            this.setState({titleErr: ""})
     }
 
     handleTextChange(e) {
         this.setState({text: e.target.value});
+        if(e.target.value.length > 0)
+            this.setState({textErr: ""})
     }
 
     handleCheckbox(e){
@@ -60,10 +69,14 @@ class IdeaForm extends React.Component {
             }
         }
         this.setState({categories: categories});
+        if(categories.length > 0)
+            this.setState({catErr: ""})
     }
 
     handleStageChange(e){
         this.setState({stage: e.target.value});
+        if(e.target.value > 0)
+            this.setState({stageErr: ""})
     }
 
     updateAttachments(files){
@@ -84,20 +97,25 @@ class IdeaForm extends React.Component {
         e.preventDefault();
         var title=this.state.title;
         if(!title){
+            this.setState({titleErr: "Please enter a title"});
+            return;
+        }
+        var categories=this.state.categories;
+        if(categories.length < 1){
+            this.setState({catErr: "Please select at least one category"});
             return;
         }
         var text=this.state.text;
         if(!text){
-            return;
-        }
-        var categories=this.state.categories;
-        if(!categories){
+            this.setState({textErr: "Please enter a description"});
             return;
         }
         var stage=this.state.stage;
         if((this.props.editMode && !stage)){
-            if(stage ==0)
+            if(stage ==0){
+                this.setState({stageErr: "Please select a stage"});
                 return;
+            }
         }
         var data = {
                 title: title,
@@ -131,32 +149,37 @@ class IdeaForm extends React.Component {
                 </div>
             )
         }
-        // for(var i=0; i<this.state.attachmentsAlreadyUploaded.length; i++){
-        //     if($.inArray(this.state.attachmentsAlreadyUploaded[i].id, this.state.attachmentsToDelete) == -1) {
-        //         savedAttachments.push(
-        //             <div className="row" key={i}>
-        //                 <div className="col-xs-6">
-        //                     {this.state.attachmentsAlreadyUploaded[i].filename}
-        //                 </div>
-        //                 <div className="col-xs-6">
-        //                     <a href="#" onClick={this.deleteSavedAttachment.bind(this,this.state.attachmentsAlreadyUploaded[i].id)}><i className="fa fa-trash" aria-label="Delete attachment"></i></a>
-        //                 </div>
-        //             </div>
-        //         )
-        //     }
-        // }
-
+        
         var editMode = this.props.editMode;
         var displaySavedFiles = this.props.editMode && this.state.attachmentsAlreadyUploaded.length > 0;
+        var invalidTitle = this.state.titleErr.length > 0;
+        var invalidText = this.state.textErr.length > 0;
+        var invalidCategory = this.state.catErr.length > 0;
+        var invalidStage = this.state.stageErr.length > 0;
         return (
             <div className="container">
                 <form action="" onSubmit={this.handleSubmit}>
-                    <div className="form-group">
+                    <div className={"form-group" + (invalidTitle ? " has-warning" : "")}>
                         <label htmlFor="title">Title</label>
-                        <input type="text" id="title" className="form-control" placeholder="Title for Feature Request" value={this.state.title} onChange={this.handleTitleChange.bind(this)}/>
+                        <span className="errorMsg" role={invalidTitle ? "alert" : ""}>{this.state.titleErr}</span>
+                        <input type="text" 
+                            id="title" 
+                            aria-required="true"
+                            aria-invalid={invalidTitle ? "true" : "false"} 
+                            className="form-control" 
+                            placeholder="Title for Feature Request" 
+                            value={this.state.title} onChange={this.handleTitleChange.bind(this)}
+                            ref={function(input) {
+                              if (input != null && invalidTitle) {
+                                console.log("There is a title error.")
+                                input.focus();
+                              }
+                            }}/>
+        
                     </div>
-                    <div className="form-group">
+                    <div className={"form-group" + (invalidCategory ? " has-warning" : "")}>
                         <label htmlFor="categories">Categories</label>
+                        <span className="errorMsg" role={invalidCategory ? "alert" : ""}>{this.state.catErr}</span>
                         <div className="row" id="categories">
                             {this.props.categories.map(category => {
                                 return (
@@ -169,15 +192,38 @@ class IdeaForm extends React.Component {
                             })}
                         </div>
                     </div>
-                     <div className="form-group">
+                     <div className={"form-group" + (invalidText ? " has-warning" : "")}>
                         <label htmlFor="text">Description</label>
-                        <textarea id="text" rows="15" className="form-control" placeholder="Describe feature..." value={this.state.text} onChange={this.handleTextChange.bind(this)}>
+                        <span className="errorMsg" role={invalidText ? "alert" : ""}>{this.state.textErr}</span>
+                        <textarea id="text"
+                                aria-required="true"
+                                aria-invalid={invalidText ? "true" : "false"}  
+                                rows="15" 
+                                className="form-control" 
+                                placeholder="Describe feature..." 
+                                value={this.state.text} 
+                                onChange={this.handleTextChange.bind(this)}
+                                ref={function(ta) {
+                                if (ta != null && invalidText) {
+                                        console.log("There is a text error.")
+                                        ta.focus();
+                                      }
+                                }}>
                         </textarea>
                     </div>
                     {this.props.editMode ? 
-                        <div className="form-group">
+                        <div className={"form-group" + (invalidStage ? " has-warning" : "")}>
+                            <div className="errorMsg" role={invalidStage ? "alert" : ""}>{this.state.stageErr}</div>
                             <label htmlFor="stage">Stage</label>
-                            <select id="stage" onChange={this.handleStageChange.bind(this)} value={this.state.stage}>
+                            <select id="stage" 
+                                    onChange={this.handleStageChange.bind(this)} 
+                                    value={this.state.stage}
+                                    ref={function(select){
+                                        if(select != null && invalidStage){
+                                            console.log("There is a stage error");
+                                            select.focus();
+                                        }
+                                    }}>
                                 <option key="0" value="0">Please Select</option>
                                 {this.props.stages.map(option => {
                                     return (

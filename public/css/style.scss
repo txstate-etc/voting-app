@@ -276,6 +276,15 @@ footer{
   font-weight: bold;
 }
 
+.errorMsg{
+    color: #a94442;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.has-warning #categories{
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 6px #c0a16b;
+}
 
 //bootstrap overrides
 .btn-warning{
