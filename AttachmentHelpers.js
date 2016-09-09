@@ -4,7 +4,7 @@ const CHUNK_SIZE = 3;
 const DEPTH = 3;
 
 function buildAttachmentPath(hash){
-  var attachment_path = process.env.ATTACHMENTS_DIR;
+  var attachment_path = "";
   for(var j=0; j<DEPTH; j++){
     attachment_path = path.join(attachment_path, hash.substring((j*CHUNK_SIZE),((j+1)*CHUNK_SIZE)));
   }

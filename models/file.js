@@ -33,8 +33,8 @@ module.exports = function(sequelize, DataTypes) {
             try{
               //create the directory where the file will be stored
               var attachmentPath = buildAttachmentPath(hash);
-              mkdirp.sync(attachmentPath);
-              fs.renameSync( files[i].path, path.join(attachmentPath, getFileName(hash)));
+              mkdirp.sync(path.join(process.env.ATTACHMENTS_DIR, attachmentPath));
+              fs.renameSync( files[i].path, path.join(process.env.ATTACHMENTS_DIR, attachmentPath, getFileName(hash)));
               attachments.push({
                   filename: file.originalname,
                   hash: hash,
@@ -71,7 +71,7 @@ module.exports = function(sequelize, DataTypes) {
               return new Promise(function(resolve, reject){
                 if(count < 2){
                   //this file is not used anywhere else, remove it
-                  var filepath = path.join( buildAttachmentPath(attachment.hash), getFileName(attachment.hash) );
+                  var filepath = path.join( process.env.ATTACHMENTS_DIR, buildAttachmentPath(attachment.hash), getFileName(attachment.hash) );
                   fs.unlink(filepath, function(err){
                     if(err) reject()
                     else resolve();
