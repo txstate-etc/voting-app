@@ -7,7 +7,8 @@ import EditIdeaContainer from './components/EditIdeaContainer.jsx';
 import ViewIdeaContainer from './components/ViewIdeaContainer.jsx';
 import AdminContainer from './components/AdminContainer.jsx';
 import LoginRedirect from './components/LoginRedirect.jsx';
-import ConfirmNewIdea from './components/ConfirmNewIdea.jsx'
+import ConfirmNewIdea from './components/ConfirmNewIdea.jsx';
+import NotFoundPage from './components/NotFoundPage.jsx';
 import {isLoggedIn} from './auth';
 import $ from 'jquery';
 
@@ -30,6 +31,7 @@ export default (
             <Route path="/edit/:ideaId" component={EditIdeaContainer} onEnter={requireAuth}/>
             <Route path="/admin" component={AdminContainer} onEnter={requireAuth}/>
             <Route path="/login" component={LoginRedirect}/>
+            <Route path="*" component={NotFoundPage}/>
         </Route>
     </Router>
 )
