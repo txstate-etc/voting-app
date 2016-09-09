@@ -8,7 +8,10 @@ class AttachmentList extends React.Component {
                 {this.props.attachments.map(attachment => {
                     return (
                         <div key={attachment.id} className="col-xs-6 col-sm-4 col-md-3">
-                        <i className={"attachment-icon fa " + getAttachmentIcon(attachment.filename)}></i>{attachment.filename}
+                            <a href={"/files/" + attachment.id}>
+                                <i className={"attachment-icon fa " + getAttachmentIcon(attachment.filename)}></i>
+                                {attachment.filename}
+                            </a>
                         </div>
                     )
                 })}

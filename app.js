@@ -35,6 +35,7 @@ var ideas = require('./routes/ideas');
 var votes = require('./routes/votes');
 var comments = require('./routes/comments');
 var replies = require('./routes/replies');
+var files = require('./routes/files');
 
 var app = express(); 
 
@@ -109,6 +110,7 @@ app.use('/ideas', ideas);
 app.use('/votes', votes);
 app.use('/comments', comments);
 app.use('/replies', replies);
+app.use('/files', files);
 
 app.use('/login', cas.bouncer, login);
 app.use('/logout', function(req, res, next){
