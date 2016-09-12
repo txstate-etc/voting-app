@@ -129,6 +129,16 @@ footer{
     }
 }
 
+.add-new{
+  float: right;
+  @media (max-width : 768px) {
+    & {
+      float: none;
+      margin-top: 1rem;
+    }
+  }
+}
+
 .logo{
     margin-right: 5px;
 }

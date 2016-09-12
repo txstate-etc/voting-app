@@ -12,11 +12,11 @@ class Admin extends React.Component {
         return(
             <div className="container">
                 <div className="row top-buffer">
-                  <div className="col-md-6">
+                  <div className="col-sm-6">
                     <SearchBar/>
                   </div>
-                  <div className="col-md-6">
-                    <div className="pull-right"><AddNew /></div>
+                  <div className="col-sm-6">
+                    <div className="add-new"><AddNew /></div>
                   </div>
                 </div>
                 <br/>
