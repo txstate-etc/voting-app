@@ -2,10 +2,6 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 
-//flash messages?
-//JSON return on edit and new
-//JSON return on delete
-
 
 router.route('/')
     .get(function(req, res, next) {
@@ -33,6 +29,7 @@ router.route('/')
                     res.status(201).json(stage);
                 }
             }); 
+            return null;
         })
         .catch(function(error){
             next(error);
@@ -84,6 +81,7 @@ router.param('stage_id', function(req, res, next, value){
             }); 
             
         }
+        return null;
     }).catch(function(error){
         next(error);
     });
@@ -98,7 +96,8 @@ router.route('/:stage_id')
             'application/json': function(){
                 res.json(req.stage);
             }
-        }); 
+        });
+        return null; 
     })
 
     .put(function(req,res,next){
@@ -114,6 +113,7 @@ router.route('/:stage_id')
                     res.json(stage);
                 }
             });
+            return null;
         }).catch(function(error){
                 next(error);
         });
@@ -124,16 +124,18 @@ router.route('/:stage_id')
                 where: {
                   id: req.stage.id
                 }
-            }).then(function(stage){
+            }).then(function(count){
+                //destroy returns the number of items deleted
                 res.format({
                     'text/html': function(){
                         //redirect instead of render?  can I send a message with that?
                     res.render('stages/index', {layout: 'admin', notice: "Stage successfully deleted"});
                     },
                     'application/json': function(){
-                        res.json(stage); //redirect?  return 204
+                        res.json(count); //redirect?  return 204
                     }
                 });
+                return null;
             }).catch(function(error){
                 next(error);
             });

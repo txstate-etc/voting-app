@@ -10,7 +10,9 @@ class AdminContainer extends React.Component {
 
     render(){
         return(
-            <Admin/>
+            <Admin
+                children = {this.props.children}
+            />
         );
     }
 }
