@@ -2,7 +2,9 @@ import React from 'react';
 import SearchBar from './SearchBar.jsx';
 import AddNew from './AddNew.jsx';
 import SelectCategoryContainer from './SelectCategoryContainer.jsx';
-import { Link } from 'react-router';
+import { Link, IndexLink } from 'react-router';
+
+const ACTIVE = { background: '#e7e7e7', fontWeight: 'bold'}
 
 class Admin extends React.Component {
 
@@ -15,11 +17,11 @@ class Admin extends React.Component {
         <div>
           <nav className="navbar navbar-default">
           <ul className="nav navbar-nav">
-            <li><Link to="/admin">Ideas</Link></li>
+            <li><IndexLink to="/admin" activeStyle={ACTIVE}>Ideas</IndexLink></li>
             <li><a href="#">Comments</a></li>
             <li><a href="#">Users</a></li>
             <li><a href="#">Categories</a></li>
-            <li><Link to="/admin/stages">Stages</Link></li>
+            <li><Link to="/admin/stages" activeStyle={ACTIVE}>Stages</Link></li>
           </ul>
           </nav>
           <div className="container">
