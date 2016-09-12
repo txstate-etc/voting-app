@@ -31,7 +31,8 @@ router.route('/')
                 'application/json': function(){
                     res.status(201).json(category);
                 }
-            }); 
+            });
+            return null; 
         })
         .catch(function(error){
             next(error);
@@ -96,7 +97,8 @@ router.route('/:category_id')
             'application/json': function(){
                 res.json(req.category);
             }
-        }); 
+        });
+        return null; 
     })
 
     .put(function(req,res,next){
@@ -111,6 +113,7 @@ router.route('/:category_id')
                     res.json(category);
                 }
             });
+            return null;
         }).catch(function(error){
                 next(error);
         });
@@ -130,6 +133,7 @@ router.route('/:category_id')
                         res.json(category);
                     }
                 });
+                return null;
             }).catch(function(error){
                 next(error);
             });

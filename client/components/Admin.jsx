@@ -20,7 +20,7 @@ class Admin extends React.Component {
             <li><IndexLink to="/admin" activeStyle={ACTIVE}>Ideas</IndexLink></li>
             <li><a href="#">Comments</a></li>
             <li><a href="#">Users</a></li>
-            <li><a href="#">Categories</a></li>
+            <li><Link to="/admin/categories" activeStyle={ACTIVE}>Categories</Link></li>
             <li><Link to="/admin/stages" activeStyle={ACTIVE}>Stages</Link></li>
           </ul>
           </nav>
