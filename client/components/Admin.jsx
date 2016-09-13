@@ -1,6 +1,7 @@
 import React from 'react';
 import SearchBar from './SearchBar.jsx';
 import AddNew from './AddNew.jsx';
+import EditIdeas from './EditIdeas.jsx';
 import SelectCategoryContainer from './SelectCategoryContainer.jsx';
 import { Link, IndexLink } from 'react-router';
 
@@ -25,7 +26,7 @@ class Admin extends React.Component {
           </ul>
           </nav>
           <div className="container">
-            {this.props.children}
+            {this.props.children || <EditIdeas/>}
           </div>
         </div>
       )

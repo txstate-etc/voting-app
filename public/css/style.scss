@@ -300,6 +300,23 @@ footer{
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 6px #c0a16b;
 }
 
+.idea-table-header{
+  background-color: $second-neutral-highlight;
+  font-weight: bold;
+  padding: 8px;
+}
+
+.edit-ideas{
+  padding-bottom: 20px;
+  &.idea-table-row-stripe{
+    background-color: #f9f9f9;
+  }
+  .idea-small-label{
+    font-weight: bold;
+    margin-right: 5px;
+  }
+}
+
 .yes-icon{
   color: green;
 }
