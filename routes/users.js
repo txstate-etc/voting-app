@@ -37,6 +37,7 @@ router.route('/')
                     res.status(201).json(user);
                 }
             }); 
+            return null;
         })
         .catch(function(error){
             next(error);
@@ -119,6 +120,7 @@ router.route('/:user_id')
                     res.json(user);
                 }
             });
+            return null;
         }).catch(function(error){
                 next(error);
         });
@@ -138,6 +140,7 @@ router.route('/:user_id')
                         res.json(user);
                     }
                 });
+                return null;
             }).catch(function(error){
                 next(error);
             });
