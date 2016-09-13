@@ -12,6 +12,8 @@ import EditStages from './components/EditStages.jsx';
 import StageForm from './components/StageForm.jsx';
 import EditCategories from './components/EditCategories.jsx';
 import CategoryForm from './components/CategoryForm.jsx';
+import EditUsers from './components/EditUsers.jsx';
+import UserForm from './components/UserForm.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
 import {isLoggedIn} from './auth';
 import $ from 'jquery';
@@ -36,11 +38,14 @@ export default (
             <Route path="/admin" component={AdminContainer} onEnter={requireAuth}>
                 <Route path="/admin/stages" component={EditStages} onEnter={requireAuth}/>
                 <Route path="/admin/categories" component={EditCategories} onEnter={requireAuth}/>
+                <Route path="/admin/users" component={EditUsers} onEnter={requireAuth}/>
             </Route>
             <Route path="/admin/stages/add" component={StageForm} editMode={false} onEnter={requireAuth}/>
             <Route path="/admin/stages/:stageId" component={StageForm} editMode={true} onEnter={requireAuth}/>
             <Route path="/admin/categories/add" component={CategoryForm} editMode={false} onEnter={requireAuth}/>
             <Route path="/admin/categories/:categoryId" component={CategoryForm} editMode={true} onEnter={requireAuth}/>
+            <Route path="/admin/users/add" component={UserForm} editMode={false} onEnter={requireAuth}/>
+            <Route path="/admin/users/:userId" component={UserForm} editMode={true} onEnter={requireAuth}/>
             <Route path="/login" component={LoginRedirect}/>
             <Route path="*" component={NotFoundPage}/>
         </Route>
