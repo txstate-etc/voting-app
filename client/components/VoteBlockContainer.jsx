@@ -2,8 +2,7 @@ import React from 'react';
 import VoteBlock from './VoteBlock.jsx';
 import $ from 'jquery';
 import {isLoggedIn,getUserId} from '../auth';
-import { browserHistory } from 'react-router'
-
+import { browserHistory } from 'react-router';
 
 class VoteBlockContainer extends React.Component {
 
@@ -17,14 +16,15 @@ class VoteBlockContainer extends React.Component {
 
     componentDidMount() {
         var _this = this;
-        this.setTotalScore();
-        if(isLoggedIn()){
-            $.ajax({url: "/votes?idea=" + this.props.ideaID + "&user=" + getUserId(), dataType: "json", success: function(result){
-               if(result.length > 0){
-                    _this.setState({userScore: result[0].score});
-               }
-            }});
-        }
+        $.ajax({url: "/votes?idea=" + _this.props.ideaID, dataType: "json", success: function(results){
+            _this.setState({totalScore: _this.calculateScore(results)});
+            if(isLoggedIn()){
+                var user_vote = results.filter((vote) => vote.user_id === getUserId());
+                if(user_vote.length > 0){
+                    _this.setState({userScore: user_vote[0].score});
+                }
+            }
+        }});
     }
 
     updateVote(score){
