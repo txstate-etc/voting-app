@@ -11,18 +11,21 @@ var models = {
     Vote: require("../models").vote
 };
 
-//should the client be sending user and idea or user_id and idea_id?
-
 describe('Vote',function(){
     var Vote = models.Vote;
     before(function(){
         return sequelize_fixtures.loadFiles(['./test/fixtures/stages.json',
                                               './test/fixtures/categories.json',
-                                              './test/fixtures/users.json'], models).then(function(){
-            return sequelize_fixtures.loadFile('./test/fixtures/ideas.json', models).then(function(){
-                return sequelize_fixtures.loadFile('./test/fixtures/votes.json', models);
-            });
-        });
+                                              './test/fixtures/users.json'], models)
+        .then(function(){ 
+            return sequelize_fixtures.loadFile('./test/fixtures/ideas.json', models);
+        })
+        .then(function(){
+            return sequelize_fixtures.loadFile('./test/fixtures/votes.json', models);
+        })
+        .catch(function(err){
+            console.error(err);
+        })
     });
 
     after(function() {
@@ -106,7 +109,7 @@ describe('Vote',function(){
             var startVotes = res.body.length;
             request.post('/votes')
             .set('Accept', 'application/json')
-            .send({score: 3, idea_id: 1, user_id: 4})
+            .send({score: 3, idea_id: 3}) //user 1 votes for idea 3
             .expect(201)
             .end(function(postErr,postRes){
                 if(postErr) return done(postErr);
@@ -124,11 +127,11 @@ describe('Vote',function(){
 
     //a user can only vote once for an idea.  They can update that vote, but only create once.
     it('should not allow one user to vote for an idea twice', function(done){
-        Vote.create({score: 1, user_id: 4, idea_id: 3})
+        Vote.create({score: 1, user_id: 1, idea_id: 4})
         .then(function(vote){
             request.post('/votes')
             .set('Accept', 'application/json')
-            .send({'score': -8, 'idea_id': 3, 'user_id': 4})
+            .send({'score': -8, 'idea_id': 4})
             .expect(200)
             .end(function(err, res){
                 if(err) return done(err);
@@ -146,7 +149,7 @@ describe('Vote',function(){
 
     //Test GET one specific vote
     it('should list a SINGLE vote on /vote/<id> GET', function(done){
-        Vote.create({score: 7, user_id: 2, idea_id: 2})
+        Vote.create({score: 7, idea_id: 4, user_id: 1})
         .then(function(vote){
             request.get('/votes/' + vote.id)
             .set('Accept', 'application/json')
