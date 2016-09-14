@@ -85,6 +85,7 @@ if(app.get('env') === 'test'){
   app.use(function(req,res,next){
     req.session = {};
     req.session.user_id = "1";
+    req.session.admin = 1;
     next();
   })
 }

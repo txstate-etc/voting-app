@@ -209,7 +209,7 @@ router.route('/:idea_id')
             }
         })
         .then(function(arg){
-            res.status(201).json(editedIdea);
+            res.status(200).json(editedIdea);
             return null;
         })
         .catch(function(err){
@@ -232,6 +232,7 @@ router.route('/:idea_id')
                         res.json(idea);
                     }
                 });
+                return null;
             }).catch(function(error){
                 next(error);
             });
