@@ -159,8 +159,3 @@ describe('Category',function(){
         
     });
 });
-
-//Move this test to idea_test
-describe('Category and Ideas', function(){
-    it('should return all ideas within a particular category');
-});
