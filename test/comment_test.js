@@ -16,11 +16,16 @@ describe('Comment',function(){
     before(function(){
         return sequelize_fixtures.loadFiles(['./test/fixtures/stages.json',
                                               './test/fixtures/categories.json',
-                                              './test/fixtures/users.json'], models).then(function(){
-            return sequelize_fixtures.loadFile('./test/fixtures/ideas.json', models).then(function(){
-                return sequelize_fixtures.loadFile('./test/fixtures/comments.json', models);
-            });
-        });
+                                              './test/fixtures/users.json'], models)
+        .then(function(){
+            return sequelize_fixtures.loadFile('./test/fixtures/ideas.json', models)
+        })
+        .then(function(){
+            return sequelize_fixtures.loadFile('./test/fixtures/comments.json', models);
+        })
+        .catch(function(err){
+            console.error(err);
+        })
     });
 
     after(function() {
