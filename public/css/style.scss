@@ -48,15 +48,15 @@ th {
 }
 
 header{
-    
-    display: none;
-} 
-@media only screen and (min-width : 768px) {
-  header{
-    display: block;
-    background: $second-neutral-shadow;
-    color: black;
-    padding: 10px;
+  display: block;
+  background: $second-neutral-shadow;
+  color: black;
+  padding: 10px;
+
+  @media (max-width : 768px) {
+   
+  display: none;
+
   }
 }
 
@@ -304,6 +304,9 @@ footer{
   background-color: $second-neutral-highlight;
   font-weight: bold;
   padding: 8px;
+  @media (max-width : 768px) {
+    display: none;
+  }
 }
 
 .edit-ideas{
@@ -314,6 +317,14 @@ footer{
   .idea-small-label{
     font-weight: bold;
     margin-right: 5px;
+  }
+  .data-label{
+    display: none;
+    @media (max-width : 768px) {
+      display: inline-block;
+      font-weight: bold;
+      margin-right: 5px;
+    }
   }
 }
 

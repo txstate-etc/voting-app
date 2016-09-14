@@ -112,9 +112,10 @@ class EditIdeas extends React.Component {
                         return(
                             <div className={"row edit-ideas" + ((index%2 == 0) ? " idea-table-row-stripe" : "")} key={idea.id}>
                                 <div className="col-sm-2">
-                                    {idea.stage ? idea.stage.name : <span className="new-indicator">NEW</span>}
+                                    <span className="data-label">Stage:</span>{idea.stage ? idea.stage.name : <span className="new-indicator">NEW</span>}
                                 </div>
                                 <div className="col-sm-2">
+                                    <span className="data-label">Category:</span>
                                     <div>
                                     {
                                         idea.categories.map((cat) => {
@@ -131,6 +132,7 @@ class EditIdeas extends React.Component {
                                     {this.buildIdea(idea)}
                                 </div>
                                 <div className="col-sm-1">
+                                    <span className="data-label">Delete?</span>
                                     <input type="checkbox" id={idea.id} onClick={this.deleteIdea.bind(this,idea.id)}/>
                                 </div>
                             </div>
