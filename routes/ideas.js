@@ -33,7 +33,7 @@ router.route('/')
                                {model: models.category, through: {where: categoryFilter, attributes:[]},required: categoryRequired}];
         if(req.query.votes && req.query.votes == "true") eagerLoadModels.push({model: models.vote});
         if(req.query.comments && req.query.comments == "true") {
-            eagerLoadModels.push({model: models.comment, include: [{model: models.reply}]});
+            eagerLoadModels.push({model: models.comment, where: {approved: 1}, required: false, include: [{model: models.reply, where: {approved: 1}, required: false}]});
         }
         else{
             //Even if they don't want the comments/replies, they might want the comment count.  This will just return the IDs of 
@@ -141,7 +141,7 @@ router.param('idea_id', function(req, res, next, value){
         include: [{model: models.user},
                   {model: models.stage},
                   {model: models.category},
-                  {model: models.comment, include: [{model: models.reply}]},
+                  {model: models.comment, where: {approved: 1}, required: false, include: [{model: models.reply, where: {approved: 1}, required: false}]},
                   {model: models.file}]
     }).then(function(idea){
         if(idea){
