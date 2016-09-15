@@ -1,6 +1,5 @@
 import React from 'react';
 import SearchBar from './SearchBar.jsx';
-import AddNew from './AddNew.jsx';
 import SelectCategoryContainer from './SelectCategoryContainer.jsx';
 import IdeaList from './IdeaList.jsx';
 import {isLoggedIn} from '../auth';
@@ -16,7 +15,9 @@ class Main extends React.Component {
             <SearchBar/>
           </div>
           <div className="col-sm-6">
-            <div className="add-new">{isLoggedIn() ? <AddNew /> : ""}</div>
+            <div className="add-new">
+              {isLoggedIn() && <a className="btn btn-warning" href="/new"><i className="fa fa-plus"></i>&nbsp;Add a New Idea</a>}
+            </div>
           </div>
         </div>
         <br/>

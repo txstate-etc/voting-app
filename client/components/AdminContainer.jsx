@@ -1,7 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
 import SearchBar from './SearchBar.jsx';
-import AddNew from './AddNew.jsx';
 import EditIdeas from './EditIdeas.jsx';
 import SelectCategoryContainer from './SelectCategoryContainer.jsx';
 import { Link, IndexLink } from 'react-router';
