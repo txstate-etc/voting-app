@@ -1,6 +1,5 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import SelectCategoryContainer from './SelectCategoryContainer.jsx';
 import $ from 'jquery';
 import Dropzone from 'react-dropzone';
 
