@@ -1,5 +1,4 @@
 import React from 'react';
-import { findDOMNode } from 'react-dom';
 import $ from 'jquery';
 import Dropzone from 'react-dropzone';
 
