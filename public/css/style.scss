@@ -17,6 +17,19 @@ $second-neutral-shadow: darken($second-neutral, 30);
 $linkColor: #004865;
 $accent: #f0ad4e;
 
+html{
+  height:100%;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#content{
+  flex: 1;
+}
 a{
   color: #00B7FF
 }

@@ -13,15 +13,9 @@ class Layout extends React.Component {
                 <div className="title-bar">
                     <i className="logo fa fa-check-square-o"></i>
                     <Link to="/" className="app-title">Voting Application</Link>
-                    <br/>
+                    <i className="fa fa-bars hamburger pull-right"></i>
                 </div>
                 {this.props.children}
-                <footer>
-                    <a href="#">
-                        <i className="fa fa-question"></i>
-                         Help
-                    </a>
-                </footer>
             </div>
         )
     }
