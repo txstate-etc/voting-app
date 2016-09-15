@@ -1,5 +1,5 @@
 import React from 'react';
-import IdeaContainer from './IdeaContainer.jsx';
+import Idea from './Idea.jsx';
 
 class IdeaList extends React.Component {
     render(){
@@ -7,7 +7,7 @@ class IdeaList extends React.Component {
             <div>
                 {this.props.ideaList.map(idea => {
                     return (
-                        <IdeaContainer
+                        <Idea
                             key = {idea.id}
                             idea = {idea}
                         />
