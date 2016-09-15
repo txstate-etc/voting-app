@@ -66,52 +66,57 @@ class EditUsers extends React.Component {
     render(){
         return(
             <div>
-                <h3>Edit Users</h3>
-                <table className="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Net ID</th>
-                            <th>Admin?</th>
-                            <th>Comment Moderator?</th>
-                            <th>Idea Moderator?</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.users.map(user => {
-                                return (
-                                    <tr key={user.id}>
-                                        <td>{user.firstname}</td>
-                                        <td>{user.lastname}</td>
-                                        <td>{user.netid}</td>
-                                        <td>
-                                            {user.admin && <i className="fa fa-check yes-icon" aria-label="User is an admin"></i>}
-                                            {!user.admin && <i className="fa fa-times no-icon" aria-label="User is not an admin"></i>}
-                                        </td>
-                                        <td>{
-                                            user.commentMod && <i className="fa fa-check yes-icon" aria-label="User is a comment moderator"></i>}
-                                            {!user.commentMod && <i className="fa fa-times no-icon" aria-label="User is not a comment moderator"></i>}
-                                        </td>
-                                        <td>
-                                            {user.ideaMod && <i className="fa fa-check yes-icon" aria-label="User is an idea moderator"></i>}
-                                            {!user.ideaMod && <i className="fa fa-times no-icon" aria-label="User is not an idea moderator"></i>}
-                                        </td>
-                                        <td><Link to={"/admin/users/" + user.id}>Edit</Link></td>
-                                        <td><input type="checkbox" value={user.id} onClick={this.deleteUser.bind(this,user.id)}/></td>
-                                    </tr>
-                                )
-                            })
-                        }
-                        <tr>
-                            <td colSpan="8"><a className="btn btn-warning btn-sm" href="/admin/users/add">Add User</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-                { this.state.usersToDelete.length > 0 && <button className="btn btn-warning btn-sm pull-right" onClick={this.handleDeletions.bind(this)}>Delete Selected Users</button>}
+            {
+                this.props.children ||
+                <div>
+                    <h3>Users</h3>
+                    <table className="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Net ID</th>
+                                <th>Admin?</th>
+                                <th>Comment Moderator?</th>
+                                <th>Idea Moderator?</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.users.map(user => {
+                                    return (
+                                        <tr key={user.id}>
+                                            <td>{user.firstname}</td>
+                                            <td>{user.lastname}</td>
+                                            <td>{user.netid}</td>
+                                            <td>
+                                                {user.admin && <i className="fa fa-check yes-icon" aria-label="User is an admin"></i>}
+                                                {!user.admin && <i className="fa fa-times no-icon" aria-label="User is not an admin"></i>}
+                                            </td>
+                                            <td>{
+                                                user.commentMod && <i className="fa fa-check yes-icon" aria-label="User is a comment moderator"></i>}
+                                                {!user.commentMod && <i className="fa fa-times no-icon" aria-label="User is not a comment moderator"></i>}
+                                            </td>
+                                            <td>
+                                                {user.ideaMod && <i className="fa fa-check yes-icon" aria-label="User is an idea moderator"></i>}
+                                                {!user.ideaMod && <i className="fa fa-times no-icon" aria-label="User is not an idea moderator"></i>}
+                                            </td>
+                                            <td><Link to={"/admin/users/" + user.id}>Edit</Link></td>
+                                            <td><input type="checkbox" value={user.id} onClick={this.deleteUser.bind(this,user.id)}/></td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                            <tr>
+                                <td colSpan="8"><a className="btn btn-warning btn-sm" href="/admin/users/add">Add User</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    { this.state.usersToDelete.length > 0 && <button className="btn btn-warning btn-sm pull-right" onClick={this.handleDeletions.bind(this)}>Delete Selected Users</button>}
+                </div>
+            }
             </div>
         );
     }

@@ -67,6 +67,7 @@ class CategoryForm extends React.Component {
         var invalidName = this.state.categoryErr.length > 0;
         return(
             <div className="container">
+                <h3>{this.props.route.editMode ? "Edit Category" : "Add Category"}</h3>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="category">Name:</label>

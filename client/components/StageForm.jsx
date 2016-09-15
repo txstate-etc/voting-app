@@ -67,6 +67,7 @@ class StageForm extends React.Component {
         var invalidName = this.state.stageErr.length > 0;
         return(
             <div className="container">
+                <h3>{this.props.route.editMode ? "Edit Stage" : "Add Stage"}</h3>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="stage">Name:</label>

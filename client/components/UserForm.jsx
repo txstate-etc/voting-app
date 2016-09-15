@@ -122,6 +122,7 @@ class UserForm extends React.Component {
         var invalidNetId = this.state.netidErr.length > 0;
         return(
             <div className="container">
+                <h3>{this.props.route.editMode ? "Edit User" : "Add User"}</h3>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="firstname">First Name:</label>

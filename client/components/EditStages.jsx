@@ -67,33 +67,37 @@ class EditStages extends React.Component {
     render(){
         return(
             <div>
-                <h3>Stages</h3>
-                <table className="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.stages.map(stage => {
-                                return (
-                                    <tr key={stage.id}>
-                                        <td><Link to={"/admin/stages/" + stage.id}>{stage.name}</Link></td>
-                                        <td><input type="checkbox" value={stage.id} onClick={this.deleteStage.bind(this,stage.id)}/></td>
-                                    </tr>
-                                )
-                            })
-                        }
-                        <tr>
-                            <td colSpan="2"><a className="btn btn-warning btn-sm" href="/admin/stages/add">Add Stage</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-                { this.state.stagesToDelete.length > 0 && <button className="btn btn-warning btn-sm pull-right" onClick={this.handleDeletions.bind(this)}>Delete Selected Stages</button>}
+            {this.props.children ||
+                <div>
+                    <h3>Stages</h3>
+                    <table className="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.stages.map(stage => {
+                                    return (
+                                        <tr key={stage.id}>
+                                            <td><Link to={"/admin/stages/" + stage.id}>{stage.name}</Link></td>
+                                            <td><input type="checkbox" value={stage.id} onClick={this.deleteStage.bind(this,stage.id)}/></td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                            <tr>
+                                <td colSpan="2"><a className="btn btn-warning btn-sm" href="/admin/stages/add">Add Stage</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    { this.state.stagesToDelete.length > 0 && <button className="btn btn-warning btn-sm pull-right" onClick={this.handleDeletions.bind(this)}>Delete Selected Stages</button>}
+                </div>
+            }
             </div>
-        )
+            )
     }
 }
 

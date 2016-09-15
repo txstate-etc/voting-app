@@ -67,31 +67,35 @@ class EditCategories extends React.Component {
     render(){
         return(
             <div>
-                <h3>categories</h3>
-                <table className="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.categories.map(category => {
-                                return (
-                                    <tr key={category.id}>
-                                        <td><Link to={"/admin/categories/" + category.id}>{category.name}</Link></td>
-                                        <td><input type="checkbox" value={category.id} onClick={this.deleteCategory.bind(this,category.id)}/></td>
-                                    </tr>
-                                )
-                            })
-                        }
-                        <tr>
-                            <td colSpan="2"><a className="btn btn-warning btn-sm" href="/admin/categories/add">Add Category</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-                { this.state.categoriesToDelete.length > 0 && <button className="btn btn-warning btn-sm pull-right" onClick={this.handleDeletions.bind(this)}>Delete Selected Categories</button>}
+                {this.props.children ||
+                <div>
+                    <h3>Categories</h3>
+                    <table className="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.categories.map(category => {
+                                    return (
+                                        <tr key={category.id}>
+                                            <td><Link to={"/admin/categories/" + category.id}>{category.name}</Link></td>
+                                            <td><input type="checkbox" value={category.id} onClick={this.deleteCategory.bind(this,category.id)}/></td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                            <tr>
+                                <td colSpan="2"><a className="btn btn-warning btn-sm" href="/admin/categories/add">Add Category</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    { this.state.categoriesToDelete.length > 0 && <button className="btn btn-warning btn-sm pull-right" onClick={this.handleDeletions.bind(this)}>Delete Selected Categories</button>}
+                </div>
+            }
             </div>
         )
     }
