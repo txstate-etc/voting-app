@@ -30,14 +30,13 @@ class ViewIdeaContainer extends React.Component {
             return returnObject;
            });
            _this.setState({iconList: iconAssignments});
-           //update views
+           //update view count
            $.ajax({
                 url: url,
                 dataType: "json",
                 type: "PUT",
                 data: {views: parseInt(result.views) + 1},
-                success: function(){
-                    console.log("views updated");
+                success: function(){  
                 },
                 error: function(xhr, status, err){
                     console.log("there was an error")
@@ -58,8 +57,6 @@ class ViewIdeaContainer extends React.Component {
     }
 
 
-    //for some reason, getting the Idea ID from the idea prop in ViewIdea was not working
-    //It said it was "undefined."  Passing it in its own prop works.
     render(){
         return(
             <ViewIdea
