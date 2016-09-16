@@ -69,7 +69,7 @@ class EditIdeas extends React.Component {
     buildIdea(idea, index){
         return(
             <div>
-                <Link to={"/edit/" + idea.id}><h4>{idea.title}</h4></Link>
+                <Link to={"/admin/ideas/" + idea.id}><h4>{idea.title}</h4></Link>
                 <p>{idea.text}</p>
                 <div className="row">
                     <div className="col-lg-3 col-md-6">
@@ -143,7 +143,7 @@ class EditIdeas extends React.Component {
                     }
                     <div className={"row edit-ideas" + ((this.state.ideas.length%2 ==0) ? " idea-table-row-stripe" : "" )}>
                         <div className="col-xs-12">
-                            <a className="btn btn-warning btn-sm" href="/new">Add Idea</a>
+                            <a className="btn btn-warning btn-sm" href="/admin/ideas/add">Add Idea</a>
                         </div>
                     </div>
                     { this.state.ideasToDelete.length > 0 && <button className="btn btn-warning btn-sm pull-right" onClick={this.handleDeletions.bind(this)}>Delete Selected Ideas</button>}

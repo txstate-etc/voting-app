@@ -42,7 +42,6 @@ export default (
                     <Route path="/admin/ideas/add" component={AddIdeaContainer} editMode={false} onEnter={requireAuth}/>
                     <Route path="/admin/ideas/:ideaId" component={EditIdeaContainer} editMode={true} onEnter={requireAuth}/>
                 </Route>
-                <Route path="/admin/add" component={AddIdeaContainer} onEnter={requireAuth}/>
                 <Route path="/admin/stages" component={EditStages} onEnter={requireAuth}>
                     <Route path="/admin/stages/add" component={StageForm} editMode={false} onEnter={requireAuth}/>
                     <Route path="/admin/stages/:stageId" component={StageForm} editMode={true} onEnter={requireAuth}/>
