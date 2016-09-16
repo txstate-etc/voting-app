@@ -92,59 +92,63 @@ class EditIdeas extends React.Component {
     render(){
         return(
             <div>
-                <h3>Ideas</h3>
-                <div className="row idea-table-header">
-                    <div className="col-sm-2">
-                        Stage
+                {this.props.children ||
+                <div>
+                    <h3>Ideas</h3>
+                    <div className="row idea-table-header">
+                        <div className="col-sm-2">
+                            Stage
+                        </div>
+                        <div className="col-sm-2">
+                            Category
+                        </div>
+                        <div className="col-sm-7">
+                            Idea
+                        </div>
+                        <div className="col-sm-1">
+                            Delete
+                        </div>
                     </div>
-                    <div className="col-sm-2">
-                        Category
-                    </div>
-                    <div className="col-sm-7">
-                        Idea
-                    </div>
-                    <div className="col-sm-1">
-                        Delete
-                    </div>
-                </div>
-                {
-                    this.state.ideas.map((idea, index) => {
-                        return(
-                            <div className={"row edit-ideas" + ((index%2 == 0) ? " idea-table-row-stripe" : "")} key={idea.id}>
-                                <div className="col-sm-2">
-                                    <span className="data-label">Stage:</span>{idea.stage ? idea.stage.name : <span className="new-indicator">NEW</span>}
-                                </div>
-                                <div className="col-sm-2">
-                                    <span className="data-label">Category:</span>
-                                    <div>
-                                    {
-                                        idea.categories.map((cat) => {
-                                            return(
-                                                <div key={cat.id}>
-                                                    {cat.name}
-                                                </div>
-                                            );
-                                        })
-                                    }
+                    {
+                        this.state.ideas.map((idea, index) => {
+                            return(
+                                <div className={"row edit-ideas" + ((index%2 == 0) ? " idea-table-row-stripe" : "")} key={idea.id}>
+                                    <div className="col-sm-2">
+                                        <span className="data-label">Stage:</span>{idea.stage ? idea.stage.name : <span className="new-indicator">NEW</span>}
+                                    </div>
+                                    <div className="col-sm-2">
+                                        <span className="data-label">Category:</span>
+                                        <div>
+                                        {
+                                            idea.categories.map((cat) => {
+                                                return(
+                                                    <div key={cat.id}>
+                                                        {cat.name}
+                                                    </div>
+                                                );
+                                            })
+                                        }
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-7">
+                                        {this.buildIdea(idea)}
+                                    </div>
+                                    <div className="col-sm-1">
+                                        <span className="data-label">Delete?</span>
+                                        <input type="checkbox" id={idea.id} onClick={this.deleteIdea.bind(this,idea.id)}/>
                                     </div>
                                 </div>
-                                <div className="col-sm-7">
-                                    {this.buildIdea(idea)}
-                                </div>
-                                <div className="col-sm-1">
-                                    <span className="data-label">Delete?</span>
-                                    <input type="checkbox" id={idea.id} onClick={this.deleteIdea.bind(this,idea.id)}/>
-                                </div>
-                            </div>
-                        )
-                    })
-                }
-                <div className={"row edit-ideas" + ((this.state.ideas.length%2 ==0) ? " idea-table-row-stripe" : "" )}>
-                    <div className="col-xs-12">
-                        <a className="btn btn-warning btn-sm" href="/new">Add Idea</a>
+                            )
+                        })
+                    }
+                    <div className={"row edit-ideas" + ((this.state.ideas.length%2 ==0) ? " idea-table-row-stripe" : "" )}>
+                        <div className="col-xs-12">
+                            <a className="btn btn-warning btn-sm" href="/new">Add Idea</a>
+                        </div>
                     </div>
+                    { this.state.ideasToDelete.length > 0 && <button className="btn btn-warning btn-sm pull-right" onClick={this.handleDeletions.bind(this)}>Delete Selected Ideas</button>}
                 </div>
-                { this.state.ideasToDelete.length > 0 && <button className="btn btn-warning btn-sm pull-right" onClick={this.handleDeletions.bind(this)}>Delete Selected Ideas</button>}
+                }
             </div>
         );
     }

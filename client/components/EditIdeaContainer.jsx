@@ -62,13 +62,16 @@ class EditIdeaContainer extends React.Component {
 
     render(){
         return (
-            <IdeaForm
-                categories= {this.state.categories}
-                onIdeaSubmit = {this.submit.bind(this)}
-                stages = {this.state.stages}
-                editMode = {true}
-                ideaId = {this.props.params.ideaId}
-            />
+            <div className="container">
+                <h3>Edit Idea</h3>
+                <IdeaForm
+                    categories= {this.state.categories}
+                    onIdeaSubmit = {this.submit.bind(this)}
+                    stages = {this.state.stages}
+                    editMode = {true}
+                    ideaId = {this.props.params.ideaId}
+                />
+            </div>
         );
     }
 }

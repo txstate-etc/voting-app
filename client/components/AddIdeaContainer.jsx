@@ -53,11 +53,14 @@ class AddIdeaContainer extends React.Component {
 
     render(){
         return (
-            <IdeaForm
-                categories= {this.state.categories}
-                onIdeaSubmit = {this.submit.bind(this)}
-                editMode = {false}
-            />
+            <div className="container">
+                <h3>Add Idea</h3>
+                <IdeaForm
+                    categories= {this.state.categories}
+                    onIdeaSubmit = {this.submit.bind(this)}
+                    editMode = {false}
+                />
+            </div>
         );
     }
 }

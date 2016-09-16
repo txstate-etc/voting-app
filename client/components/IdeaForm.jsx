@@ -155,7 +155,7 @@ class IdeaForm extends React.Component {
         var invalidCategory = this.state.catErr.length > 0;
         var invalidStage = this.state.stageErr.length > 0;
         return (
-            <div className="container">
+            <div>
                 <form action="" onSubmit={this.handleSubmit}>
                     <div className={"form-group" + (invalidTitle ? " has-warning" : "")}>
                         <label htmlFor="title">Title</label>

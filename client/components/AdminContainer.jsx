@@ -18,7 +18,7 @@ class AdminContainer extends React.Component {
             <div>
               <nav className="navbar navbar-default">
               <ul className="nav navbar-nav">
-                <li><IndexLink to="/admin" activeStyle={ACTIVE}>Ideas</IndexLink></li>
+                <li><Link to="/admin/ideas" activeStyle={ACTIVE}>Ideas</Link></li>
                 <li><a href="#">Comments</a></li>
                 <li><Link to="/admin/users" activeStyle={ACTIVE}>Users</Link></li>
                 <li><Link to="/admin/categories" activeStyle={ACTIVE}>Categories</Link></li>
@@ -26,7 +26,7 @@ class AdminContainer extends React.Component {
               </ul>
               </nav>
               <div className="container">
-                {this.props.children || <EditIdeas/>}
+                {this.props.children}
               </div>
             </div>
         );

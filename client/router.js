@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, browserHistory, IndexRoute } from 'react-router';
+import { Router, Route, browserHistory, IndexRedirect } from 'react-router';
 import Layout from './components/Layout.jsx';
 import MainContainer from './components/MainContainer.jsx';
 import AddIdeaContainer from './components/AddIdeaContainer.jsx';
@@ -8,6 +8,7 @@ import ViewIdeaContainer from './components/ViewIdeaContainer.jsx';
 import AdminContainer from './components/AdminContainer.jsx';
 import LoginRedirect from './components/LoginRedirect.jsx';
 import ConfirmNewIdea from './components/ConfirmNewIdea.jsx';
+import EditIdeas from './components/EditIdeas.jsx';
 import EditStages from './components/EditStages.jsx';
 import StageForm from './components/StageForm.jsx';
 import EditCategories from './components/EditCategories.jsx';
@@ -36,6 +37,12 @@ export default (
             <Route path="/view/:ideaId" component={ViewIdeaContainer}/>
             <Route path="/edit/:ideaId" component={EditIdeaContainer} onEnter={requireAuth}/>
             <Route path="/admin" component={AdminContainer} onEnter={requireAuth}>
+                <IndexRedirect to="/admin/ideas" />
+                <Route path="/admin/ideas" component={EditIdeas} onEnter={requireAuth}>
+                    <Route path="/admin/ideas/add" component={AddIdeaContainer} editMode={false} onEnter={requireAuth}/>
+                    <Route path="/admin/ideas/:ideaId" component={EditIdeaContainer} editMode={true} onEnter={requireAuth}/>
+                </Route>
+                <Route path="/admin/add" component={AddIdeaContainer} onEnter={requireAuth}/>
                 <Route path="/admin/stages" component={EditStages} onEnter={requireAuth}>
                     <Route path="/admin/stages/add" component={StageForm} editMode={false} onEnter={requireAuth}/>
                     <Route path="/admin/stages/:stageId" component={StageForm} editMode={true} onEnter={requireAuth}/>
