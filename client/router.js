@@ -16,7 +16,7 @@ import CategoryForm from './components/CategoryForm.jsx';
 import EditUsers from './components/EditUsers.jsx';
 import UserForm from './components/UserForm.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
-import {isLoggedIn} from './auth';
+import {isLoggedIn, isAdmin} from './auth';
 import $ from 'jquery';
 
 function requireAuth(nextState, replace) {
@@ -26,6 +26,15 @@ function requireAuth(nextState, replace) {
        state: { nextPathname: nextState.location.pathname }
      })
    }
+}
+
+function requireAdmin(nextState, replace) {
+    if (!isAdmin()) {
+     replace({
+       pathname: '/notfound',
+       state: { nextPathname: nextState.location.pathname }
+         })
+    }
 }
 
 export default (
@@ -38,21 +47,21 @@ export default (
             <Route path="/edit/:ideaId" component={EditIdeaContainer} onEnter={requireAuth}/>
             <Route path="/admin" component={AdminContainer} onEnter={requireAuth}>
                 <IndexRedirect to="/admin/ideas" />
-                <Route path="/admin/ideas" component={EditIdeas} onEnter={requireAuth}>
-                    <Route path="/admin/ideas/add" component={AddIdeaContainer} editMode={false} onEnter={requireAuth}/>
-                    <Route path="/admin/ideas/:ideaId" component={EditIdeaContainer} editMode={true} onEnter={requireAuth}/>
+                <Route path="/admin/ideas" component={EditIdeas} onEnter={requireAdmin}>
+                    <Route path="/admin/ideas/add" component={AddIdeaContainer} editMode={false}/>
+                    <Route path="/admin/ideas/:ideaId" component={EditIdeaContainer} editMode={true}/>
                 </Route>
-                <Route path="/admin/stages" component={EditStages} onEnter={requireAuth}>
-                    <Route path="/admin/stages/add" component={StageForm} editMode={false} onEnter={requireAuth}/>
-                    <Route path="/admin/stages/:stageId" component={StageForm} editMode={true} onEnter={requireAuth}/>
+                <Route path="/admin/stages" component={EditStages} onEnter={requireAdmin}>
+                    <Route path="/admin/stages/add" component={StageForm} editMode={false}/>
+                    <Route path="/admin/stages/:stageId" component={StageForm} editMode={true}/>
                 </Route>
-                <Route path="/admin/categories" component={EditCategories} onEnter={requireAuth}>
-                    <Route path="/admin/categories/add" component={CategoryForm} editMode={false} onEnter={requireAuth}/>
-                    <Route path="/admin/categories/:categoryId" component={CategoryForm} editMode={true} onEnter={requireAuth}/>
+                <Route path="/admin/categories" component={EditCategories} onEnter={requireAdmin}>
+                    <Route path="/admin/categories/add" component={CategoryForm} editMode={false}/>
+                    <Route path="/admin/categories/:categoryId" component={CategoryForm} editMode={true}/>
                 </Route>
-                <Route path="/admin/users" component={EditUsers} onEnter={requireAuth}>
-                    <Route path="/admin/users/add" component={UserForm} editMode={false} onEnter={requireAuth}/>
-                    <Route path="/admin/users/:userId" component={UserForm} editMode={true} onEnter={requireAuth}/>
+                <Route path="/admin/users" component={EditUsers} onEnter={requireAdmin}>
+                    <Route path="/admin/users/add" component={UserForm} editMode={false}/>
+                    <Route path="/admin/users/:userId" component={UserForm} editMode={true}/>
                 </Route>
             </Route>
             <Route path="/login" component={LoginRedirect}/>
