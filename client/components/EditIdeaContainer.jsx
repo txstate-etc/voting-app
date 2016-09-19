@@ -1,7 +1,6 @@
 import React from 'react';
 import IdeaForm from './IdeaForm.jsx';
 import $ from 'jquery';
-import {isLoggedIn,getUserId} from '../auth';
 import { browserHistory } from 'react-router';
 
 class EditIdeaContainer extends React.Component {
