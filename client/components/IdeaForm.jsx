@@ -1,6 +1,8 @@
 import React from 'react';
 import $ from 'jquery';
 import Dropzone from 'react-dropzone';
+import {getUserId, isAdmin} from '../auth';
+import { browserHistory } from 'react-router';
 
 class IdeaForm extends React.Component {
 
@@ -26,12 +28,18 @@ class IdeaForm extends React.Component {
         var _this = this;
         if(this.props.editMode){
             $.ajax({url: "/ideas/" + _this.props.ideaId + "?files=true", dataType: "json", success: function(result){
-                _this.setState({title: result.title,
-                                text: result.text,
-                                categories: _this.formatCategories(result.categories),
-                                stage: result.stage_id || 0,
-                                attachmentsAlreadyUploaded: result.files
-                            });
+                if(isAdmin() || result.creator == getUserId()){
+                    _this.setState({title: result.title,
+                                    text: result.text,
+                                    categories: _this.formatCategories(result.categories),
+                                    stage: result.stage_id || 0,
+                                    attachmentsAlreadyUploaded: result.files
+                                });
+                }
+                else{
+                    //They should not be editing this idea, show them not found page
+                    browserHistory.push('/notfound')
+                }
             }});
         }
     }
