@@ -48,6 +48,7 @@
     "grunt-autoprefixer": "^3.0.4",
     "grunt-browserify": "^5.0.0",
     "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "mocha": "^2.4.5",
     "sequelize-fixtures": "^0.5.4",

@@ -30,6 +30,13 @@ module.exports = function(grunt) {
                 dest: 'public/js/bundle.js'
             }
         },
+        uglify: {
+            my_target: {
+              files: {
+                'public/js/bundle.min.js': ['public/js/bundle.js']
+                }
+            }
+        },
         watch: {
             css: {
                 files: ["public/css/*.scss"],
@@ -46,6 +53,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-autoprefixer");
     grunt.loadNpmTasks("grunt-browserify");
     grunt.loadNpmTasks("grunt-contrib-watch");
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
     grunt.registerTask("css", ["sass", "autoprefixer"]);
 
