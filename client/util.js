@@ -15,6 +15,24 @@ function sumCommentsAndReplies(comments){
     return 0;
 }
 
+function sumUnapprovedCommentsAndReplies(comments){
+    var numComments = 0;
+    if(comments){
+        for(var i=0; i<comments.length; i++){
+            if(!comments[i].approved){
+                numComments++;
+                var replies = comments[i].replies;
+                for(var j=0; j<replies.length; j++){
+                    if(!replies[j].approved){
+                        numComments++;
+                    }
+                }
+            }
+        }
+    }
+    return numComments;
+}
+
 function getAttachmentIcon(filename){
     var extension = filename.substr(filename.lastIndexOf('.')+1).toLowerCase();
     switch(extension){
@@ -35,4 +53,4 @@ function getAttachmentIcon(filename){
     }
 }
 
-export {dateToElapsedTime, sumCommentsAndReplies, getAttachmentIcon};
+export {dateToElapsedTime, sumCommentsAndReplies, sumUnapprovedCommentsAndReplies, getAttachmentIcon};

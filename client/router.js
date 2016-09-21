@@ -9,6 +9,7 @@ import AdminContainer from './components/AdminContainer.jsx';
 import LoginRedirect from './components/LoginRedirect.jsx';
 import ConfirmNewIdea from './components/ConfirmNewIdea.jsx';
 import EditIdeas from './components/EditIdeas.jsx';
+import EditComments from './components/EditComments.jsx';
 import EditStages from './components/EditStages.jsx';
 import StageForm from './components/StageForm.jsx';
 import EditCategories from './components/EditCategories.jsx';
@@ -50,6 +51,8 @@ export default (
                 <Route path="/admin/ideas" component={EditIdeas} onEnter={requireAdmin}>
                     <Route path="/admin/ideas/add" component={AddIdeaContainer} editMode={false}/>
                     <Route path="/admin/ideas/:ideaId" component={EditIdeaContainer} editMode={true}/>
+                </Route>
+                <Route path="/admin/comments" component={EditComments} onEnter={requireAdmin}>
                 </Route>
                 <Route path="/admin/stages" component={EditStages} onEnter={requireAdmin}>
                     <Route path="/admin/stages/add" component={StageForm} editMode={false}/>
