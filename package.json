@@ -33,6 +33,7 @@
     "multer": "^1.2.0",
     "mysql": "^2.10.2",
     "react": "^15.1.0",
+    "react-addons-update": "^15.3.2",
     "react-cookie": "^0.4.7",
     "react-dom": "^15.1.0",
     "react-dropzone": "^3.6.0",
