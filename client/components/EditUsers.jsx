@@ -76,6 +76,7 @@ class EditUsers extends React.Component {
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Net ID</th>
+                                <th>Affiliation</th>
                                 <th>Admin?</th>
                                 <th>Comment Moderator?</th>
                                 <th>Idea Moderator?</th>
@@ -91,6 +92,7 @@ class EditUsers extends React.Component {
                                             <td>{user.firstname}</td>
                                             <td>{user.lastname}</td>
                                             <td>{user.netid}</td>
+                                            <td>{user.affiliation}</td>
                                             <td>
                                                 {user.admin && <i className="fa fa-check yes-icon" aria-label="User is an admin"></i>}
                                                 {!user.admin && <i className="fa fa-times no-icon" aria-label="User is not an admin"></i>}
@@ -110,7 +112,7 @@ class EditUsers extends React.Component {
                                 })
                             }
                             <tr>
-                                <td colSpan="8"><a className="btn btn-warning btn-sm" href="/admin/users/add">Add User</a></td>
+                                <td colSpan="9"><a className="btn btn-warning btn-sm" href="/admin/users/add">Add User</a></td>
                             </tr>
                         </tbody>
                     </table>

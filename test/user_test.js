@@ -39,7 +39,7 @@ describe('User',function(){
             var startUsers = res.body.length;
             request.post('/users')
             .set('Accept', 'application/json')
-            .send({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', admin: '0',  commentMod: '0',  ideaMod: '1'})
+            .send({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', affiliation: 'staff', admin: '0',  commentMod: '0',  ideaMod: '1'})
             .expect(201)
             .end(function(postErr,postRes){
                 if(postErr) return done(postErr);
@@ -57,7 +57,7 @@ describe('User',function(){
 
     //Test GET one specific user
     it('should list a SINGLE user on /users/<id> GET', function(done){
-        User.create({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', admin: '0',  commentMod: '0',  ideaMod: '1'})
+        User.create({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', affiliation: 'staff', admin: '0',  commentMod: '0',  ideaMod: '1'})
         .then(function(user){
             request.get('/users/' + user.id)
             .set('Accept', 'application/json')
@@ -90,7 +90,7 @@ describe('User',function(){
 
     //Test update a user (PUT)
     it('should update a SINGLE user on /users/<id> PUT',function(done){
-        User.create({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', admin: '0',  commentMod: '0',  ideaMod: '1'})
+        User.create({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', affiliation: 'staff', admin: '0',  commentMod: '0',  ideaMod: '1'})
         .then(function(user){
             request.put('/users/' + user.id)
             .set('Accept', 'application/json')
@@ -112,7 +112,7 @@ describe('User',function(){
 
     //make sure I can send just last name.  it should leave everything else alone
     it('should update just one field if that is all that has changed',function(done){
-        User.create({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', admin: '0',  commentMod: '0',  ideaMod: '1'})
+        User.create({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', affiliation: 'staff', admin: '0',  commentMod: '0',  ideaMod: '1'})
         .then(function(user){
             request.put('/users/' + user.id)
             .set('Accept', 'application/json')
@@ -130,7 +130,7 @@ describe('User',function(){
     });
 
     it('should handle nonsense JSON nicely',function(done){
-        User.create({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', admin: '0',  commentMod: '0',  ideaMod: '1'})
+        User.create({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', affiliation: 'staff', admin: '0',  commentMod: '0',  ideaMod: '1'})
         .then(function(user){
             request.put('/users/' + user.id)
             .set('Accept', 'application/json')
@@ -172,7 +172,7 @@ describe('User',function(){
 
     //Test DELETE a user
     it('should delete a SINGLE user on /users/<id> DELETE', function(done){
-        User.create({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', admin: '0',  commentMod: '0',  ideaMod: '1'})
+        User.create({firstname: 'Donald', lastname: 'Trump', netid: 'dt1234', affiliation: 'staff', admin: '0',  commentMod: '0',  ideaMod: '1'})
         .then(function(user){
             request.delete('/users/' + user.id)
             .set('Accept', 'application/json')

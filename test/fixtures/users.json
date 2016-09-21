@@ -6,6 +6,7 @@
             "firstname": "Mickey",
             "lastname": "Mouse",
             "netid": "mm1234",
+            "affiliation": "staff",
             "admin": 1,
             "commentMod": 1,
             "ideaMod": 1
@@ -18,6 +19,7 @@
             "firstname": "Severus",
             "lastname": "Snape",
             "netid": "ss1234",
+            "affiliation": "faculty",
             "admin": 0,
             "commentMod": 1,
             "ideaMod": 0
@@ -30,6 +32,7 @@
             "firstname": "Katniss",
             "lastname": "Everdeen",
             "netid": "ke1234",
+            "affiliation": "student",
             "admin": 0,
             "commentMod": 1,
             "ideaMod": 1
@@ -43,6 +46,7 @@
             "firstname": "NotAnAdmin",
             "lastname": "OfAnyKind",
             "netid": "no1234",
+            "affiliation": "student",
             "admin": 0,
             "commentMod": 0,
             "ideaMod": 0

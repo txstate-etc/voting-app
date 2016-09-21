@@ -24,7 +24,8 @@ router.route('/')
     .post(function(req,res,next){
         models.user.create({firstname: req.body.firstname, 
                         lastname: req.body.lastname, 
-                        netid: req.body.netid, 
+                        netid: req.body.netid,
+                        affiliation: req.body.affiliation, 
                         admin: req.body.admin, 
                         commentMod: req.body.commentMod,  
                         ideaMod: req.body.ideaMod})

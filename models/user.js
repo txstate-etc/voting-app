@@ -5,6 +5,7 @@ module.exports = function(sequelize, DataTypes) {
     firstname: DataTypes.STRING(),
     lastname: DataTypes.STRING(),
     netid: DataTypes.STRING(),
+    affiliation: DataTypes.ENUM('student', 'faculty', 'staff', 'moderator'),
     admin: {type: DataTypes.BOOLEAN(), defaultValue: false},
     commentMod: {type: DataTypes.BOOLEAN(), defaultValue: false},
     ideaMod: {type: DataTypes.BOOLEAN(), defaultValue: false}

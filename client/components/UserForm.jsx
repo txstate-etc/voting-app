@@ -12,6 +12,7 @@ class UserForm extends React.Component {
             lastNameErr: "",
             netid: "",
             netidErr: "",
+            affiliation: "student",
             admin: false,
             commentMod: false,
             ideaMod: false
@@ -28,6 +29,7 @@ class UserForm extends React.Component {
                 _this.setState({firstName: result.firstname});
                 _this.setState({lastName: result.lastname});
                 _this.setState({netid: result.netid});
+                _this.setState({affiliation: result.affiliation});
                 _this.setState({admin: result.admin});
                 _this.setState({commentMod: result.commentMod});
                 _this.setState({ideaMod: result.ideaMod});
@@ -51,6 +53,10 @@ class UserForm extends React.Component {
         this.setState({netid: e.target.value});
         if(e.target.value.length > 0)
             this.setState({netidErr: ""})
+    }
+
+    handleAffiliationChange(e){
+        this.setState({affiliation: e.target.value})
     }
 
     handleAdminStatusChange(e){
@@ -90,6 +96,7 @@ class UserForm extends React.Component {
             firstname: firstname,
             lastname: lastname,
             netid: netid,
+            affiliation: this.state.affiliation,
             admin: this.state.admin,
             commentMod: this.state.commentMod,
             ideaMod: this.state.ideaMod
@@ -165,6 +172,15 @@ class UserForm extends React.Component {
                                     input.focus();
                                   }
                                 }}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="affiliation">Affiliation:</label>
+                        <select id="affiliation" onChange={this.handleAffiliationChange.bind(this)} value={this.state.affiliation}>
+                            <option value="student">Student</option>
+                            <option value="faculty">Faculty</option>
+                            <option value="staff">Staff</option>
+                            <option value="moderator">Moderator</option>
+                        </select>
                     </div>
                     <div className="form-group">
                         <label htmlFor="administrator">Admin:</label>
