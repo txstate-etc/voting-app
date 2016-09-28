@@ -16,12 +16,15 @@ class AddCommentContainer extends React.Component {
     }
     
     render(){
-        return(
-            <AddComment
-              ideaID = {this.props.ideaID}
-              onCommentSubmit = {this.submit.bind(this)}
-            />
-        );
+        var jsx = this.props.loggedIn? 
+              <AddComment
+                ideaID = {this.props.ideaID}
+                onCommentSubmit = {this.submit.bind(this)}
+              />
+              :
+              <span>Please log in to make a comment</span>;
+          
+        return(jsx);
     }
 }
 

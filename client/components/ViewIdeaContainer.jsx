@@ -3,6 +3,7 @@ import ViewIdea from './ViewIdea.jsx';
 import $ from 'jquery';
 import {sumCommentsAndReplies} from '../util';
 import {getIcons} from '../IconGenerator';
+import {isLoggedIn} from '../auth';
 
 class ViewIdeaContainer extends React.Component {
 
@@ -14,12 +15,14 @@ class ViewIdeaContainer extends React.Component {
                 files: []
             },
             iconList: [],
+            loggedIn: false
         };
     }
 
     componentDidMount() {
         var _this = this;
         var url = "/ideas/" + this.props.params.ideaId + "?files=true";
+        this.setState({loggedIn: isLoggedIn()});
         $.ajax({url: url, dataType: "json", success: function(result){
            _this.setState({idea: result})
            var contributors = _this.getUniqueContributors(result.comments);
@@ -64,6 +67,7 @@ class ViewIdeaContainer extends React.Component {
                 id = {this.props.params.ideaId}
                 commentCount = {sumCommentsAndReplies(this.state.idea.comments)}
                 iconList = {this.state.iconList}
+                loggedIn = {this.state.loggedIn}
             />
         );
     }

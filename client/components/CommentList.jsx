@@ -13,6 +13,7 @@ class CommentList extends React.Component {
                                 key = {comment.id}
                                 comment = {comment}
                                 iconList = {this.props.iconList}
+                                loggedIn = {this.props.loggedIn}
                             />
                         )
                     })}

@@ -42,11 +42,13 @@ class ViewIdea extends React.Component {
                 <h5>Comments</h5>
                 <AddCommentContainer
                     ideaID = {this.props.id}
+                    loggedIn = {this.props.loggedIn}
                 />
                 <div className="comment-list">
                     <CommentList
                         commentList = {idea.comments}
                         iconList = {this.props.iconList}
+                        loggedIn = {this.props.loggedIn}
                     />
                 </div>
             </div> 

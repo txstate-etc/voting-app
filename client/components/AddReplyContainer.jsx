@@ -16,11 +16,13 @@ class AddReplyContainer extends React.Component {
     }
     
     render(){
-        return(
-            <AddComment
+        var jsx = this.props.loggedIn?
+          <AddComment
               onCommentSubmit = {this.submit.bind(this)}
             />
-        );
+          :
+          <div/>
+        return(jsx);
     }
 }
 
