@@ -29,12 +29,17 @@ class ViewIdea extends React.Component {
                         <p>{idea.text}</p>
                     </div>
                 </div>
-                Attachments
-                <AttachmentList
-                    attachments = {idea.files}
-                />
+                {
+                    (idea.files.length > 0) &&
+                <div>
+                    <h5>Attachments</h5>
+                    <AttachmentList
+                        attachments = {idea.files}
+                    />
+                </div>
+                }
                 <hr/>
-                Comments
+                <h5>Comments</h5>
                 <AddCommentContainer
                     ideaID = {this.props.id}
                 />
