@@ -34,6 +34,7 @@ class MainContainer extends React.Component {
                 updateCategory = {this.updateCategory.bind(this)}
                 ideaList = {this.state.ideaList}
                 numIdeas = {this.state.ideaList.length}
+                auth = {this.props.auth}
             />
         );
     }

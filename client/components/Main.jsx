@@ -2,7 +2,6 @@ import React from 'react';
 import SearchBar from './SearchBar.jsx';
 import SelectCategoryContainer from './SelectCategoryContainer.jsx';
 import IdeaList from './IdeaList.jsx';
-import {isLoggedIn} from '../auth';
 
 class Main extends React.Component {
 
@@ -16,7 +15,7 @@ class Main extends React.Component {
           </div>
           <div className="col-sm-6">
             <div className="add-new">
-              {isLoggedIn() && <a className="btn btn-warning" href="/new"><i className="fa fa-plus"></i>&nbsp;Add a New Idea</a>}
+              {this.props.auth.loggedIn && <a className="btn btn-warning" href="/new"><i className="fa fa-plus"></i>&nbsp;Add a New Idea</a>}
             </div>
           </div>
         </div>
@@ -29,6 +28,7 @@ class Main extends React.Component {
         <hr/>
         <IdeaList
           ideaList = {this.props.ideaList}
+          auth = {this.props.auth}
         />
       </div>
     );

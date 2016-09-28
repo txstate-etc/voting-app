@@ -22,6 +22,7 @@ class ViewIdea extends React.Component {
                     <div className="media-left media-top">
                         <VoteBlockContainer
                             ideaID = {this.props.id}
+                            auth = {this.props.auth}
                         />
                     </div>
                     <div className="media-body idea-description">
