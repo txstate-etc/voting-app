@@ -1,6 +1,7 @@
 import React from 'react';
 import VoteBlock from './VoteBlock.jsx';
 import $ from 'jquery';
+import {isLoggedIn,getUserId} from '../auth';
 import { browserHistory } from 'react-router';
 
 class VoteBlockContainer extends React.Component {
@@ -17,8 +18,8 @@ class VoteBlockContainer extends React.Component {
         var _this = this;
         $.ajax({url: "/votes?idea=" + _this.props.ideaID, dataType: "json", success: function(results){
             _this.setState({totalScore: _this.calculateScore(results)});
-            if(_this.props.auth.loggedIn){
-                var user_vote = results.filter((vote) => vote.user_id === _this.props.auth.userId);
+            if(isLoggedIn()){
+                var user_vote = results.filter((vote) => vote.user_id === getUserId());
                 if(user_vote.length > 0){
                     _this.setState({userScore: user_vote[0].score});
                 }
@@ -30,7 +31,7 @@ class VoteBlockContainer extends React.Component {
         var _this = this;
         if(score == this.state.userScore){
             //If the user votes and then repeats the same vote, remove the vote
-           $.ajax({url: "/votes?idea=" + this.props.ideaID + "&user=" + this.props.auth.userId, dataType: "json", success: function(result){
+           $.ajax({url: "/votes?idea=" + this.props.ideaID + "&user=" + getUserId(), dataType: "json", success: function(result){
                if(result.length > 0){
                     var voteId = result[0].id;
                     $.ajax({

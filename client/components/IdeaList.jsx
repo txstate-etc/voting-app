@@ -10,7 +10,6 @@ class IdeaList extends React.Component {
                         <Idea
                             key = {idea.id}
                             idea = {idea}
-                            auth = {this.props.auth}
                         />
                     )
                 })}
