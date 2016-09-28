@@ -161,10 +161,10 @@ class IdeaForm extends React.Component {
         for(var i=0; i<this.state.attachmentsToUpload.length; i++){
             selectedAttachments.push(
                 <div className="row" key={i}>
-                    <div className="col-xs-6">
+                    <div className="col-xs-3">
                         {this.state.attachmentsToUpload[i].name}
                     </div>
-                    <div className="col-xs-6">
+                    <div className="col-xs-7 pull-left">
                         <a href="#" onClick={this.removeSelectedAttachment.bind(this, this.state.attachmentsToUpload[i].id )}><i className="fa fa-trash"></i></a>
                     </div>
                 </div>
@@ -174,10 +174,10 @@ class IdeaForm extends React.Component {
         for(var i=0; i<this.state.attachmentsAlreadyUploaded.length; i++){
             savedAttachments.push(
                 <div className="row" key={i}>
-                    <div className="col-xs-6">
+                    <div className="col-xs-3">
                         {this.state.attachmentsAlreadyUploaded[i].filename}
                     </div>
-                    <div className="col-xs-6">
+                    <div className="col-xs-7 pull-left">
                         <a href="#" onClick={this.deleteSavedAttachment.bind(this, this.state.attachmentsAlreadyUploaded[i].id)}><i className="fa fa-trash"></i></a>
                     </div>
                 </div>
