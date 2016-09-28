@@ -47,6 +47,9 @@ th {
   font-size: 1.5rem;
   font-weight: normal;
   color: white;
+  a{
+    margin: 0px 5px;
+  }
 }
 
 .admin-link{
@@ -204,6 +207,12 @@ footer{
   margin-right: 5px;
 }
 
+.view-idea-stats{
+  span{
+    margin: 0px 5px;
+  }
+}
+
 .comment-list{
   margin-top: 6rem;
   ul li{
@@ -253,6 +262,10 @@ footer{
   .hidden{
     visibility: hidden;
   }
+}
+
+.btn-voting-save{
+  margin-top: 5px;
 }
 
 //admin

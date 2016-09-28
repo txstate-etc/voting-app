@@ -13,10 +13,10 @@ class ViewIdea extends React.Component {
         return(
             <div className="container">
                 <h2>{idea.title}</h2>
-                <span>
-                    {date.toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})} |
-                    <i className="fa fa-eye"></i> {viewCountText} | 
-                    <i className="fa fa-comment-o"></i> {this.props.commentCount} comments
+                <span className="view-idea-stats">
+                    <span>{date.toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})}</span> |
+                    <span><i className="fa fa-eye"></i> {viewCountText}</span> | 
+                    <span><i className="fa fa-comment-o"></i> {this.props.commentCount} comments</span>
                 </span>
                 <div className="media idea idea-detail">
                     <div className="media-left media-top">

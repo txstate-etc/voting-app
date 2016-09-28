@@ -28,7 +28,7 @@ class AddComment extends React.Component {
         return(
             <form action="" onSubmit={this.handleSubmit}>
                 <textarea rows="5" className="form-control" placeholder="Tell us what you think" value={this.state.text} onChange={this.handleTextChange.bind(this)}></textarea>
-                <button className="btn btn-warning pull-right">Save Comment</button>
+                <button className="btn btn-warning pull-right btn-voting-save">Save Comment</button>
             </form>
         );
     }
