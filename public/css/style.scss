@@ -328,6 +328,12 @@ width: 30%;
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 6px #c0a16b;
 }
 
+.admin-form-buttons{
+  .save{
+    margin-right: 5px;
+  }
+}
+
 .idea-table-header{
   background-color: $second-neutral-highlight;
   font-weight: bold;
