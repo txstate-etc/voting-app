@@ -5,6 +5,7 @@ import {sumCommentsAndReplies} from '../util';
 import {getIcons} from '../IconGenerator';
 import {isLoggedIn} from '../auth';
 
+
 class ViewIdeaContainer extends React.Component {
 
     constructor(props) {
@@ -25,13 +26,9 @@ class ViewIdeaContainer extends React.Component {
         this.setState({loggedIn: isLoggedIn()});
         $.ajax({url: url, dataType: "json", success: function(result){
            _this.setState({idea: result})
+        
            var contributors = _this.getUniqueContributors(result.comments);
-           var icons = getIcons(contributors.length);
-           var iconAssignments = icons.map(function(icon, index){
-            var returnObject = icon;
-            icon.id = contributors[index];
-            return returnObject;
-           });
+           var iconAssignments = getIcons(contributors, result.id);
            _this.setState({iconList: iconAssignments});
            //update view count
            $.ajax({
@@ -58,7 +55,6 @@ class ViewIdeaContainer extends React.Component {
         });
         return uniqueContributors
     }
-
 
     render(){
         return(
