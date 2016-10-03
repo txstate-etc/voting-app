@@ -4,7 +4,6 @@ var models = require('../models');
 var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
 
-
 router.route('/')
     .get(function(req, res, next) {
         var userFilter = {},
@@ -33,7 +32,7 @@ router.route('/')
                                {model: models.category, through: {where: categoryFilter, attributes:[]},required: categoryRequired}];
         if(req.query.votes && req.query.votes == "true") eagerLoadModels.push({model: models.vote});
         if(req.query.comments && req.query.comments == "true") {
-            eagerLoadModels.push({model: models.comment, where: {approved: 1}, required: false, include: [{model: models.reply, where: {approved: 1}, required: false}]});
+            eagerLoadModels.push({model: models.comment,  include: [{model: models.reply}]});
         }
         else{
             //Even if they don't want the comments/replies, they might want the comment count.  This will just return the IDs of 
@@ -50,7 +49,8 @@ router.route('/')
         .then(function(ideas){
             res.format({
                 'text/html': function(){
-                    res.render('ideas/index', {layout: 'admin', ideas: ideas });
+                    res.status(404);
+                    next();
                 },
                 'application/json': function(){
                     res.json(ideas);
@@ -99,40 +99,6 @@ router.route('/')
         }
     });
 
-/* get NEW idea page */
-router.get('/new', function(req, res) {
-    models.category.findAll({})
-    .then(function(categories){
-         return models.stage.findAll({})
-        .then(function(stages){
-            res.format({
-                'text/html': function(){
-                    res.render('ideas/form', {
-                        layout: 'admin',
-                        "title" : "Add Idea",
-                        "action" : "/ideas",
-                        "method" : "POST",
-                        "categories" : categories,
-                        "stages" : stages
-                    });
-                },
-                'default': function() {
-                    // log the request and respond with 406
-                    res.status(406).send('Not Acceptable');
-                }
-            }); 
-        })
-        .catch(function(error){
-            next(error);
-        });
-        
-    })
-    .catch(function(error){
-        next(error);
-    });   
-});
-
-
 router.param('idea_id', function(req, res, next, value){
     models.idea.find({
         where: {
@@ -141,7 +107,7 @@ router.param('idea_id', function(req, res, next, value){
         include: [{model: models.user},
                   {model: models.stage},
                   {model: models.category},
-                  {model: models.comment, where: {approved: 1}, required: false, include: [{model: models.reply, where: {approved: 1}, required: false}]},
+                  {model: models.comment, include: [{model: models.reply}]},
                   {model: models.file}]
     }).then(function(idea){
         if(idea){
@@ -170,7 +136,8 @@ router.route('/:idea_id')
     .get(function(req, res, next) {
         res.format({
             'text/html': function(){
-                res.render('ideas/show', {layout: 'admin', idea: req.idea });
+                res.status(404);
+                next();
             },
             'application/json': function(){
                 res.json(req.idea);
@@ -226,7 +193,8 @@ router.route('/:idea_id')
             }).then(function(idea){
                 res.format({
                     'text/html': function(){
-                    res.render('ideas/index', {layout: 'admin', notice: "Idea successfully deleted"});
+                        res.status(404);
+                        next();
                     },
                     'application/json': function(){
                         res.json(idea);
@@ -236,39 +204,6 @@ router.route('/:idea_id')
             }).catch(function(error){
                 next(error);
             });
-    });
-
-router.route('/:idea_id/edit')
-    .get(function(req, res, next){
-        return models.category.findAll({})
-        .then(function(categories){
-            return models.stage.findAll({})
-            .then(function(stages){
-                res.format({
-                    'text/html': function(){
-                        res.render('ideas/form', {
-                            layout: 'admin',
-                            "idea": req.idea,
-                            "title": "Edit Idea",
-                            "method": "PUT",
-                            "action": "/ideas/" + req.idea.id,
-                            "categories" : categories,
-                            "stages" : stages
-                        });
-                    },
-                    'application/json': function(){
-                        // log the request and respond with 406
-                        res.status(406).send('Not Acceptable');
-                    }
-                });
-            })
-            .catch(function(error){
-                next(error);
-            });
-        })
-        .catch(function(error){
-            next(error);
-        });
     });
 
 module.exports = router;
