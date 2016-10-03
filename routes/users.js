@@ -2,17 +2,14 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 
-//flash messages
-//JSON return on edit and new
-//JSON return on delete
-
 router.route('/')
     .get(function(req, res, next) {
       models.user.findAll({})
         .then(function(users){
             res.format({
                 'text/html': function(){
-                    res.render('users/index', {layout: 'admin', users: users });
+                    res.status(404);
+                    next();
                 },
                 'application/json': function(){
                     res.json(users);
@@ -32,7 +29,8 @@ router.route('/')
         .then(function(user){
             res.format({
                 'text/html': function(){
-                   res.redirect('/users');
+                    res.status(404);
+                    next();
                 },
                 'application/json': function(){
                     res.status(201).json(user);
@@ -44,26 +42,6 @@ router.route('/')
             next(error);
         });
     });
-
-/* get NEW user page */
-router.get('/new', function(req, res) {
-    var user = models.user.build({firstname: null,lastname: null, netid: null, admin:0, commentMod: 0, ideaMode:0});
-    res.format({
-        'text/html': function(){
-            res.render('users/form', {
-                layout: 'admin',
-                "title" : "Add User",
-                "action" : "/users",
-                "method" : "POST"
-            });
-        },
-        'application/json': function(){
-            //this just sends an empty user 
-            res.json(user);
-        }
-    }); 
-     
-});
 
 router.param('user_id', function(req, res, next, value){
     models.user.find({
@@ -97,7 +75,8 @@ router.route('/:user_id')
     .get(function(req, res, next) {
         res.format({
             'text/html': function(){
-                res.render('users/show', {layout: 'admin', user: req.user });
+                res.status(404);
+                next();
             },
             'application/json': function(){
                 res.json(req.user);
@@ -115,7 +94,8 @@ router.route('/:user_id')
         .then(function(user){
             res.format({
                 'text/html': function(){
-                    res.render('users/index', {layout: 'admin', notice: "User successfully updated"});
+                    res.status(404);
+                    next();
                 },
                 'application/json': function(){
                     res.json(user);
@@ -135,7 +115,8 @@ router.route('/:user_id')
             }).then(function(user){
                 res.format({
                     'text/html': function(){
-                    res.render('users/index', {layout: 'admin', notice: "User successfully deleted"});
+                        res.status(404);
+                        next();
                     },
                     'application/json': function(){
                         res.json(user);
@@ -146,24 +127,5 @@ router.route('/:user_id')
                 next(error);
             });
     });
-
-router.route('/:user_id/edit')
-    .get(function(req, res, next){
-        res.format({
-            'text/html': function(){
-                res.render('users/form', {
-                    layout: 'admin',
-                    "user": req.user,
-                    "title": "Edit User",
-                    "method": "PUT",
-                    "action": "/users/" + req.user.id
-                });
-            },
-            'application/json': function(){
-               res.json(req.user);
-            }
-        });
-    });
-
 
 module.exports = router;
