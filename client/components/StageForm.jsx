@@ -63,6 +63,10 @@ class StageForm extends React.Component {
         
     }
 
+    handleCancel(){
+        browserHistory.push('/admin/stages');
+    }
+
     render(){
         var invalidName = this.state.stageErr.length > 0;
         return(
@@ -83,7 +87,10 @@ class StageForm extends React.Component {
                                   }
                                 }}/>
                     </div>
-                    <button type="submit" className="btn btn-warning pull-right">Save Changes</button>
+                    <div className="admin-form-buttons pull-right">
+                        <button type="submit" className="btn btn-warning save">Save Changes</button>
+                        <button className="btn btn-warning" onClick={this.handleCancel}>Cancel</button>
+                    </div>
                 </form>
             </div>
         )

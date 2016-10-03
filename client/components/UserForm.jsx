@@ -123,6 +123,10 @@ class UserForm extends React.Component {
         }
     }
 
+    handleCancel(){
+        
+    }
+
     render(){
         var invalidFirstName = this.state.firstNameErr.length > 0;
         var invalidLastName = this.state.lastNameErr.length > 0;
@@ -206,7 +210,10 @@ class UserForm extends React.Component {
                          checked={this.state.ideaMod ? "checked" : ""}
                          onChange={this.handleIdeaModStatusChange.bind(this)}/>
                     </div>
-                    <button type="submit" className="btn btn-warning pull-right">Save Changes</button>
+                    <div className="admin-form-buttons pull-right">
+                        <button type="submit" className="btn btn-warning save">Save Changes</button>
+                        <button className="btn btn-warning" onClick={this.handleCancel}>Cancel</button>
+                    </div>
                 </form>
             </div>
         );
