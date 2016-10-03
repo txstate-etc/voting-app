@@ -2,17 +2,14 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 
-//flash messages
-//JSON return on edit and new
-//JSON return on delete
-
 router.route('/')
     .get(function(req, res, next) {
       models.category.findAll({})
         .then(function(categories){
             res.format({
                 'text/html': function(){
-                    res.render('categories/index', {layout: 'admin', categories: categories });
+                    res.status(404);
+                    next();
                 },
                 'application/json': function(){
                     res.json(categories);
@@ -26,7 +23,8 @@ router.route('/')
         .then(function(category){
             res.format({
                 'text/html': function(){
-                   res.redirect('/categories');
+                    res.status(404);
+                    next();
                 },
                 'application/json': function(){
                     res.status(201).json(category);
@@ -38,26 +36,6 @@ router.route('/')
             next(error);
         });
     });
-
-/* get NEW category page */
-router.get('/new', function(req, res) {
-    var category = models.category.build({name: null});
-    res.format({
-        'text/html': function(){
-            res.render('categories/form', {
-                layout: 'admin',
-                "title" : "Add Category",
-                "action" : "/categories",
-                "method" : "POST"
-            });
-        },
-        'application/json': function(){
-            //this just sends an empty stage with id and name null
-            res.json(category);
-        }
-    }); 
-     
-});
 
 router.param('category_id', function(req, res, next, value){
     models.category.find({
@@ -92,7 +70,8 @@ router.route('/:category_id')
     .get(function(req, res, next) {
         res.format({
             'text/html': function(){
-                res.render('categories/show', {layout: 'admin', category: req.category });
+                res.status(404);
+                next();
             },
             'application/json': function(){
                 res.json(req.category);
@@ -107,7 +86,8 @@ router.route('/:category_id')
         }).then(function(category){
             res.format({
                 'text/html': function(){
-                    res.render('categories/index', {layout: 'admin', notice: "Category successfully updated"});
+                    res.status(404);
+                    next();
                 },
                 'application/json': function(){
                     res.json(category);
@@ -127,7 +107,8 @@ router.route('/:category_id')
             }).then(function(category){
                 res.format({
                     'text/html': function(){
-                    res.render('categories/index', {layout: 'admin', notice: "Category successfully deleted"});
+                        res.status(404);
+                        next();
                     },
                     'application/json': function(){
                         res.json(category);
@@ -137,25 +118,6 @@ router.route('/:category_id')
             }).catch(function(error){
                 next(error);
             });
-    });
-
-router.route('/:category_id/edit')
-    .get(function(req, res, next){
-        res.format({
-            'text/html': function(){
-                res.render('categories/form', {
-                    layout: 'admin',
-                    "category": req.category,
-                    "title": "Edit Category",
-                    "method": "PUT",
-                    "action": "/categories/" + req.category.id
-                });
-            },
-            'application/json': function(){
-               res.json(req.category);
-            }
-        });
-
     });
 
 module.exports = router;
