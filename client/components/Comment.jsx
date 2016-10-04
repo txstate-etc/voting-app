@@ -26,6 +26,7 @@ class Comment extends React.Component {
 
     render(){
         var comment = this.props.comment;
+        var isModeratorComment = (comment.user.affiliation === "moderator");
         var replyText = "Reply";
         if(comment.replies.length == 1){
           replyText = "1 Reply";
@@ -43,11 +44,15 @@ class Comment extends React.Component {
         var timeElapsed = dateToElapsedTime(comment.updated_at);
 
         var icon = this.getIcon(comment.user_id);
+        if(isModeratorComment){
+          icon.icon = "fa-lock";
+          icon.color = "";
+        }
 
         return(
             <li className="media">
                 <div className="media-left">
-                  <i aria-label={"Comment by user " + icon.aria_id} className={"avatar fa " + icon.icon + " " + icon.color }></i>
+                  <i aria-label={"Comment by " + comment.user.affiliation + " " + icon.aria_id} className={"avatar fa " + icon.icon + " " + icon.color }></i>
                 </div>
                 <div className="media-body">
                   <div className="media-heading">
