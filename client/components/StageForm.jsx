@@ -31,6 +31,7 @@ class StageForm extends React.Component {
     }
 
     handleSubmit(e){
+        var _this = this;
         e.preventDefault();
         var name = this.state.name;
         if(!name){
@@ -48,6 +49,7 @@ class StageForm extends React.Component {
                 data: data,
                 method: 'PUT',
                 success: function(result){
+                   _this.props.editStage(result);
                     browserHistory.push('/admin/stages');
                 }})
         }
@@ -57,6 +59,7 @@ class StageForm extends React.Component {
                 data: data,
                 method: 'POST',
                 success: function(result){
+                    _this.props.addStage(result);
                     browserHistory.push('/admin/stages');
                 }})
         }

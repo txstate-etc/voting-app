@@ -75,6 +75,7 @@ class UserForm extends React.Component {
     }
 
     handleSubmit(e){
+        var _this = this;
         e.preventDefault();
         var firstname = this.state.firstName;
         if(!firstname){
@@ -109,6 +110,7 @@ class UserForm extends React.Component {
                 data: data,
                 method: 'PUT',
                 success: function(result){
+                    _this.props.editUser(result);
                     browserHistory.push('/admin/users');
                 }})
         }
@@ -118,6 +120,7 @@ class UserForm extends React.Component {
                 data: data,
                 method: 'POST',
                 success: function(result){
+                     _this.props.addUser(result);
                     browserHistory.push('/admin/users');
                 }})
         }

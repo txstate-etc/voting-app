@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import { Link } from 'react-router';
+import update from 'react-addons-update';
 
 class EditUsers extends React.Component {
     constructor(props) {
@@ -16,6 +17,27 @@ class EditUsers extends React.Component {
         $.ajax({url: "/users", dataType: "json", success: function(results){
             _this.setState({users: results});
         }});
+    }
+
+    addUser(user){
+        if(user){
+            var users = update(this.state.users, {$push: [user]});
+            this.setState({users: users});
+        }
+    }
+
+    editUser(editedUser){
+        if(editedUser){
+            var users = this.state.users.map(function(user){
+                if(user.id == editedUser.id){
+                    return editedUser;
+                }
+                else{
+                    return user;
+                }
+            })
+            this.setState({users: users});
+        }
     }
 
     deleteUser( id, e ){
@@ -64,10 +86,18 @@ class EditUsers extends React.Component {
     }
 
     render(){
+        //pass a callback to the children so they can update the parent (user list) state
+        var _this = this;
+        var children = React.Children.map(this.props.children, function(child){
+            return React.cloneElement(child, {
+                addUser: _this.addUser.bind(_this),
+                editUser: _this.editUser.bind(_this)
+            })
+        });
         return(
             <div>
             {
-                this.props.children ||
+                children ||
                 <div>
                     <h3>Users</h3>
                     <table className="table table-striped table-bordered">

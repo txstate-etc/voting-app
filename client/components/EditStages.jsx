@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import { Link } from 'react-router';
+import update from 'react-addons-update';
 
 class EditStages extends React.Component {
 
@@ -17,6 +18,27 @@ class EditStages extends React.Component {
         $.ajax({url: "/stages", dataType: "json", success: function(result){
             _this.setState({stages: result});
         }});
+    }
+
+    addStage(stage){
+        if(stage){
+            var stages = update(this.state.stages, {$push: [stage]});
+            this.setState({stages: stages});
+        }
+    }
+
+    editStage(editedStage){
+        if(editedStage){
+            var stages = this.state.stages.map(function(stage){
+                if(stage.id == editedStage.id){
+                    return editedStage;
+                }
+                else{
+                    return stage;
+                }
+            })
+            this.setState({stages: stages});
+        }
     }
 
     deleteStage(id, e){
@@ -65,9 +87,17 @@ class EditStages extends React.Component {
     }
 
     render(){
+        //pass a callback to the children so they can update the parent (stage list) state
+        var _this = this;
+        var children = React.Children.map(this.props.children, function(child){
+            return React.cloneElement(child, {
+                addStage: _this.addStage.bind(_this),
+                editStage: _this.editStage.bind(_this)
+            })
+        });
         return(
             <div>
-            {this.props.children ||
+            {children ||
                 <div>
                     <h3>Stages</h3>
                     <table className="table table-striped table-bordered">

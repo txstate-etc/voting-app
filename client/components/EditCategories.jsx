@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import { Link } from 'react-router';
+import update from 'react-addons-update';
 
 class EditCategories extends React.Component {
 
@@ -17,6 +18,27 @@ class EditCategories extends React.Component {
         $.ajax({url: "/categories", dataType: "json", success: function(result){
             _this.setState({categories: result});
         }});
+    }
+
+    addCategory(category){
+        if(category){
+            var categories = update(this.state.categories, {$push: [category]});
+            this.setState({categories: categories});
+        }
+    }
+
+    editCategory(editedCategory){
+        if(editedCategory){
+            var categories = this.state.categories.map(function(category){
+                if(category.id == editedCategory.id){
+                    return editedCategory;
+                }
+                else{
+                    return category;
+                }
+            })
+            this.setState({categories: categories});
+        }
     }
 
     deleteCategory(id, e){
@@ -65,9 +87,17 @@ class EditCategories extends React.Component {
     }
 
     render(){
+        //pass a callback to the children so they can update the parent (category list) state
+        var _this = this;
+        var children = React.Children.map(this.props.children, function(child){
+            return React.cloneElement(child, {
+                addCategory: _this.addCategory.bind(_this),
+                editCategory: _this.editCategory.bind(_this)
+            })
+        });
         return(
             <div>
-                {this.props.children ||
+                {children ||
                 <div>
                     <h3>Categories</h3>
                     <table className="table table-striped table-bordered">
