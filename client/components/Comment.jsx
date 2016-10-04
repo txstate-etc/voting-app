@@ -61,7 +61,9 @@ class Comment extends React.Component {
                   </div>
                   <p>{comment.text}</p>
                   <div className="pull-right">
-                    <a className="reply-link" onClick={this.toggleReplies.bind(this)}><i className="fa fa-comment-o"></i> {replyText}</a>
+                  {
+                    (this.props.loggedIn || comment.replies.length > 0) && <a className="reply-link" onClick={this.toggleReplies.bind(this)}><i className="fa fa-comment-o"></i> {replyText}</a>
+                  }
                   </div>
                   {replyBlock}
                 </div>
