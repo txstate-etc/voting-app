@@ -4,7 +4,7 @@ import SelectCategoryContainer from './SelectCategoryContainer.jsx';
 import IdeaList from './IdeaList.jsx';
 import {isLoggedIn} from '../auth';
 
-class Main extends React.Component {
+class Home extends React.Component {
 
   render() {
 
@@ -35,4 +35,4 @@ class Main extends React.Component {
   }
 }
 
-export default Main;
+export default Home;

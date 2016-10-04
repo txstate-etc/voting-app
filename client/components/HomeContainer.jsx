@@ -1,8 +1,8 @@
 import React from 'react';
-import Main from './Main.jsx';
+import Home from './Home.jsx';
 import $ from 'jquery';
 
-class MainContainer extends React.Component {
+class HomeContainer extends React.Component {
 
     constructor(props) {
         super(props);
@@ -30,7 +30,7 @@ class MainContainer extends React.Component {
 
     render(){
         return (
-            <Main
+            <Home
                 updateCategory = {this.updateCategory.bind(this)}
                 ideaList = {this.state.ideaList}
                 numIdeas = {this.state.ideaList.length}
@@ -39,4 +39,4 @@ class MainContainer extends React.Component {
     }
 }
 
-export default MainContainer;
+export default HomeContainer;

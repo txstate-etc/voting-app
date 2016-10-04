@@ -4,7 +4,7 @@ import CommentList from './CommentList.jsx';
 import AddCommentContainer from './AddCommentContainer.jsx';
 import AttachmentList from './AttachmentList.jsx';
 
-class ViewIdea extends React.Component {
+class ShowIdea extends React.Component {
 
     render(){
         var idea = this.props.idea;
@@ -56,4 +56,4 @@ class ViewIdea extends React.Component {
     }
 }
 
-export default ViewIdea;
+export default ShowIdea;

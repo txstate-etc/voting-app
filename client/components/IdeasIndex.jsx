@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { Link } from 'react-router';
 import {sumCommentsAndReplies} from '../util';
 
-class EditIdeas extends React.Component {
+class IdeasIndex extends React.Component {
     
     constructor(props) {
         super(props);
@@ -154,4 +154,4 @@ class EditIdeas extends React.Component {
     }
 }
 
-export default EditIdeas;
+export default IdeasIndex;

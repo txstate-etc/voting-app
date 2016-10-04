@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { Link } from 'react-router';
 import update from 'react-addons-update';
 
-class EditUsers extends React.Component {
+class UsersIndex extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -154,4 +154,4 @@ class EditUsers extends React.Component {
     }
 }
 
-export default EditUsers;
+export default UsersIndex;

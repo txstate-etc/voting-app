@@ -1,12 +1,12 @@
 import React from 'react';
-import ViewIdea from './ViewIdea.jsx';
+import ShowIdea from './ShowIdea.jsx';
 import $ from 'jquery';
 import {sumCommentsAndReplies} from '../util';
 import {getIcons} from '../IconGenerator';
 import {isLoggedIn} from '../auth';
 
 
-class ViewIdeaContainer extends React.Component {
+class ShowIdeaContainer extends React.Component {
 
     constructor(props) {
         super(props);
@@ -58,7 +58,7 @@ class ViewIdeaContainer extends React.Component {
 
     render(){
         return(
-            <ViewIdea
+            <ShowIdea
                 idea = {this.state.idea}
                 id = {this.props.params.ideaId}
                 commentCount = {sumCommentsAndReplies(this.state.idea.comments)}
@@ -69,4 +69,4 @@ class ViewIdeaContainer extends React.Component {
     }
 }
 
-export default ViewIdeaContainer;
+export default ShowIdeaContainer;

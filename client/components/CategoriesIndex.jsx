@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { Link } from 'react-router';
 import update from 'react-addons-update';
 
-class EditCategories extends React.Component {
+class CategoriesIndex extends React.Component {
 
     constructor(props) {
         super(props);
@@ -131,4 +131,4 @@ class EditCategories extends React.Component {
     }
 }
 
-export default EditCategories;
+export default CategoriesIndex;

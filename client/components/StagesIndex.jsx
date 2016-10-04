@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { Link } from 'react-router';
 import update from 'react-addons-update';
 
-class EditStages extends React.Component {
+class StagesIndex extends React.Component {
 
     constructor(props) {
         super(props);
@@ -131,4 +131,4 @@ class EditStages extends React.Component {
     }
 }
 
-export default EditStages;
+export default StagesIndex;
