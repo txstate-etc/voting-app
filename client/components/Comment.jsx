@@ -51,7 +51,7 @@ class Comment extends React.Component {
                 </div>
                 <div className="media-body">
                   <div className="media-heading">
-                    <p className="comment-title">Student|Faculty|Staff</p>
+                    <p className="comment-title">{comment.user.affiliation}</p>
                     <span className="comment-age">{timeElapsed}</span>
                   </div>
                   <p>{comment.text}</p>

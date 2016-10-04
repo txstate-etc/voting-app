@@ -107,7 +107,8 @@ router.param('idea_id', function(req, res, next, value){
         include: [{model: models.user},
                   {model: models.stage},
                   {model: models.category},
-                  {model: models.comment, include: [{model: models.reply}]},
+                  {model: models.comment, include: [{model: models.reply, include: [{model: models.user, attributes: ['id', 'affiliation']}]}, 
+                                                    {model: models.user, attributes: ['id', 'affiliation']}]},
                   {model: models.file}]
     }).then(function(idea){
         if(idea){
