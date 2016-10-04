@@ -156,6 +156,11 @@ class IdeaForm extends React.Component {
         this.setState({text: ''});
     }
 
+    handleCancel(e){
+        e.preventDefault();
+        browserHistory.goBack();
+    }
+
     render(){
         var selectedAttachments = [];
         for(var i=0; i<this.state.attachmentsToUpload.length; i++){
@@ -284,8 +289,11 @@ class IdeaForm extends React.Component {
                               <div>Drop files here or click to select files</div>
                             </Dropzone>
                         </div>
-                    </div>                    
-                    <button type="submit" className="btn btn-warning pull-right">Submit Feature</button>
+                    </div>
+                    <div className="admin-form-buttons pull-right">
+                        <button type="submit" className="btn btn-warning save">Submit Feature</button>
+                        <button className="btn btn-warning" onClick={this.handleCancel.bind(this)}>Cancel</button>
+                    </div>
                 </form>
             </div>
         );
