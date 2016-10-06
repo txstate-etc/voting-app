@@ -10,7 +10,8 @@ router.route('/')
         .then(function(stages){
             res.format({
                 'text/html': function(){
-                    res.render('stages/index', {layout: 'admin', stages: stages });
+                    res.status(404);
+                    next();
                 },
                 'application/json': function(){
                     res.json(stages);
@@ -24,7 +25,8 @@ router.route('/')
         .then(function(stage){
             res.format({
                 'text/html': function(){
-                   res.redirect('/stages');
+                    res.status(404);
+                    next();
                 },
                 'application/json': function(){
                     res.status(201).json(stage);
@@ -73,7 +75,8 @@ router.route('/:stage_id')
     .get(function(req, res, next) {
         res.format({
             'text/html': function(){
-                res.render('stages/show', { layout: 'admin', stage: req.stage });
+                res.status(404);
+                next();
             },
             'application/json': function(){
                 res.json(req.stage);
@@ -88,8 +91,8 @@ router.route('/:stage_id')
         }).then(function(stage){
             res.format({
                 'text/html': function(){
-                    //redirect instead of render?  can I send a message with that?
-                    res.render('stages/index', {layout: 'admin', notice: "Stage successfully updated"});
+                    res.status(404);
+                    next();
                 },
                 'application/json': function(){
                     res.json(stage);
@@ -110,8 +113,8 @@ router.route('/:stage_id')
                 //destroy returns the number of items deleted
                 res.format({
                     'text/html': function(){
-                        //redirect instead of render?  can I send a message with that?
-                    res.render('stages/index', {layout: 'admin', notice: "Stage successfully deleted"});
+                        res.status(404);
+                        next();
                     },
                     'application/json': function(){
                         res.json(count); //redirect?  return 204
@@ -121,26 +124,6 @@ router.route('/:stage_id')
             }).catch(function(error){
                 next(error);
             });
-    });
-
-router.route('/:stage_id/edit')
-    .get(function(req, res, next){
-        res.format({
-            'text/html': function(){
-                res.render('stages/form', {
-                    layout: 'admin',
-                    "stage": req.stage,
-                    "title": "Edit Stage",
-                    "method": "PUT",
-                    "action": "/stages/" + req.stage.id
-                });
-            },
-            'application/json': function(){
-               //what JSON return makes sense?  Calendar doesn't have one.
-               res.json(req.stage);
-            }
-        });
-
     });
 
 module.exports = router;
