@@ -67,7 +67,8 @@ class CategoryForm extends React.Component {
     }
 
     handleCancel(){
-        browserHistory.push('/admin/categories');
+        e.preventDefault();
+        browserHistory.goBack();
     }
 
     render(){

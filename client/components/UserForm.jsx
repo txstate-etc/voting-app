@@ -126,8 +126,9 @@ class UserForm extends React.Component {
         }
     }
 
-    handleCancel(){
-        
+    handleCancel(e){
+        e.preventDefault();
+        browserHistory.goBack();
     }
 
     render(){

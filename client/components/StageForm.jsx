@@ -67,7 +67,8 @@ class StageForm extends React.Component {
     }
 
     handleCancel(){
-        browserHistory.push('/admin/stages');
+        e.preventDefault();
+        browserHistory.goBack();
     }
 
     render(){
