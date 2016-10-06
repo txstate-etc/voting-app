@@ -1,55 +1,52 @@
 import React from 'react';
 import $ from 'jquery';
-import { Link } from 'react-router';
-import {sumUnapprovedCommentsAndReplies} from '../util';
+import EditComment from './EditComment.jsx'
 
 class EditComments extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            ideas: [],
-            commentsToDelete: [] 
+           idea: {
+                comments: [],
+                files: []
+            }
         };
     }
 
     componentDidMount(){
         var _this = this;
-        $.ajax({url: "/ideas?comments=true", dataType: "json", success: function(result){
-            _this.setState({ideas: result});
+        $.ajax({url: "/ideas/" + _this.props.params.ideaId, dataType: "json", success: function(result){
+            _this.setState({idea: result});
         }});
     }
 
     render(){
+        var idea = this.state.idea;
         return(
             <div>
-                <div>
-                    <h3>Comments</h3>
-                    <table className="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Idea</th>
-                                <th>Unapproved Comments</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                this.state.ideas.map(idea => {
-                                    return (
-                                        <tr key={idea.id}>
-                                            <td><Link to={"/view/" + idea.id}>{idea.title}</Link></td>
-                                            <td>{sumUnapprovedCommentsAndReplies(idea.comments)}</td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </table>
+                <div className="row">
+                    <div className="col-sm-2 show-label">Idea Title:</div>
+                    <div className="col-sm-10">{idea.title}</div>
+                </div>
+                <div className="row top-buffer">
+                    <div className="col-sm-2 show-label">Idea Description:</div>
+                    <div className="col-sm-10">{idea.text}</div>
+                </div>
+                <div className="top-buffer comment-list">
+                    <ul className="media-list">
+                    {
+                        idea.comments.map(comment => {
+                            return(
+                                <EditComment comment={comment} key={comment.id}/>
+                            )
+                        })
+                    }
+                    </ul>
                 </div>
             </div>
-        )
+        );
     }
-
 }
 
 export default EditComments;

@@ -237,6 +237,28 @@ footer{
       margin-right: 3px;
     }
   }
+
+  .admin-buttons{
+    float: right;
+    @media (max-width : 768px) {
+      & {
+        float: none;
+      }
+    }
+  }
+
+  .approved {
+    padding: 0px 5px;
+    .fa {
+      color: green;
+      font-size: 3rem;
+    }
+  }
+}
+
+.comment-approved {
+  color: green;
+  font-size: 2rem;
 }
 
 .top-buffer{
@@ -248,6 +270,18 @@ footer{
   padding: 3px;
   border-radius: 5px;
   display:inline-block;
+  .reply-actions &{
+    margin-right: 5px;
+  }
+}
+
+.reply-actions{
+  float: right;
+  margin-bottom: 2rem;
+}
+
+.edit-reply-list{
+  clear: both;
 }
 
 .create-date{
@@ -335,6 +369,12 @@ width: 30%;
   }
 }
 
+.comment-title-admin{
+  font-size: 1.5rem;
+  margin-bottom: 0px;
+  text-transform: capitalize;
+}
+
 .idea-table-header{
   background-color: $second-neutral-highlight;
   font-weight: bold;
@@ -361,6 +401,10 @@ width: 30%;
       margin-right: 5px;
     }
   }
+}
+
+.show-label{
+  font-weight: bold;
 }
 
 .yes-icon{

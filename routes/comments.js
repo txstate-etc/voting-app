@@ -9,7 +9,8 @@ router.route('/')
         if(req.query.idea) filter.idea_id = req.query.idea;
         var findOptions = {};
         findOptions.where = filter;
-        if(req.query.replies && req.query.replies == "true") findOptions.include = [{model: models.reply}];
+        findOptions.include = [{model: models.user}, {model: models.idea}];
+        if(req.query.replies && req.query.replies == "true") findOptions.include.push({model: models.reply, include:[{model: models.user}]});
         models.comment.findAll(findOptions)
         .then(function(comments){
             res.format({
