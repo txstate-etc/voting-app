@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models');
-
+var authenticate = require('./auth').authenticate;
+var checkAdmin = require('./auth').admin;
 
 router.route('/')
     .get(function(req, res, next) {
@@ -18,7 +19,7 @@ router.route('/')
         });
     })
 
-    .post(function(req,res,next){
+    .post(authenticate, checkAdmin, function(req,res,next){
         models.stage.create({name: req.body.name})
         .then(function(stage){
             res.format({
@@ -36,25 +37,6 @@ router.route('/')
         });
     });
 
-/* get NEW stage page */
-router.get('/new', function(req, res) {
-    var stage = models.stage.build({name: null});
-    res.format({
-        'text/html': function(){
-            res.render('stages/form', { 
-                layout: 'admin',
-                "title" : "Add Stage",
-                "action" : "/stages",
-                "method" : "POST"
-            });
-        },
-        'application/json': function(){
-            //this just sends an empty stage with id and name null
-            res.json(stage);
-        }
-    }); 
-     
-});
 
 //for routes like /stages/<id> check if the id exists
 //if not, send back 404.  otherwise, move on to the router
@@ -100,7 +82,7 @@ router.route('/:stage_id')
         return null; 
     })
 
-    .put(function(req,res,next){
+    .put(authenticate, checkAdmin, function(req,res,next){
         req.stage.updateAttributes({
             name: req.body.name
         }).then(function(stage){
@@ -119,7 +101,7 @@ router.route('/:stage_id')
         });
     })
 
-    .delete(function(req,res,next){
+    .delete(authenticate, checkAdmin, function(req,res,next){
         models.stage.destroy({
                 where: {
                   id: req.stage.id

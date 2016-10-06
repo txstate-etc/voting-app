@@ -19,6 +19,7 @@ import CategoryForm from './components/CategoryForm.jsx';
 import UsersIndex from './components/UsersIndex.jsx';
 import UserForm from './components/UserForm.jsx';
 import NotFoundPage from './components/NotFoundPage.jsx';
+import NotAuthorized from './components/NotAuthorized.jsx';
 import {isLoggedIn, isAdmin} from './auth';
 import $ from 'jquery';
 
@@ -72,6 +73,7 @@ export default (
                     </Route>
                 </Route>
                 <Route path="/login" component={LoginRedirect}/>
+                <Route path="/notauthorized" component={NotAuthorized}/>
                 <Route path="*" component={NotFoundPage}/>
             </Route>
         </Route>

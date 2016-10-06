@@ -51,7 +51,15 @@ class StageForm extends React.Component {
                 success: function(result){
                    _this.props.editStage(result);
                     browserHistory.push('/admin/stages');
-                }})
+                },
+                error: function(xhr, status, err){
+                    //unauthorized
+                    if(xhr.status == 403){
+                        //redirect to ???
+                        browserHistory.push('/notauthorized');
+                    }
+                }
+            })    
         }
         else{
             $.ajax({url: "/stages/", 
@@ -61,7 +69,15 @@ class StageForm extends React.Component {
                 success: function(result){
                     _this.props.addStage(result);
                     browserHistory.push('/admin/stages');
-                }})
+                },
+                error: function(xhr, status, err){
+                    //unauthorized
+                    if(xhr.status == 403){
+                        //redirect to ???
+                        browserHistory.push('/notauthorized');
+                    }
+                }
+            })
         }
         
     }
