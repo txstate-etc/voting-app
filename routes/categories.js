@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models');
+var authenticate = require('./auth').authenticate;
+var checkAdmin = require('./auth').admin;
 
 router.route('/')
     .get(function(req, res, next) {
@@ -18,7 +20,7 @@ router.route('/')
         });
     })
 
-    .post(function(req,res,next){
+    .post(authenticate, checkAdmin, function(req,res,next){
         models.category.create({name: req.body.name})
         .then(function(category){
             res.format({
@@ -80,7 +82,7 @@ router.route('/:category_id')
         return null; 
     })
 
-    .put(function(req,res,next){
+    .put(authenticate, checkAdmin, function(req,res,next){
         req.category.updateAttributes({
             name: req.body.name
         }).then(function(category){
@@ -99,7 +101,7 @@ router.route('/:category_id')
         });
     })
 
-    .delete(function(req,res,next){
+    .delete(authenticate, checkAdmin, function(req,res,next){
         models.category.destroy({
                 where: {
                   id: req.category.id

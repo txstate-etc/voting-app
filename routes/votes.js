@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 var Sequelize = require('sequelize');
+var authenticate = require('./auth').authenticate;
 
 //A user should only be able to modify or delete a vote if it is their vote. or they are an admin?
 
@@ -23,7 +24,7 @@ router.route('/')
         });
     })
 
-    .post(function(req,res,next){
+    .post(authenticate, function(req,res,next){
         var user_id = req.session["user_id"];
         if(user_id){
             models.vote.createOrUpdateVote(req.body.idea_id, user_id, req.body.score)
@@ -90,7 +91,7 @@ router.route('/:vote_id')
         }); 
     })
 
-    .put(function(req,res,next){
+    .put(authenticate, function(req,res,next){
         req.vote.updateAttributes(req.body)
         .then(function(vote){
             res.format({
@@ -106,7 +107,7 @@ router.route('/:vote_id')
         });
     })
 
-    .delete(function(req,res,next){
+    .delete(authenticate, function(req,res,next){
         models.vote.destroy({
                 where: {
                   id: req.vote.id

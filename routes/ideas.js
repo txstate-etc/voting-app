@@ -3,6 +3,8 @@ var router = express.Router();
 var models = require('../models');
 var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
+var authenticate = require('./auth').authenticate;
+var checkAdmin = require('./auth').admin;
 
 router.route('/')
     .get(function(req, res, next) {
@@ -60,7 +62,7 @@ router.route('/')
     })
 
     //if the idea is inserted but adding attachments fails, should the idea be removed?
-    .post(upload.array('attachments'), function(req, res, next){
+    .post(authenticate, upload.array('attachments'), function(req, res, next){
         var creator = req.session["user_id"];
         var newIdea;
         if(creator){
@@ -146,7 +148,7 @@ router.route('/:idea_id')
         });
     })
 
-    .put(upload.array('attachments'), function(req,res,next){
+    .put(authenticate, checkAdmin, upload.array('attachments'), function(req,res,next){
         var editedIdea;
         req.idea.updateAttributes(req.body)
         .then(function(idea){
@@ -186,7 +188,7 @@ router.route('/:idea_id')
         })
     })
      
-    .delete(function(req,res,next){
+    .delete(authenticate, checkAdmin, function(req,res,next){
         models.idea.destroy({
                 where: {
                   id: req.idea.id

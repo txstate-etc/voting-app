@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models');
+var authenticate = require('./auth').authenticate;
+var checkAdmin = require('./auth').admin;
 
 router.route('/')
-    .get(function(req, res, next) {
+    .get(authenticate, checkAdmin, function(req, res, next) {
       models.user.findAll({})
         .then(function(users){
             res.format({
@@ -18,7 +20,7 @@ router.route('/')
         });
     })
 
-    .post(function(req,res,next){
+    .post(authenticate, checkAdmin, function(req,res,next){
         models.user.create({firstname: req.body.firstname, 
                         lastname: req.body.lastname, 
                         netid: req.body.netid,
@@ -72,7 +74,7 @@ router.param('user_id', function(req, res, next, value){
 });
 
 router.route('/:user_id')
-    .get(function(req, res, next) {
+    .get(authenticate, checkAdmin, function(req, res, next) {
         res.format({
             'text/html': function(){
                 res.status(404);
@@ -84,7 +86,7 @@ router.route('/:user_id')
         }); 
     })
 
-    .put(function(req,res,next){
+    .put(authenticate, checkAdmin, function(req,res,next){
         //if the booleans are missing from req.body, they need to be false.
         //it is probably the responsibility of the front end to make sure these are correct...
         if(!req.body.admin) req.body.admin = false;
@@ -107,7 +109,7 @@ router.route('/:user_id')
         });
     })
 
-    .delete(function(req,res,next){
+    .delete(authenticate, checkAdmin, function(req,res,next){
         models.user.destroy({
                 where: {
                   id: req.user.id
