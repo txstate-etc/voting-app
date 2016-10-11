@@ -17,6 +17,7 @@ class Layout extends React.Component {
                 <header>
                 <Login
                     auth = {this.props.auth}
+                    currentPage = {this.props.location.pathname}
                 />
                 </header>
                 <div className="title-bar">

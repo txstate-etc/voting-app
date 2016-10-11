@@ -5,14 +5,7 @@ var auth = {
             next();
         }
         else{
-            res.format({
-                    'text/html': function(){
-                        res.redirect('/login');
-                    },
-                    'application/json': function(){
-                        res.status(302).json({message: "Login required"});
-                    }
-                });
+            res.status(302).json({message: "Login required"});
         }
         
     },

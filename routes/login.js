@@ -2,9 +2,19 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 var https = require('https');
+var cas = require('../cas');
+
+var currentPage = "/";
+
+function saveCurrentPage(req, res, next){
+    if(req.query.url){
+        currentPage = req.query.url;
+    }
+    next()
+}
 
 router.route('/')
-    .get(function(req, res, next) {
+    .get(saveCurrentPage, cas.bouncer, function(req, res, next) {
         var netid = req.session.cas_user;
         var jsonValue;
         models.user.findByNetId(netid).then(function(user){
@@ -19,7 +29,7 @@ router.route('/')
                 res.cookie("user", jsonValue)
                 req.session['user_id'] = user.id;
                 req.session['admin'] = user.admin;
-                res.redirect('/'); 
+                res.redirect(currentPage); 
             }
             else{
                 //get user's information from LDAP
@@ -46,7 +56,7 @@ router.route('/')
                                 affiliation: user.affiliation})
                             res.cookie("user", jsonValue);
                             req.session['user_id'] = user.id
-                            res.redirect('/');
+                            res.redirect(currentPage); 
                         })
                     });
                 }).on('error', (e) => {

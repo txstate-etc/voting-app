@@ -91,7 +91,7 @@ if(app.get('env') === 'test'){
 }
 else{
   app.use( session({
-      secret            : config.secret,
+      secret: config.secret,
       store: new SequelizeStore({
         db: db
       }),
@@ -103,6 +103,14 @@ else{
 
 app.use(cors());
 
+//For debugging
+// app.use(function(req, res, next){
+//   console.log("~~*~*~~*~*~~*~*~~*~*~~*~*~~*~*~~*~*")
+//   console.log(req.method + " " + req.url)
+//   console.log("~~*~*~~*~*~~*~*~~*~*~~*~*~~*~*~~*~*")
+//   next();
+// })
+
 //routes
 app.use('/stages', stages);
 app.use('/categories', categories);
@@ -113,7 +121,7 @@ app.use('/comments', comments);
 app.use('/replies', replies);
 app.use('/files', files);
 
-app.use('/login', cas.bouncer, login);
+app.use('/login', login);
 app.use('/logout', function(req, res, next){
                       res.clearCookie('user');
                       delete req.session['user_id'];
