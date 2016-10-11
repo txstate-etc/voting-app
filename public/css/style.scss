@@ -170,7 +170,19 @@ footer{
         margin-left: 3px;
       }
     }
+    h4.media-heading{
+      display: inline-block;
+    }
 }
+
+.stage{
+  margin-left: 10px;
+  border: 1px solid black;
+  padding: 2px;
+  border-radius: 5px;
+  background-color: lighten($first-color, 35);
+}
+
 .vote-count-box{
    background: $second-neutral-highlight;
    line-height: 60px;
@@ -205,6 +217,10 @@ footer{
 
 .attachment-icon{
   margin-right: 5px;
+}
+
+.view-idea-title{
+  display: inline-block;
 }
 
 .view-idea-stats{

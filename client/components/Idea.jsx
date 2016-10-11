@@ -20,7 +20,7 @@ class Idea extends React.Component {
                     />
                 </div>
                 <div className="media-body idea-description">
-                    <h4 className="media-heading"><a href={detailUrl}>{idea.title}</a></h4>
+                    <h4 className="media-heading"><a href={detailUrl}>{idea.title}</a></h4>{idea.stage && <span className="stage">{idea.stage.name}</span>}
                     <p>{idea.text}</p>
                     <span className="idea-stats">
                         <i className="fa fa-eye"></i> {viewCountText} | 

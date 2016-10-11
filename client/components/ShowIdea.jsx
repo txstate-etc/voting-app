@@ -12,12 +12,12 @@ class ShowIdea extends React.Component {
         var viewCountText = (idea.views == 1) ? "1 view" : (idea.views + " views");
         return(
             <div className="container">
-                <h2>{idea.title}</h2>
-                <span className="view-idea-stats">
+                <h2 className="view-idea-title">{idea.title}</h2>{idea.stage && <span className="stage">{idea.stage.name}</span>}
+                <div className="view-idea-stats">
                     <span>{date.toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})}</span> |
                     <span><i className="fa fa-eye"></i> {viewCountText}</span> | 
                     <span><i className="fa fa-comment-o"></i> {this.props.commentCount} comments</span>
-                </span>
+                </div>
                 <div className="media idea idea-detail">
                     <div className="media-left media-top">
                         <VoteBlockContainer
@@ -25,7 +25,6 @@ class ShowIdea extends React.Component {
                         />
                     </div>
                     <div className="media-body idea-description">
-                        <h4 className="media-heading">{idea.title}</h4>
                         <p>{idea.text}</p>
                     </div>
                 </div>
