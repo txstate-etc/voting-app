@@ -15,6 +15,8 @@ function saveCurrentPage(req, res, next){
 
 router.route('/')
     .get(saveCurrentPage, cas.bouncer, function(req, res, next) {
+        var redirectPage = currentPage;
+        currentPage = "/";
         var netid = req.session.cas_user;
         var jsonValue;
         models.user.findByNetId(netid).then(function(user){
@@ -29,7 +31,7 @@ router.route('/')
                 res.cookie("user", jsonValue)
                 req.session['user_id'] = user.id;
                 req.session['admin'] = user.admin;
-                res.redirect(currentPage); 
+                res.redirect(redirectPage); 
             }
             else{
                 //get user's information from LDAP
@@ -56,7 +58,7 @@ router.route('/')
                                 affiliation: user.affiliation})
                             res.cookie("user", jsonValue);
                             req.session['user_id'] = user.id
-                            res.redirect(currentPage); 
+                            res.redirect(redirectPage); 
                         })
                     });
                 }).on('error', (e) => {
