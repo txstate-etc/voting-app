@@ -3,6 +3,7 @@ import VoteBlockContainer from './VoteBlockContainer.jsx';
 import CommentList from './CommentList.jsx';
 import AddCommentContainer from './AddCommentContainer.jsx';
 import AttachmentList from './AttachmentList.jsx';
+import Linkify from 'react-linkify';
 
 class ShowIdea extends React.Component {
 
@@ -12,7 +13,7 @@ class ShowIdea extends React.Component {
         var viewCountText = (idea.views == 1) ? "1 view" : (idea.views + " views");
         return(
             <div className="container">
-                <h2 className="view-idea-title">{idea.title}</h2>{idea.stage && <span className="stage">{idea.stage.name}</span>}
+                <h2 className="view-idea-title"><Linkify>{idea.title}</Linkify></h2>{idea.stage && <span className="stage">{idea.stage.name}</span>}
                 <div className="view-idea-stats">
                     <span>{date.toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})}</span> |
                     <span><i className="fa fa-eye"></i> {viewCountText}</span> | 
@@ -25,7 +26,7 @@ class ShowIdea extends React.Component {
                         />
                     </div>
                     <div className="media-body idea-description">
-                        <p>{idea.text}</p>
+                        <p><Linkify>{idea.text}</Linkify></p>
                     </div>
                 </div>
                 {
