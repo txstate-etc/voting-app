@@ -14,6 +14,20 @@ class ShowIdea extends React.Component {
         return(
             <div className="container">
                 <h2 className="view-idea-title"><Linkify>{idea.title}</Linkify></h2>{idea.stage && <span className="stage">{idea.stage.name}</span>}
+                <div className="idea-category">
+                        <span className="category-label">
+                            {idea.categories.length == 1? "Category:" : "Categories:"}
+                        </span>
+                        <span>
+                            {
+                                idea.categories.map(function(cat, index){
+                                    var val="";
+                                    if(index !=0) val += ", ";
+                                    return val + cat.name;
+                                })
+                            }
+                        </span>
+                    </div>
                 <div className="view-idea-stats">
                     <span>{date.toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})}</span> |
                     <span><i className="fa fa-eye"></i> {viewCountText}</span> | 

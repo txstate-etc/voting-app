@@ -23,6 +23,20 @@ class Idea extends React.Component {
                 <div className="media-body idea-description">
                     <h4 className="media-heading"><a href={detailUrl}>{idea.title}</a></h4>{idea.stage && <span className="stage">{idea.stage.name}</span>}
                     <p><Linkify>{idea.text}</Linkify></p>
+                    <div className="idea-category">
+                        <span className="category-label">
+                            {idea.categories.length == 1? "Category:" : "Categories:"}
+                        </span>
+                        <span>
+                            {
+                                idea.categories.map(function(cat, index){
+                                    var val="";
+                                    if(index !=0) val += ", ";
+                                    return val + cat.name;
+                                })
+                            }
+                        </span>
+                    </div>
                     <span className="idea-stats">
                         <i className="fa fa-eye"></i> {viewCountText} | 
                         <a href={detailUrl}>

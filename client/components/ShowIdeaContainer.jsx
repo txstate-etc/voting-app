@@ -13,7 +13,8 @@ class ShowIdeaContainer extends React.Component {
         this.state = {
             idea: {
                 comments: [],
-                files: []
+                files: [],
+                categories: []
             },
             iconList: [],
             loggedIn: false

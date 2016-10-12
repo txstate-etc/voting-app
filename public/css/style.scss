@@ -183,6 +183,13 @@ footer{
   background-color: lighten($first-color, 35);
 }
 
+.idea-category{
+  .category-label{
+    font-weight: bold;
+    margin-right: 3px;
+  }
+}
+
 .vote-count-box{
    background: $second-neutral-highlight;
    line-height: 60px;
