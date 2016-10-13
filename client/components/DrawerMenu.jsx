@@ -9,7 +9,7 @@ class DrawerMenu extends React.Component {
                 <h3 className="mobile-drawer-title">Voting Application</h3>
                 <ul>
                     {!this.props.auth.loggedIn && <li><a className="drawer-menu-item" href={"/login?url=" + currentPage}>Login</a></li>}
-                    <li><a className="drawer-menu-item" href="/admin">Admin</a></li>
+                    {this.props.auth.admin && <li><a className="drawer-menu-item" href="/admin">Admin</a></li>}
                     {this.props.auth.loggedIn && <li><a className="drawer-menu-item" href={"/logout"}>Log Out</a></li>}
                 </ul>
             </nav>
