@@ -14,7 +14,7 @@ class HomeContainer extends React.Component {
 
     componentDidMount() {
         var _this = this;
-        $.ajax({url: "/ideas?comments=true", dataType: "json", success: function(result){
+        $.ajax({url: "/ideas?comments=true&stageRequired=true", dataType: "json", success: function(result){
             _this.setState({ideaList: result});
         }});
     }

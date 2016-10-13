@@ -20,6 +20,7 @@ router.route('/')
             stageFilter.id = req.query.stage;
             stageRequired = true;
         }
+
         var categoryFilter = {},
             categoryRequired = false;
         if(req.query.category) {
@@ -47,7 +48,13 @@ router.route('/')
         if(req.query.files && req.query.files == "true") {
             eagerLoadModels.push({model: models.file}); 
         }
-        models.idea.findAll({include: eagerLoadModels})
+
+        var whereClause = {};
+        if(req.query.stageRequired == "true"){
+            whereClause.stage_id = {$ne: null}
+        }
+        
+        models.idea.findAll({include: eagerLoadModels, where: whereClause})
         .then(function(ideas){
             res.format({
                 'text/html': function(){
