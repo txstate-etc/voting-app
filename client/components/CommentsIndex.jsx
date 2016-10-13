@@ -45,7 +45,6 @@ class CommentsIndex extends React.Component {
                                 <th>Idea</th>
                                 <th>Author</th>
                                 <th>Last Modified</th>
-                                <th>Approved?</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,7 +60,6 @@ class CommentsIndex extends React.Component {
                                             <td>{comment.idea.title}</td>
                                             <td>{comment.user.netid}</td>
                                             <td>{moment(comment.updated_at).format('MM/D/YYYY h:mma')}</td>
-                                            <td>{comment.approved? "true" : "false"}</td>
                                         </tr>
                                     )
                                 })
