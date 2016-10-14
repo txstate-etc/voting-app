@@ -12,7 +12,9 @@ class Home extends React.Component {
       <div className="container">
         <div className="row top-buffer">
           <div className="col-sm-6">
-            <SearchBar/>
+            <SearchBar
+              search = {this.props.search}
+            />
           </div>
           <div className="col-sm-6">
             <div className="add-new">

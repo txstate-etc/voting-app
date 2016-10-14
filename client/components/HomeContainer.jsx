@@ -8,13 +8,22 @@ class HomeContainer extends React.Component {
         super(props);
         this.state = {
             ideaList:[],
-            category: "" 
+            category: ""
         };
     }
 
     componentDidMount() {
         var _this = this;
         $.ajax({url: "/ideas?comments=true&stageRequired=true", dataType: "json", success: function(result){
+            _this.setState({ideaList: result});
+        }});
+    }
+
+    search(terms){
+        console.log("You searched for " + terms);
+        var _this = this;
+        var url="/ideas?comments=true&stageRequired=true&q=" + terms;
+        $.ajax({url: url, dataType: "json", success: function(result){
             _this.setState({ideaList: result});
         }});
     }
@@ -34,6 +43,7 @@ class HomeContainer extends React.Component {
                 updateCategory = {this.updateCategory.bind(this)}
                 ideaList = {this.state.ideaList}
                 numIdeas = {this.state.ideaList.length}
+                search = {this.search.bind(this)}
             />
         );
     }

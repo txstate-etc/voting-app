@@ -5,6 +5,7 @@ var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
 var authenticate = require('./auth').authenticate;
 var checkAdmin = require('./auth').admin;
+var formatSearchWords = require('./helpers').formatSearchWords;
 
 router.route('/')
     .get(function(req, res, next) {
@@ -52,6 +53,33 @@ router.route('/')
         var whereClause = {};
         if(req.query.stageRequired == "true"){
             whereClause.stage_id = {$ne: null}
+        }
+
+        //This is inefficient
+        /*For example, if the search terms are "apple, banana" sequelize wants it to look like:
+        where: {
+            $or: [
+              {$and: [
+                  {title: {$like: '%apple%'}},
+                  {title: {$like: '%banana%'}}
+                ]},
+              {
+                $and: [
+                  {text: {$like: '%apple%'}},
+                  {text: {$like: '%banana%'}}
+                ]
+              }
+            ]
+        }
+        */
+        if(req.query.q){
+            var terms = formatSearchWords(req.query.q);
+            var searchTitle = [], searchText = [];
+            for(var i=0; i<terms.length; i++){
+                searchTitle.push({title: {$like: '%' + terms[i] + '%'}})
+                searchText.push({text: {$like: '%' + terms[i] + '%'}})
+            }
+            whereClause.$or = [{$and: searchTitle},{$and: searchText}]
         }
         
         models.idea.findAll({include: eagerLoadModels, where: whereClause})
