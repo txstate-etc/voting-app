@@ -3,7 +3,8 @@
 module.exports = function(sequelize, DataTypes) {
   var Reply = sequelize.define("reply", {
     text: DataTypes.TEXT(),
-    approved: {type: DataTypes.BOOLEAN(), defaultValue: 0}
+    flagged: {type: DataTypes.BOOLEAN(), defaultValue: 0},
+    deleted: {type: DataTypes.BOOLEAN(), defaultValue: 0}
   }, {
     classMethods: {
       associate: function(models) {
