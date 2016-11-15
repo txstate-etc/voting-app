@@ -303,11 +303,16 @@ $menu-width: 250px;
     font-size: 3rem;
   }
 
-  .reply-link{
+  .reply-link, .flag{
     cursor: pointer;
     .fa{
       margin-right: 3px;
     }
+  }
+
+  .reply-list{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 
   .admin-buttons{

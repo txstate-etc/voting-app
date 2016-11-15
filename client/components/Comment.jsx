@@ -1,7 +1,8 @@
 import React from 'react';
 import ReplyList from './ReplyList.jsx';
 import AddReplyContainer from './AddReplyContainer.jsx';
-import {dateToElapsedTime} from '../util'
+import {dateToElapsedTime} from '../util';
+import $ from 'jquery';
 
 class Comment extends React.Component {
 
@@ -15,6 +16,22 @@ class Comment extends React.Component {
     toggleReplies(e){
       var currentState = this.state.repliesOpen;
       this.setState({repliesOpen: !currentState})
+    }
+
+    flagComment(id){
+      console.log("comment " + id + " flagged")
+      $.ajax({
+        url: "/comments/" + id,
+        dataType: "json",
+        type: 'PUT',
+        data: {'flagged': true},
+        success: function(){
+          alert("Thank you for bringing this to our attention.")  
+        },
+        error: function(xhr, status, err){
+            console.log("there was an error")
+        }
+      })
     }
 
     getIcon(user_id){
@@ -60,11 +77,12 @@ class Comment extends React.Component {
                     <span className="comment-age">{timeElapsed}</span>
                   </div>
                   <p>{comment.text}</p>
-                  <div className="pull-right">
+                  <span><a className="flag" onClick={this.flagComment.bind(this, comment.id)}><i className="fa fa-flag-o"></i>Flag Comment</a></span>
+                  <span className="pull-right">
                   {
                     (this.props.loggedIn || comment.replies.length > 0) && <a className="reply-link" onClick={this.toggleReplies.bind(this)}><i className="fa fa-comment-o"></i> {replyText}</a>
                   }
-                  </div>
+                  </span>
                   {replyBlock}
                 </div>
             </li>

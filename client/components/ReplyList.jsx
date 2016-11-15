@@ -12,7 +12,7 @@ class ReplyList extends React.Component {
 
     render(){
         return(
-            <div>
+            <div className="reply-list">
                 {this.props.replies.map(reply => {
                     return (
                         <Reply
