@@ -84,7 +84,7 @@ describe('Reply',function(){
             var startReplies = res.body.length;
             request.post('/replies')
             .set('Accept', 'application/json')
-            .send({'text': 'Desk goes up, desk goes down.', 'approved': 0, 'user_id': 1, 'comment_id': 2})
+            .send({'text': 'Desk goes up, desk goes down.', 'deleted': 0, 'flagged': 0, 'user_id': 1, 'comment_id': 2})
             .expect(201)
             .end(function(postErr,postRes){
                 if(postErr) return done(postErr);
@@ -102,7 +102,7 @@ describe('Reply',function(){
 
     //Test GET one specific reply
     it('should list a SINGLE reply on /replies/<id> GET', function(done){
-        Reply.create({text: 'More cowbell', approved: 0, user_id: 3, comment_id: 3})
+        Reply.create({text: 'More cowbell', deleted: 0, flagged: 0, user_id: 3, comment_id: 3})
         .then(function(reply){
             request.get('/replies/' + reply.id)
             .set('Accept', 'application/json')
@@ -134,15 +134,15 @@ describe('Reply',function(){
 
     //Test update a reply (PUT)
     it('should update a SINGLE reply on /replies/<id> PUT',function(done){
-        Reply.create({text: 'ABCDEFGHIJKLM', approved: 0, user_id: 3, comment_id: 2})
+        Reply.create({text: 'ABCDEFGHIJKLM', flagged: 0, user_id: 3, comment_id: 2})
         .then(function(reply){
             request.put('/replies/' + reply.id)
-            .send({'approved': 1})
+            .send({'flagged': 1})
             .set('Accept', 'application/json')
             .expect(200)
             .end(function(err,res){
                 if(err) return done(err);
-                expect(res.body.approved).to.be.ok;  
+                expect(res.body.flagged).to.be.ok;  
                 done();
             });
         });
@@ -156,7 +156,7 @@ describe('Reply',function(){
         .end(function(err, res){
             if(err) return done(err);
             request.put('/replies/random')
-            .send({'approved':1})
+            .send({'deleted':1})
             .expect(404)
             .end(function(err2,res2){
                 if(err2) return done(err2);
@@ -167,7 +167,7 @@ describe('Reply',function(){
 
     //Test DELETE a reply
     it('should delete a SINGLE reply on /replies/<id> DELETE', function(done){
-        Reply.create({text: 'Replying with something unrelated', approved: 0, user_id: 1, comment_id: 4})
+        Reply.create({text: 'Replying with something unrelated', flagged: 0, deleted: 0, user_id: 1, comment_id: 4})
         .then(function(reply){
             request.delete('/replies/' + reply.id)
             .set('Accept', 'application/json')
@@ -176,9 +176,10 @@ describe('Reply',function(){
                 if(err) return done(err);
                 request.get('/replies/' + reply.id)
                 .set('Accept', 'application/json')
-                .expect(404)
+                .expect(200)
                 .end(function(getErr,getRes){
                     if(getErr) return done(getErr);
+                    expect(getRes.body.deleted).to.be.ok;
                     done();
                 });
             });

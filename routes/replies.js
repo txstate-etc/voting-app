@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models');
+var authenticate = require('./auth').authenticate;
+var checkAdmin = require('./auth').admin;
 
 router.route('/')
     .get(function(req, res, next) {
@@ -19,11 +21,12 @@ router.route('/')
         });
     })
 
-    .post(function(req,res,next){
+    .post(authenticate, function(req,res,next){
         var author = req.session["user_id"];
         if(author){
             models.reply.create({text: req.body.text,
-                                approved: req.body.approved,
+                                flagged: false,
+                                deleted: false,
                                 user_id: author,
                                 comment_id: req.body.comment_id
             })
@@ -89,7 +92,7 @@ router.route('/:reply_id')
         }); 
     })
 
-    .put(function(req,res,next){
+    .put(authenticate, checkAdmin, function(req,res,next){
         req.reply.updateAttributes(req.body)
         .then(function(reply){
             res.format({
@@ -105,11 +108,9 @@ router.route('/:reply_id')
         });
     })
 
-    .delete(function(req,res,next){
-        models.reply.destroy({
-                where: {
-                  id: req.reply.id
-                }
+    .delete(authenticate, checkAdmin, function(req,res,next){
+        req.reply.updateAttributes({
+                deleted: true
             }).then(function(reply){
                 res.format({
                     'text/html': function(){

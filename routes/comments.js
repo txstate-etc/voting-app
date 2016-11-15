@@ -30,7 +30,8 @@ router.route('/')
         var author = req.session["user_id"];
         if(author){
             models.comment.create({text: req.body.text,
-                                    approved: req.body.approved,
+                                    flagged: false,
+                                    deleted: false,
                                     user_id: author,
                                     idea_id: req.body.idea_id
             })
@@ -111,22 +112,19 @@ router.route('/:comment_id')
     })
 
     .delete(authenticate, checkAdmin, function(req,res,next){
-        models.comment.destroy({
-                where: {
-                  id: req.comment.id
+        req.comment.updateAttributes({deleted: true})
+        .then(function(comment){
+            res.format({
+                'text/html': function(){
+                
+                },
+                'application/json': function(){
+                    res.json(comment);
                 }
-            }).then(function(comment){
-                res.format({
-                    'text/html': function(){
-                    
-                    },
-                    'application/json': function(){
-                        res.json(comment);
-                    }
-                });
-            }).catch(function(error){
-                next(error);
             });
+        }).catch(function(error){
+            next(error);
+        });
     });
 
 module.exports = router;

@@ -99,7 +99,7 @@ describe('Comment',function(){
             var startComments = res.body.length;
             request.post('/comments')
             .set('Accept', 'application/json')
-            .send({'text': 'Let\'s go get ice cream.', 'approved': 0, 'user_id': 2, 'idea_id': 2})
+            .send({'text': 'Let\'s go get ice cream.', 'deleted': 0, 'flagged': 0, 'user_id': 2, 'idea_id': 2})
             .expect(201)
             .end(function(postErr,postRes){
                 if(postErr) return done(postErr);
@@ -117,7 +117,7 @@ describe('Comment',function(){
 
     //Test GET one specific comment
     it('should list a SINGLE comment on /comments/<id> GET', function(done){
-        Comment.create({text: 'ABCDEFGHIJKLM', approved: 0, user_id: 3, idea_id: 3})
+        Comment.create({text: 'ABCDEFGHIJKLM', deleted: 0, flagged: 0, user_id: 3, idea_id: 3})
         .then(function(comment){
             request.get('/comments/' + comment.id)
             .set('Accept', 'application/json')
@@ -149,15 +149,15 @@ describe('Comment',function(){
 
     //Test update a comment (PUT)
     it('should update a SINGLE comment on /comments/<id> PUT',function(done){
-        Comment.create({text: 'ABCDEFGHIJKLM', approved: 0, user_id: 3, idea_id: 3})
+        Comment.create({text: 'ABCDEFGHIJKLM', flagged: 0, user_id: 3, idea_id: 3})
         .then(function(comment){
             request.put('/comments/' + comment.id)
-            .send({'approved': 1})
+            .send({'flagged': 1})
             .set('Accept', 'application/json')
             .expect(200)
             .end(function(err,res){
                 if(err) return done(err);
-                expect(res.body.approved).to.be.ok; //checks if approved is truthy.  
+                expect(res.body.flagged).to.be.ok; //checks if flagged is truthy.  
                 done();
             });
         });
@@ -171,7 +171,7 @@ describe('Comment',function(){
         .end(function(err, res){
             if(err) return done(err);
             request.put('/comments/random')
-            .send({'approved':1})
+            .send({'deleted':1})
             .expect(404)
             .end(function(err2,res2){
                 if(err2) return done(err2);
@@ -182,7 +182,7 @@ describe('Comment',function(){
 
     //Test DELETE a comment
     it('should delete a SINGLE comment on /comments/<id> DELETE', function(done){
-        Comment.create({text: 'ABCDEFGHIJKLM', approved: 0, user_id: 3, idea_id: 3})
+        Comment.create({text: 'ABCDEFGHIJKLM', deleted: 0, flagged: 0, user_id: 3, idea_id: 3})
         .then(function(comment){
             request.delete('/comments/' + comment.id)
             .set('Accept', 'application/json')
@@ -191,9 +191,10 @@ describe('Comment',function(){
                 if(err) return done(err);
                 request.get('/comments/' + comment.id)
                 .set('Accept', 'application/json')
-                .expect(404)
+                .expect(200)
                 .end(function(getErr,getRes){
                     if(getErr) return done(getErr);
+                    expect(getRes.body.deleted).to.be.ok;
                     done();
                 });
             });
