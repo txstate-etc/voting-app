@@ -14,6 +14,7 @@ class CommentList extends React.Component {
                                 comment = {comment}
                                 iconList = {this.props.iconList}
                                 loggedIn = {this.props.loggedIn}
+                                updateCommentList = {this.props.updateCommentList}
                             />
                         )
                     })}

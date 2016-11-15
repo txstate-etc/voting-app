@@ -4,6 +4,7 @@ import $ from 'jquery';
 import {sumCommentsAndReplies} from '../util';
 import {getIcons} from '../IconGenerator';
 import {isLoggedIn} from '../auth';
+import update from 'react-addons-update';
 
 
 class ShowIdeaContainer extends React.Component {
@@ -19,6 +20,14 @@ class ShowIdeaContainer extends React.Component {
             iconList: [],
             loggedIn: false
         };
+    }
+
+    updateCommentList(comments){
+        var idea = update(this.state.idea, {$merge: {comments: comments}});
+        this.setState({idea: idea});
+        var contributors = this.getUniqueContributors(comments);
+        var iconAssignments = getIcons(contributors, this.state.idea.id);
+        this.setState({iconList: iconAssignments});
     }
 
     componentDidMount() {
@@ -65,6 +74,7 @@ class ShowIdeaContainer extends React.Component {
                 commentCount = {sumCommentsAndReplies(this.state.idea.comments)}
                 iconList = {this.state.iconList}
                 loggedIn = {this.state.loggedIn}
+                updateCommentList = {this.updateCommentList.bind(this)}
             />
         );
     }

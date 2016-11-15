@@ -5,14 +5,24 @@ import $ from 'jquery';
 class AddReplyContainer extends React.Component {
 
     submit(formData){
-      //TODO: Get the user ID from somewhere.  
       var data = {
         text: formData.text,
         comment_id: this.props.comment_id
       };
+       var _this = this;
       $.post( "/replies", data, function( result ) {
-        //display a message that the comment will be displayed after it has been approved
-      });
+        $.ajax({
+          url: "/comments?replies=true&idea=" + _this.props.idea_id,
+          dataType: "json",
+          success: function(comments){
+            _this.props.updateCommentList(comments);
+          },
+          error: function(){
+
+          }
+        })
+
+      }, "json");
     }
     
     render(){

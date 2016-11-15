@@ -57,12 +57,14 @@ class ShowIdea extends React.Component {
                 <AddCommentContainer
                     ideaID = {this.props.id}
                     loggedIn = {this.props.loggedIn}
+                    updateCommentList = {this.props.updateCommentList}
                 />
                 <div className="comment-list">
                     <CommentList
                         commentList = {idea.comments}
                         iconList = {this.props.iconList}
                         loggedIn = {this.props.loggedIn}
+                        updateCommentList = {this.props.updateCommentList}
                     />
                 </div>
             </div> 

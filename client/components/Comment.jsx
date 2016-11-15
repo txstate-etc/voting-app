@@ -38,7 +38,7 @@ class Comment extends React.Component {
         if(this.state.repliesOpen){
           var replyList  = "";
           if(comment.replies.length > 0) replyList = <ReplyList key="replylist" replies={comment.replies} iconList={this.props.iconList} />;
-          replyBlock = [replyList,<AddReplyContainer key={comment.id} comment_id={comment.id} loggedIn={this.props.loggedIn}/>];
+          replyBlock = [replyList,<AddReplyContainer key={comment.id} comment_id={comment.id} loggedIn={this.props.loggedIn} idea_id = {comment.idea_id} updateCommentList = {this.props.updateCommentList}/>];
         }
 
         var timeElapsed = dateToElapsedTime(comment.updated_at);
