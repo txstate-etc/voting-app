@@ -16,7 +16,7 @@ class CommentsIndex extends React.Component {
 
     componentDidMount(){
         var _this = this;
-        $.ajax({url: "/comments?replies=true", dataType: "json", success: function(result){
+        $.ajax({url: "/comments?replies=true&flagged=true", dataType: "json", success: function(result){
             _this.setState({comments: result});
         }});
     }
@@ -36,11 +36,10 @@ class CommentsIndex extends React.Component {
             <div>
                 { this.props.children ||
                 <div>
-                    <h3>Comments</h3>
+                    <h3>Flagged Comments</h3>
                     <table className="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>Status</th>
                                 <th>Comment</th>
                                 <th>Idea</th>
                                 <th>Author</th>
@@ -50,12 +49,8 @@ class CommentsIndex extends React.Component {
                         <tbody>
                             {
                                 this.state.comments.map(comment => {
-                                    var icon = (comment.approved && !this.hasNewReplies(comment.replies))? <div className="comment-approved text-center"><i className="fa fa-check" aria-label="Approved Comment"></i></div>
-                                     : 
-                                     <div className="text-center"><span className="new-indicator">NEW</span></div>;
                                     return (
                                         <tr key={comment.id}>
-                                            <td>{icon}</td>
                                             <td><a href={"/admin/comments/edit/" + comment.idea.id + "#comment" + comment.id }>{comment.text}</a></td>
                                             <td>{comment.idea.title}</td>
                                             <td>{comment.user.netid}</td>
