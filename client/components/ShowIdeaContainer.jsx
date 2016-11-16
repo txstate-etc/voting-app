@@ -32,7 +32,7 @@ class ShowIdeaContainer extends React.Component {
 
     componentDidMount() {
         var _this = this;
-        var url = "/ideas/" + this.props.params.ideaId + "?files=true";
+        var url = "/ideas/" + this.props.params.ideaId + "?files=true&comments=true";
         this.setState({loggedIn: isLoggedIn()});
         $.ajax({url: url, dataType: "json", success: function(result){
            _this.setState({idea: result})

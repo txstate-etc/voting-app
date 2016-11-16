@@ -29,7 +29,7 @@ router.route('/')
                 filter.$or = [
                             {
                               flagged: {
-                                $eq: false
+                                $eq: true
                               }
                             },
                             {

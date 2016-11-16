@@ -317,6 +317,11 @@ $menu-width: 250px;
 
   .admin-buttons{
     float: right;
+    button{
+      .fa{
+        margin-right: 3px;
+      }
+    }
     @media (max-width : 768px) {
       & {
         float: none;
@@ -329,6 +334,15 @@ $menu-width: 250px;
     .fa {
       color: green;
       font-size: 3rem;
+    }
+  }
+  .flag {
+    color: transparent;
+    .fa{
+      font-size: 3rem;
+    }
+    &.on{
+      color: red;
     }
   }
 }
@@ -355,6 +369,12 @@ $menu-width: 250px;
 .reply-actions{
   float: right;
   margin-bottom: 2rem;
+  .flagged-reply{
+    color: red;
+    .fa{
+      margin-right: 3px;
+    }
+  }
 }
 
 .edit-reply-list{
