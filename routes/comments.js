@@ -106,6 +106,7 @@ router.param('comment_id', function(req, res, next, value){
             }); 
             
         }
+        return null;
     }).catch(function(error){
         next(error);
     });
@@ -134,6 +135,7 @@ router.route('/:comment_id')
                     res.json(comment);
                 }
             });
+            return null;
         }).catch(function(error){
             next(error);
         });
@@ -150,6 +152,7 @@ router.route('/:comment_id')
                     res.json(comment);
                 }
             });
+            return null;
         }).catch(function(error){
             next(error);
         });
