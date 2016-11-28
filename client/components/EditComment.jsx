@@ -7,7 +7,9 @@ class EditComment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-           repliesOpen: false
+           repliesOpen: false,
+           editMode: false,
+           value: ""
         };
     }
 
@@ -50,6 +52,28 @@ class EditComment extends React.Component {
         })
     }
 
+    updateComment(e){
+        this.setState({value: e.target.value})
+    }
+
+    saveComment(){
+        var data = {
+            text: this.state.value,
+            edited: true
+        }
+        var url = "/comments/" + this.props.comment.id;
+        var _this = this;
+        $.ajax({
+            url: url,
+            method: 'PUT',
+            data: data,
+            dataType: 'json',
+            success: function(){
+                _this.setState({editMode: false})
+            }
+        })
+    }
+
     hasFlaggedReplies(replies){
         var flaggedReplies = false;
         for(var i=0; i<replies.length; i++){
@@ -63,6 +87,11 @@ class EditComment extends React.Component {
     toggleReplies(e){
       var currentState = this.state.repliesOpen;
       this.setState({repliesOpen: !currentState})
+    }
+
+    toggleEditMode(e){
+        var currentState = this.state.editMode;
+        this.setState({editMode: !currentState})
     }
 
     buildReplyList(replies){
@@ -124,7 +153,7 @@ class EditComment extends React.Component {
         var replyLink = <a className="reply-link" onClick={this.toggleReplies.bind(this)}>
                             {this.state.repliesOpen ? "Hide " : "Show "} Replies
                         </a>;
-        if(this.state.repliesOpen){
+        if(!this.state.editMode && this.state.repliesOpen){
           replyList  = this.buildReplyList(comment.replies);
         }
 
@@ -148,19 +177,37 @@ class EditComment extends React.Component {
                                 </span>
                             </div>
                             <div className="col-sm-4">
-                                <div className="admin-buttons">
-                                    {comment.flagged && <button onClick={this.unFlagComment.bind(this, "comment", comment.id)}><i className="fa fa-flag-o"></i>Unflag</button>}
-                                    <button><i className="fa fa-edit"></i>Edit</button>
-                                    <button onClick={this.rejectComment.bind(this, "comment", comment.id)}><i className="fa fa-ban"></i>Reject</button>
-                                </div>
+                                {
+                                    !this.state.editMode &&
+                                    <div className="admin-buttons">
+                                        {comment.flagged && <button onClick={this.unFlagComment.bind(this, "comment", comment.id)}><i className="fa fa-flag-o"></i>Unflag</button>}
+                                        <button onClick={this.toggleEditMode.bind(this)}><i className="fa fa-edit"></i>Edit</button>
+                                        <button onClick={this.rejectComment.bind(this, "comment", comment.id)}><i className="fa fa-ban"></i>Reject</button>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
-                    <p>{comment.text}</p>
-                    <div className="pull-right reply-actions">
-                        {this.hasFlaggedReplies(comment.replies) && <span className="flagged-reply"><i className="fa fa-flag" aria-label="Flagged replies"></i></span>}
-                        {comment.replies.length >0 && replyLink}
-                    </div>
+                    {
+                        this.state.editMode ?
+                            <form onSubmit={this.saveComment.bind(this)}>
+                                <textarea autoFocus={true} className="edit-comment" defaultValue={comment.text} onChange={this.updateComment.bind(this)} aria-label="Edit Comment"></textarea>
+                                <div className="edit-buttons pull-right">
+                                    <button aria-label="save changes to comment" type="submit" className="btn btn-sm btn-warning">Save Changes</button>
+                                    <button aria-label="cancel changes to comment" className="btn btn-sm btn-warning">Cancel</button>
+                                </div>
+                            </form>
+                            :
+                            <p>{comment.text}</p>
+                    }
+                    
+                    {
+                        !this.state.editMode &&
+                        <div className="pull-right reply-actions">
+                            {this.hasFlaggedReplies(comment.replies) && <span className="flagged-reply"><i className="fa fa-flag" aria-label="Flagged replies"></i></span>}
+                            {comment.replies.length >0 && replyLink}
+                        </div>
+                    }
                     {replyList}
                 </div>
             </li>

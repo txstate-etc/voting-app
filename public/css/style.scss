@@ -320,6 +320,15 @@ $menu-width: 250px;
   .flag.on{
     color: red;
   }
+
+  .edit-comment{
+    width: 100%;
+  }
+  .edit-buttons{
+    button{
+      margin: 0px 2px;
+    }
+  }
  
   .reply-list{
     margin-top: 2rem;
