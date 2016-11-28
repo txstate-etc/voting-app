@@ -285,34 +285,54 @@ $menu-width: 250px;
   }
 }
 
+
 .comment-list{
   margin-top: 6rem;
   ul li{
-    border: 1px solid lightgray;
+    border-top: 1px solid lightgray;
     padding: 5px;
   }
   .comment-title{
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin-bottom: 0px;
     text-transform: capitalize;
+    font-weight: 500;
   }
   .comment-age{
-    font-size: 1rem;
-  }
-  .comment-icon{
-    font-size: 3rem;
+    font-size: 1.2rem;
+    color: #4c4c4c;
+    margin-left: 10px;
   }
 
   .reply-link, .flag{
     cursor: pointer;
-    .fa{
-      margin-right: 3px;
-    }
   }
 
+  .spacer{
+    margin: 0px 5px;
+  }
+  .toggle-replies{
+    margin-top: 1rem;
+    .replycon{
+      margin-right:5px;
+    }
+  }
+  .flag.on{
+    color: red;
+  }
+ 
   .reply-list{
     margin-top: 2rem;
     margin-bottom: 2rem;
+    
+    .avatar{
+      font-size: 3rem;
+    }
+
+    .reply{
+      border-top: 1px solid lightgray;
+      padding: 5px;
+    }
   }
 
   .admin-buttons{
@@ -328,24 +348,7 @@ $menu-width: 250px;
       }
     }
   }
-
-  .approved {
-    padding: 0px 5px;
-    .fa {
-      color: green;
-      font-size: 3rem;
-    }
-  }
-  .flag {
-    color: transparent;
-    .fa{
-      font-size: 3rem;
-    }
-    &.on{
-      color: red;
-    }
-  }
-}
+ }
 
 .comment-approved {
   color: green;
@@ -368,7 +371,6 @@ $menu-width: 250px;
 
 .reply-actions{
   float: right;
-  margin-bottom: 2rem;
   .flagged-reply{
     color: red;
     .fa{
@@ -379,6 +381,10 @@ $menu-width: 250px;
 
 .edit-reply-list{
   clear: both;
+  .media{
+    border-top: 1px solid lightgray;
+    padding: 5px;
+  }
 }
 
 .create-date{

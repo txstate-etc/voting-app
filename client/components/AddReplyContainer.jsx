@@ -29,6 +29,7 @@ class AddReplyContainer extends React.Component {
         var jsx = this.props.loggedIn?
           <AddComment
               onCommentSubmit = {this.submit.bind(this)}
+              focus = {true}
             />
           :
           <div/>

@@ -20,13 +20,14 @@ class EditComment extends React.Component {
         else if(type == "reply"){
             url = "/replies/" + id;
         }
+        var _this = this;
         $.ajax({
             url: url,
             method: 'PUT',
             dataType: 'json',
             data: {flagged: false},
             success: function(){
-                console.log(type + " was unflagged.")
+                _this.props.updateComments(_this.props.comment.idea_id);
             }
         })
     }
@@ -68,7 +69,12 @@ class EditComment extends React.Component {
         return(
             <div className="edit-reply-list">
             {replies.map(reply => {
-                var icon = <div className={"flag" + (reply.flagged ? " on" : "")}><i className="fa fa-flag" aria-label="Flagged Comment"></i></div>
+                var icon = (
+                    reply.flagged ? 
+                        <div className={"flag" + (reply.flagged ? " on" : "")}><i className="fa fa-flag fa-fw" aria-label="Flagged Comment"></i></div>
+                        :
+                        <div className="flag"><i className="fa fa-fw"></i></div>
+                    )
                return(
                     <div className="media" key={reply.id}>
                         <div className="media-left">
@@ -77,26 +83,24 @@ class EditComment extends React.Component {
                         <div className="media-body">
                             <div className="media-heading">
                                 <div className="row">
-                                    <div className="col-sm-6">
+                                    <div className="col-sm-4">
                                         <p className="comment-title-admin">
                                             <Link to={'/admin/users/' + reply.user.id}>{reply.user.affiliation + " " + reply.user.id}</Link>
                                         </p>
                                     </div>
-                                    <div className="col-sm-6">
+                                    <div className="col-sm-4">
+                                        <span className="comment-age">
+                                            {moment(reply.updated_at).format('MM/D/YYYY h:mma')}
+                                        </span>
+                                    </div>
+                                    <div className="col-sm-4">
                                         <div className="admin-buttons">
                                             <div className="admin-buttons">
-                                                {reply.flagged && <button onClick={this.unFlagComment.bind(this, "reply", reply.id)}><i className="fa fa-flag-o"></i>Unflag</button>}
+                                                {reply.flagged && <button onClick={this.unFlagComment.bind(this, "reply", reply.id)}><i className="fa fa-flag-o" aria-label="This comment has flagged replies."></i>Unflag</button>}
                                                 <button><i className="fa fa-edit"></i>Edit</button>
                                                 <button onClick={this.rejectComment.bind(this, "reply", reply.id)}><i className="fa fa-ban"></i>Reject</button>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-xs-12">
-                                        <span className="comment-age">
-                                            {moment(reply.updated_at).format('MM/D/YYYY h:mma')}
-                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -111,11 +115,17 @@ class EditComment extends React.Component {
 
     render(){
         var comment = this.props.comment;
-        var icon = <div className={"flag" + (comment.flagged ? " on" : "")}><i className="fa fa-flag" aria-label="Flagged Comment"></i></div>
-
+        var icon = (comment.flagged ? 
+                <div className="flag on"><i className="fa fa-flag fa-fw" aria-label="Flagged Comment"></i></div>
+                :
+                <div className="flag"><i className="fa fa-fw"></i></div>
+            )
         var replyList = "";
+        var replyLink = <a className="reply-link" onClick={this.toggleReplies.bind(this)}>
+                            {this.state.repliesOpen ? "Hide " : "Show "} Replies
+                        </a>;
         if(this.state.repliesOpen){
-          var replyList  = this.buildReplyList(comment.replies);
+          replyList  = this.buildReplyList(comment.replies);
         }
 
         return(
@@ -127,12 +137,17 @@ class EditComment extends React.Component {
                 <div className="media-body">
                     <div className="media-heading">
                         <div className="row">
-                            <div className="col-sm-6">
+                            <div className="col-sm-4">
                                 <p className="comment-title-admin">
                                     <Link to={'/admin/users/' + comment.user.id}>{comment.user.affiliation + " " + comment.user.id}</Link>
                                 </p>
                             </div>
-                            <div className="col-sm-6">
+                            <div className="col-sm-4">
+                                <span className="comment-age">
+                                    {moment(comment.updated_at).format('MM/D/YYYY h:mma')}
+                                </span>
+                            </div>
+                            <div className="col-sm-4">
                                 <div className="admin-buttons">
                                     {comment.flagged && <button onClick={this.unFlagComment.bind(this, "comment", comment.id)}><i className="fa fa-flag-o"></i>Unflag</button>}
                                     <button><i className="fa fa-edit"></i>Edit</button>
@@ -140,18 +155,11 @@ class EditComment extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-xs-12">
-                                <span className="comment-age">
-                                    {moment(comment.updated_at).format('MM/D/YYYY h:mma')}
-                                </span>
-                            </div>
-                        </div>
                     </div>
                     <p>{comment.text}</p>
                     <div className="pull-right reply-actions">
-                        {this.hasFlaggedReplies(comment.replies) && <span className="flagged-reply"><i className="fa fa-flag"></i></span>}
-                        {comment.replies.length >0 && <a className="reply-link" onClick={this.toggleReplies.bind(this)}><i className="fa fa-comment-o"></i>Replies</a>}
+                        {this.hasFlaggedReplies(comment.replies) && <span className="flagged-reply"><i className="fa fa-flag" aria-label="Flagged replies"></i></span>}
+                        {comment.replies.length >0 && replyLink}
                     </div>
                     {replyList}
                 </div>

@@ -14,6 +14,10 @@ class EditComments extends React.Component {
         };
     }
 
+    updateComments(idea_id){
+        console.log("Updating comments for idea " + idea_id)
+    }
+
     componentDidMount(){
         var _this = this;
         $.ajax({url: "/ideas/" + _this.props.params.ideaId, dataType: "json", success: function(result){
@@ -38,7 +42,7 @@ class EditComments extends React.Component {
                     {
                         idea.comments.map(comment => {
                             return(
-                                <EditComment comment={comment} key={comment.id}/>
+                                <EditComment comment={comment} key={comment.id} updateComments={this.updateComments.bind(this)}/>
                             )
                         })
                     }

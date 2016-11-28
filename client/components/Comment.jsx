@@ -18,6 +18,11 @@ class Comment extends React.Component {
       this.setState({repliesOpen: !currentState})
     }
 
+    openReplyBlock(e){
+      console.log("open reply block")
+      this.setState({repliesOpen: true})
+    }
+
     flagComment(id){
       console.log("comment " + id + " flagged")
       $.ajax({
@@ -42,51 +47,57 @@ class Comment extends React.Component {
     }
 
     render(){
-        var comment = this.props.comment;
-        var isModeratorComment = (comment.user.affiliation === "moderator");
-        var replyText = "Reply";
-        if(comment.replies.length == 1){
-          replyText = "1 Reply";
-        }
-        else if(comment.replies.length > 1){
-          replyText = comment.replies.length + " replies";
-        }
-        var replyBlock = "";
-        if(this.state.repliesOpen){
-          var replyList  = "";
-          if(comment.replies.length > 0) replyList = <ReplyList key="replylist" replies={comment.replies} iconList={this.props.iconList} />;
-          replyBlock = [replyList,<AddReplyContainer key={comment.id} comment_id={comment.id} loggedIn={this.props.loggedIn} idea_id = {comment.idea_id} updateCommentList = {this.props.updateCommentList}/>];
-        }
+      var comment = this.props.comment;
+      var isModeratorComment = (comment.user.affiliation === "moderator");
+      var replyText = " Replies";
+      if(comment.replies.length == 1){
+        replyText = " Reply";
+      }
+      
+      var replyBlock = "";
+      if(this.state.repliesOpen){
+        var replyList  = "";
+        if(comment.replies.length > 0) replyList = <ReplyList key="replylist" replies={comment.replies} iconList={this.props.iconList} />;
+        replyBlock = [replyList,<AddReplyContainer key={comment.id} comment_id={comment.id} loggedIn={this.props.loggedIn} idea_id = {comment.idea_id} updateCommentList = {this.props.updateCommentList}/>];
+      }
+      var timeElapsed = dateToElapsedTime(comment.updated_at);
 
-        var timeElapsed = dateToElapsedTime(comment.updated_at);
+      var icon = this.getIcon(comment.user_id);
+      if(isModeratorComment){
+        icon.icon = "fa-lock";
+        icon.color = "";
+      }
 
-        var icon = this.getIcon(comment.user_id);
-        if(isModeratorComment){
-          icon.icon = "fa-lock";
-          icon.color = "";
-        }
-
-        return(
-            <li className="media">
-                <div className="media-left">
-                  <i aria-label={"Comment by " + comment.user.affiliation + " " + icon.aria_id} className={"avatar fa " + icon.icon + " " + icon.color }></i>
-                </div>
-                <div className="media-body">
-                  <div className="media-heading">
-                    <p className="comment-title">{comment.user.affiliation}</p>
-                    <span className="comment-age">{timeElapsed}</span>
-                  </div>
-                  <p>{comment.text}</p>
-                  <span><a className="flag" onClick={this.flagComment.bind(this, comment.id)}><i className="fa fa-flag-o"></i>Flag Comment</a></span>
-                  <span className="pull-right">
-                  {
-                    (this.props.loggedIn || comment.replies.length > 0) && <a className="reply-link" onClick={this.toggleReplies.bind(this)}><i className="fa fa-comment-o"></i> {replyText}</a>
-                  }
-                  </span>
-                  {replyBlock}
-                </div>
-            </li>
-        );
+      return(
+        <li className="media">
+          <div className="author-icon media-left">
+            <i aria-label={"Comment by " + comment.user.affiliation + " " + icon.aria_id} className={"avatar fa " + icon.icon + " " + icon.color }></i>
+          </div>
+          <div className="media-body">
+            <div className="media-heading">
+              <span className="comment-title">{comment.user.affiliation}</span>
+              <span className="comment-age">{timeElapsed}</span>
+            </div>
+            <p>{comment.text}</p>
+            <span>
+            {
+              (this.props.loggedIn || comment.replies.length > 0) && <a onClick={this.openReplyBlock.bind(this)} className="reply-link">Reply</a>
+            }
+            </span>
+            <span className="spacer">&middot;</span>
+            <span><a className="flag" onClick={this.flagComment.bind(this, comment.id)}>Flag</a></span>
+            <div className="toggle-replies">
+              {comment.replies.length > 0 && 
+              <a onClick={this.toggleReplies.bind(this)}>
+                <i className={"replycon fa " + (this.state.repliesOpen ? "fa-angle-up" : "fa-reply fa-rotate-180")}></i>
+                {(this.state.repliesOpen ? "Hide " + replyText : comment.replies.length + replyText)}
+              </a>
+              }
+            </div>
+            {replyBlock}
+          </div>
+        </li>
+      );
     }
 }
 

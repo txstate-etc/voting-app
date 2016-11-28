@@ -29,6 +29,7 @@ class AddCommentContainer extends React.Component {
               <AddComment
                 ideaID = {this.props.ideaID}
                 onCommentSubmit = {this.submit.bind(this)}
+                focus={false}
               />
               :
               <span>Please log in to make a comment</span>;

@@ -29,17 +29,17 @@ class Reply extends React.Component {
             icon.color = "";
         }
         return(
-            <div className="media">
+            <div className="reply media">
                 <div className="media-left">
                   <i aria-label={"Reply from " + this.props.reply.user.affiliation + " " + icon.aria_id}className={"avatar fa " + icon.icon + " " + icon.color }></i>
                 </div>
                 <div className="media-body">
                     <div className="media-heading">
-                        <p className="comment-title">{this.props.reply.user.affiliation}</p>
+                        <span className="comment-title">{this.props.reply.user.affiliation}</span>
                         <span className="comment-age">{timeElapsed}</span>
                     </div>
                     <p>{this.props.reply.text}</p>
-                    <div><a className="flag" onClick={this.flagComment.bind(this, this.props.reply.id)}><i className="fa fa-flag-o"></i>Flag Comment</a></div>
+                    <div><a className="flag" onClick={this.flagComment.bind(this, this.props.reply.id)}>Flag</a></div>
                 </div>
           </div>
         );
