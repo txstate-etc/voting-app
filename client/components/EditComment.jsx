@@ -29,27 +29,30 @@ class EditComment extends React.Component {
             dataType: 'json',
             data: {flagged: false},
             success: function(){
-                _this.props.updateComments(_this.props.comment.idea_id);
+                _this.props.updateCommentState(_this.props.comment.id);
             }
         })
     }
 
     rejectComment(type, id){
-        var url;
-        if(type=="comment"){
-            url = "/comments/" + id;
-        }
-        else if(type == "reply"){
-            url = "/replies/" + id;
-        }
-        $.ajax({
-            url: url,
-            method: 'DELETE',
-            dataType: 'json',
-            success: function(){
-                console.log(type + " was rejected.")
+        if(confirm("Are you sure you want to delete this comment?")){
+            var url;
+            if(type=="comment"){
+                url = "/comments/" + id;
             }
-        })
+            else if(type == "reply"){
+                url = "/replies/" + id;
+            }
+            var _this = this;
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                dataType: 'json',
+                success: function(){
+                    _this.props.removeComment(_this.props.comment.id);
+                }
+            })
+        }
     }
 
     updateComment(e){
@@ -68,8 +71,9 @@ class EditComment extends React.Component {
             method: 'PUT',
             data: data,
             dataType: 'json',
-            success: function(){
+            success: function(comment){
                 _this.setState({editMode: false})
+                _this.props.updateCommentState(comment.id, comment.text)
             }
         })
     }
