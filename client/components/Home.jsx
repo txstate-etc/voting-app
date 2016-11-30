@@ -6,8 +6,33 @@ import {isLoggedIn} from '../auth';
 
 class Home extends React.Component {
 
-  render() {
+  handlePageChange(newPage, e){
+    this.props.updatePage(newPage);
+  }
 
+  render() {
+    //pagination
+    var totalPages = Math.ceil(this.props.ideaCount/this.props.ideasPerPage);
+    var pageLinks = [];
+    //previous link
+    pageLinks.push(<li key="prev" className={this.props.currentPage == 1 ? "disabled" : ""}>
+                    <a onClick={this.handlePageChange.bind(this, (this.props.currentPage > 1 ? (this.props.currentPage - 1) : this.props.currentPage ))} 
+                        aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>);
+    //not sure about the totalPages at the end
+    for (var i = Math.max(this.props.currentPage-3, 1); i <= Math.min(this.props.currentPage+3, totalPages); i++){
+      pageLinks.push(<li key={i} className={i == this.props.currentPage ? "active" : ""}>
+                      <a onClick={this.handlePageChange.bind(this, i)}>{i}</a>
+                     </li>);
+    }
+    pageLinks.push(<li key="next" className={this.props.currentPage == totalPages ? "disabled" : ""}>
+                    <a onClick={this.handlePageChange.bind(this, (this.props.currentPage < totalPages ? (this.props.currentPage + 1) : this.props.currentPage))} 
+                        aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>)
     return (
       <div className="container">
         <div className="row top-buffer">
@@ -32,6 +57,11 @@ class Home extends React.Component {
         <IdeaList
           ideaList = {this.props.ideaList}
         />
+        <nav aria-label="Page navigation" className="text-center">
+          <ul className="pagination">
+            {pageLinks}
+          </ul>
+        </nav>
       </div>
     );
   }
