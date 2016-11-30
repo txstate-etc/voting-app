@@ -1,4 +1,3 @@
-
 require('babel-register')({
     presets: ['es2015', 'react']
 });
@@ -14,18 +13,9 @@ var methodOverride = require('method-override');
 var cas = require('./cas');
 var cors = require('cors');
 
-//for server-side React rendering
-var ReactDOMServer = require('react-dom/server');
-var React = require('react');
-var match = require('react-router/lib/match');
-var RouterContext = require('react-router/lib/RouterContext');
-var clientRoutes = require('./client/router');
-
 var exphbs  = require('express-handlebars');
 
-//handlebars helpers
-var helpers = require('./lib/helpers');
-
+//server side routes
 var login = require('./routes/login');
 var routes = require('./routes/index');
 var stages = require('./routes/stages');
@@ -44,15 +34,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Create `ExpressHandlebars` instance with a default layout.
 var hbs = exphbs.create({
-    defaultLayout: 'main',
-    helpers      : helpers,
-
-    // Uses multiple partials dirs, templates in "shared/templates/" are shared
-    // with the client-side of the app (see below).
-    partialsDir: [
-        //'shared/templates/',
-        'views/partials/'
-    ]
+    defaultLayout: 'main'
 });
 
 // Register `hbs` as our view engine using its bound `engine()` function.
@@ -62,17 +44,13 @@ app.set('view engine', 'handlebars');
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //location for the static files (js, css, images)
 app.use(express.static(path.join(__dirname, 'public')));
-
-//methodOverride makes it easier to send PUT and DELETE.  If the client submits a form using
-//POST with _method=PUT in the query string, it will be treated as a PUT
-app.use(methodOverride('_method'));
-
 
 // Set up an Express session, which is required for CASAuthentication.
 // Some of the examples get the location of the config file from an environment variable
@@ -97,7 +75,7 @@ else{
       }),
       maxAge: 1000 * 60 * 60 * 2, //2 hours
       resave            : false,
-      saveUninitialized : true  //need to figure out why this option breaks supertest
+      saveUninitialized : false
   }));
 }
 
