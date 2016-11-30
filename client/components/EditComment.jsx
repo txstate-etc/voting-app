@@ -2,6 +2,7 @@ import React from 'react';
 var moment = require('moment');
 import { Link } from 'react-router';
 import $ from 'jquery';
+import EditReplies from './EditReplies.jsx';
 
 class EditComment extends React.Component {
     constructor(props) {
@@ -13,15 +14,8 @@ class EditComment extends React.Component {
         };
     }
 
-    //type can be "reply" or "comment"
-    unFlagComment(type, id){
-        var url;
-        if(type=="comment"){
-            url = "/comments/" + id;
-        }
-        else if(type == "reply"){
-            url = "/replies/" + id;
-        }
+    unFlagComment(id){
+        var url = "/comments/" + id;
         var _this = this;
         $.ajax({
             url: url,
@@ -34,15 +28,9 @@ class EditComment extends React.Component {
         })
     }
 
-    rejectComment(type, id){
+    rejectComment(id){
         if(confirm("Are you sure you want to delete this comment?")){
-            var url;
-            if(type=="comment"){
-                url = "/comments/" + id;
-            }
-            else if(type == "reply"){
-                url = "/replies/" + id;
-            }
+            var url = "/comments/" + id;
             var _this = this;
             $.ajax({
                 url: url,
@@ -73,9 +61,13 @@ class EditComment extends React.Component {
             dataType: 'json',
             success: function(comment){
                 _this.setState({editMode: false})
-                _this.props.updateCommentState(comment.id, comment.text)
+                _this.props.updateCommentState(comment.id)
             }
         })
+    }
+
+    cancelEdit(){
+        this.setState({editMode: false})
     }
 
     hasFlaggedReplies(replies){
@@ -98,54 +90,6 @@ class EditComment extends React.Component {
         this.setState({editMode: !currentState})
     }
 
-    buildReplyList(replies){
-        return(
-            <div className="edit-reply-list">
-            {replies.map(reply => {
-                var icon = (
-                    reply.flagged ? 
-                        <div className={"flag" + (reply.flagged ? " on" : "")}><i className="fa fa-flag fa-fw" aria-label="Flagged Comment"></i></div>
-                        :
-                        <div className="flag"><i className="fa fa-fw"></i></div>
-                    )
-               return(
-                    <div className="media" key={reply.id}>
-                        <div className="media-left">
-                            {icon}
-                        </div>
-                        <div className="media-body">
-                            <div className="media-heading">
-                                <div className="row">
-                                    <div className="col-sm-4">
-                                        <p className="comment-title-admin">
-                                            <Link to={'/admin/users/' + reply.user.id}>{reply.user.affiliation + " " + reply.user.id}</Link>
-                                        </p>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <span className="comment-age">
-                                            {moment(reply.updated_at).format('MM/D/YYYY h:mma')}
-                                        </span>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <div className="admin-buttons">
-                                            <div className="admin-buttons">
-                                                {reply.flagged && <button onClick={this.unFlagComment.bind(this, "reply", reply.id)}><i className="fa fa-flag-o" aria-label="This comment has flagged replies."></i>Unflag</button>}
-                                                <button><i className="fa fa-edit"></i>Edit</button>
-                                                <button onClick={this.rejectComment.bind(this, "reply", reply.id)}><i className="fa fa-ban"></i>Reject</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <p>{reply.text}</p>
-                        </div>
-                    </div>
-                ) 
-            })}
-            </div>
-        );
-    }
-
     render(){
         var comment = this.props.comment;
         var icon = (comment.flagged ? 
@@ -158,7 +102,7 @@ class EditComment extends React.Component {
                             {this.state.repliesOpen ? "Hide " : "Show "} Replies
                         </a>;
         if(!this.state.editMode && this.state.repliesOpen){
-          replyList  = this.buildReplyList(comment.replies);
+          replyList  = <EditReplies replies={comment.replies} updateReplyState={this.props.updateReplyState} removeReply={this.props.removeReply}></EditReplies>
         }
 
         return(
@@ -184,9 +128,9 @@ class EditComment extends React.Component {
                                 {
                                     !this.state.editMode &&
                                     <div className="admin-buttons">
-                                        {comment.flagged && <button onClick={this.unFlagComment.bind(this, "comment", comment.id)}><i className="fa fa-flag-o"></i>Unflag</button>}
+                                        {comment.flagged && <button onClick={this.unFlagComment.bind(this, comment.id)}><i className="fa fa-flag-o"></i>Unflag</button>}
                                         <button onClick={this.toggleEditMode.bind(this)}><i className="fa fa-edit"></i>Edit</button>
-                                        <button onClick={this.rejectComment.bind(this, "comment", comment.id)}><i className="fa fa-ban"></i>Reject</button>
+                                        <button onClick={this.rejectComment.bind(this, comment.id)}><i className="fa fa-ban"></i>Reject</button>
                                     </div>
                                 }
                             </div>
