@@ -8,7 +8,8 @@ module.exports = function(sequelize, DataTypes) {
     affiliation: DataTypes.ENUM('student', 'faculty', 'staff', 'moderator'),
     admin: {type: DataTypes.BOOLEAN(), defaultValue: false},
     commentMod: {type: DataTypes.BOOLEAN(), defaultValue: false},
-    ideaMod: {type: DataTypes.BOOLEAN(), defaultValue: false}
+    ideaMod: {type: DataTypes.BOOLEAN(), defaultValue: false},
+    deleted: {type: DataTypes.BOOLEAN(), defaultValue: false}
   }, {
     classMethods: {
        associate: function(models) {
