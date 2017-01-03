@@ -5,8 +5,22 @@ var authenticate = require('./auth').authenticate;
 var checkAdmin = require('./auth').admin;
 
 router.route('/')
-    .get(authenticate, checkAdmin, function(req, res, next) {
-      models.user.findAll({})
+    .get(function(req, res, next) {
+        var options = {}
+        options.where = {deleted: false}
+        //include deleted users too
+        if(req.query.deleted && req.query.deleted == "true")
+            options.where = {}
+        //search for net id's containing a search term
+        if(req.query.q){
+            options.where.netid = {$like: '%' + req.query.q + '%'}
+        }
+        //pagination
+        if(req.query.offset && req.query.limit){
+            options.offset = parseInt(req.query.offset)
+            options.limit = parseInt(req.query.limit)
+        }
+        models.user.findAndCountAll(options)
         .then(function(users){
             res.format({
                 'text/html': function(){
@@ -14,13 +28,15 @@ router.route('/')
                     next();
                 },
                 'application/json': function(){
-                    res.json(users);
+                    res.set('X-total-count', users.count);
+                    res.json(users.rows);
                 }
             }); 
         });
     })
 
     .post(authenticate, checkAdmin, function(req,res,next){
+        console.log(req.body)
         models.user.create({firstname: req.body.firstname, 
                         lastname: req.body.lastname, 
                         netid: req.body.netid,
@@ -110,24 +126,21 @@ router.route('/:user_id')
     })
 
     .delete(authenticate, checkAdmin, function(req,res,next){
-        models.user.destroy({
-                where: {
-                  id: req.user.id
+        req.user.updateAttributes({deleted: true})
+        .then(function(count){
+            res.format({
+                'text/html': function(){
+                    res.status(404);
+                    next();
+                },
+                'application/json': function(){
+                    res.json(count);
                 }
-            }).then(function(user){
-                res.format({
-                    'text/html': function(){
-                        res.status(404);
-                        next();
-                    },
-                    'application/json': function(){
-                        res.json(user);
-                    }
-                });
-                return null;
-            }).catch(function(error){
-                next(error);
             });
+            return null;
+        }).catch(function(error){
+            next(error);
+        });
     });
 
 module.exports = router;
