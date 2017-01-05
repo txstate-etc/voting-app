@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var myapp = require('../app.js');
+var myapp = require('../server.js');
 var request = require('supertest')(myapp);
 var sequelize_fixtures = require('sequelize-fixtures');
 var models = {
@@ -181,8 +181,9 @@ describe('User',function(){
                 if(err) return done(err);
                 request.get('/users/' + user.id)
                 .set('Accept', 'application/json')
-                .expect(404)
+                .expect(200)
                 .end(function(getErr,getRes){
+                    expect(getRes.body.deleted).to.be.true;
                     if(getErr) return done(getErr);
                     done();
                 });

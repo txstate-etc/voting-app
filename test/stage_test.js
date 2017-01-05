@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var myapp = require('../app.js');
+var myapp = require('../server.js');
 var request = require('supertest')(myapp);
 var sequelize_fixtures = require('sequelize-fixtures');
 var models = {
