@@ -102,24 +102,28 @@ router.route('/:category_id')
     })
 
     .delete(authenticate, checkAdmin, function(req,res,next){
-        models.category.destroy({
-                where: {
-                  id: req.category.id
-                }
-            }).then(function(category){
-                res.format({
-                    'text/html': function(){
-                        res.status(404);
-                        next();
-                    },
-                    'application/json': function(){
-                        res.json(category);
-                    }
-                });
+        req.category.getIdeas()
+        .then(function(ideas){
+            if(ideas.length > 0){
+                var message = "Can't delete category " + req.category.name + " because it still contains ideas.";
+                console.log(message)
+                res.status(409).json({message: message})
                 return null;
-            }).catch(function(error){
-                next(error);
-            });
+            }
+            else{
+                models.category.destroy({
+                    where: {
+                        id: req.category.id
+                    }
+                })
+                .then(function(category){
+                    res.json(category)
+                })
+                .catch(function(error){
+                    next(error)
+                })
+            }
+        })
     });
 
 module.exports = router;
