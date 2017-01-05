@@ -105,25 +105,28 @@ router.route('/:stage_id')
     })
 
     .delete(authenticate, checkAdmin, function(req,res,next){
-        models.stage.destroy({
-                where: {
-                  id: req.stage.id
-                }
-            }).then(function(count){
-                //destroy returns the number of items deleted
-                res.format({
-                    'text/html': function(){
-                        res.status(404);
-                        next();
-                    },
-                    'application/json': function(){
-                        res.json(count); //redirect?  return 204
-                    }
-                });
+        req.stage.getIdeas()
+        .then(function(ideas){
+            if(ideas.length > 0){
+                var message = "Can't delete stage " + req.stage.name + " because it still contains ideas.";
+                console.log(message)
+                res.status(409).json({message: message})
                 return null;
-            }).catch(function(error){
-                next(error);
-            });
+            }
+            else{
+                models.stage.destroy({
+                    where: {
+                        id: req.stage.id
+                    }
+                })
+                .then(function(stage){
+                    res.json(stage)
+                })
+                .catch(function(error){
+                    next(error)
+                })
+            }
+        })
     });
 
 module.exports = router;
