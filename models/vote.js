@@ -22,12 +22,8 @@ module.exports = function(sequelize, DataTypes) {
           .spread(function(vote, created){
             if(!created){
               vote.updateAttributes({score: score});
-              return false;
             }
-            else{
-              //a new vote was created
-              return true;
-            }
+            return {created: created, vote: vote}
           });
        }
     }

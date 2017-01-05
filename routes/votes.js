@@ -28,14 +28,14 @@ router.route('/')
         var user_id = req.session["user_id"];
         if(user_id){
             models.vote.createOrUpdateVote(req.body.idea_id, user_id, req.body.score)
-            .then(function(voteCreated){
-                var status = voteCreated ? 201 : 200;
+            .then(function(result){
+                var status = result.created ? 201 : 200;
                 res.format({
                     'text/html': function(){
                        res.status(status).end();
                     },
                     'application/json': function(){
-                        res.status(status).json(voteCreated);
+                        res.status(status).json(result);
                     }
                 });
                 return null;
