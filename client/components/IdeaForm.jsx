@@ -1,7 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
 import Dropzone from 'react-dropzone';
-import {getUserId, isAdmin} from '../auth';
 import { browserHistory } from 'react-router';
 import update from 'react-addons-update';
 
@@ -26,31 +24,20 @@ class IdeaForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount(){
-        var _this = this;
+    componentWillReceiveProps(nextProps) {
+        console.log("IdeaForm componentWillReceiveProps")
         if(this.props.editMode){
-            $.ajax({url: "/ideas/" + _this.props.ideaId + "?files=true", dataType: "json", success: function(result){
-                if(isAdmin() || result.creator == getUserId()){
-                    _this.setState({title: result.title,
-                                    text: result.text,
-                                    categories: _this.formatCategories(result.categories),
-                                    stage: result.stage_id || 0,
-                                    attachmentsAlreadyUploaded: result.files
-                                });
-                }
-                else{
-                    //They should not be editing this idea, show them not found page
-                    browserHistory.push('/notfound')
-                }
-            }});
+            var categories = nextProps.idea.categories.map(cat => {
+                return cat.id
+            })
+            this.setState({
+                title: nextProps.idea.title || "",
+                text: nextProps.idea.text || "",
+                categories: categories,
+                stage: nextProps.idea.stage_id || 0,
+                attachmentsAlreadyUploaded: nextProps.idea.files
+            })
         }
-    }
-
-    formatCategories(categories){
-        var cat= categories.map(function(obj){
-            return obj.id.toString();
-        });
-        return cat;
     }
 
     handleTitleChange(e) {
@@ -68,7 +55,7 @@ class IdeaForm extends React.Component {
     handleCheckbox(e){
         var categories = this.state.categories.slice(0);
         if(e.target.checked){
-            categories.push(e.target.value);
+            categories.push(parseInt(e.target.value));
         }
         else{
             var index = categories.indexOf(e.target.value);
@@ -88,6 +75,7 @@ class IdeaForm extends React.Component {
     }
 
     updateAttachments(file){
+        console.log("updating attachments")
         var fileWithId = file[0];
         fileWithId.id = this.state.attachmentID;
         this.setState({attachmentID: fileWithId.id + 1})
@@ -110,16 +98,15 @@ class IdeaForm extends React.Component {
         e.preventDefault();
         var del = confirm("Are you sure you want to delete this attachment?");
         if(del){
-            var deleteList = this.state.attachmentsToDelete.slice(0);
-            deleteList.push(id);
-            this.setState({attachmentsToDelete: deleteList});
+            var deleteList = update(this.state.attachmentsToDelete, {$push: [id]})
+            this.setState({attachmentsToDelete: deleteList})
             var uploadedList = this.state.attachmentsAlreadyUploaded.filter(function(attachment){
                 return attachment.id != id;
             })
             this.setState({attachmentsAlreadyUploaded: uploadedList});
         }
     }
-
+    
     handleSubmit(e){
         e.preventDefault();
         var title=this.state.title;
@@ -175,6 +162,7 @@ class IdeaForm extends React.Component {
                 </div>
             )
         }
+
         var savedAttachments = [];
         for(var i=0; i<this.state.attachmentsAlreadyUploaded.length; i++){
             savedAttachments.push(
@@ -188,16 +176,15 @@ class IdeaForm extends React.Component {
                 </div>
             )
         }
-        
         var editMode = this.props.editMode;
-        var displaySavedFiles = this.props.editMode && this.state.attachmentsAlreadyUploaded.length > 0;
+        var displaySavedFiles = editMode && this.state.attachmentsAlreadyUploaded.length > 0;
         var invalidTitle = this.state.titleErr.length > 0;
         var invalidText = this.state.textErr.length > 0;
         var invalidCategory = this.state.catErr.length > 0;
         var invalidStage = this.state.stageErr.length > 0;
-        return (
-            <div>
-                <form action="" onSubmit={this.handleSubmit}>
+        return(
+            <div className="container">
+                <form onSubmit={this.handleSubmit}>
                     <div className={"form-group" + (invalidTitle ? " has-warning" : "")}>
                         <label htmlFor="title">Title</label>
                         <span className="errorMsg" role={invalidTitle ? "alert" : ""}>{this.state.titleErr}</span>
@@ -214,7 +201,6 @@ class IdeaForm extends React.Component {
                                 input.focus();
                               }
                             }}/>
-        
                     </div>
                     <div className={"form-group" + (invalidCategory ? " has-warning" : "")}>
                         <label htmlFor="categories">Categories</label>
@@ -224,14 +210,14 @@ class IdeaForm extends React.Component {
                                 return (
                                     <div key={category.id} className="col-xs-6 col-sm-4 col-md-3">
                                         <label htmlFor={"category" + category.id}>
-                                            <input type="checkbox" name="categories" value={category.id} id={"category" + category.id} checked={(this.state.categories.indexOf(category.id.toString()) > -1)? "checked" : ""} onChange={this.handleCheckbox.bind(this)}/>{category.name}
+                                            <input type="checkbox" name="categories" value={category.id} id={"category" + category.id} checked={(this.state.categories.indexOf(category.id) > -1)? "checked" : ""} onChange={this.handleCheckbox.bind(this)}/>{category.name}
                                         </label>
                                     </div>
                                 )
                             })}
                         </div>
                     </div>
-                     <div className={"form-group" + (invalidText ? " has-warning" : "")}>
+                    <div className={"form-group" + (invalidText ? " has-warning" : "")}>
                         <label htmlFor="text">Description</label>
                         <span className="errorMsg" role={invalidText ? "alert" : ""}>{this.state.textErr}</span>
                         <textarea id="text"
@@ -259,7 +245,6 @@ class IdeaForm extends React.Component {
                                     value={this.state.stage}
                                     ref={function(select){
                                         if(select != null && invalidStage){
-                                            console.log("There is a stage error");
                                             select.focus();
                                         }
                                     }}>
@@ -296,8 +281,7 @@ class IdeaForm extends React.Component {
                     </div>
                 </form>
             </div>
-        );
+        )
     }
 }
-
 export default IdeaForm;

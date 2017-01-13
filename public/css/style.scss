@@ -239,6 +239,22 @@ $menu-width: 250px;
   }
 }
 
+.stage-label, .votes-label, .views-label, .date-label, .creator-label, .description-label, .attachments-label{
+  font-weight: bold;
+  margin-right: 3px;
+}
+
+.edit-button{
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.back-icon{
+  font-size: 3rem;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
 .vote-count-box{
    background: $second-neutral-highlight;
    line-height: 60px;
@@ -496,6 +512,12 @@ width: 30%;
   }
 }
 
+.delete-item{
+  i{
+    cursor: pointer
+  }
+}
+
 .edit-ideas{
   padding-bottom: 20px;
   &.idea-table-row-stripe{
@@ -531,11 +553,48 @@ width: 30%;
   margin-left: 5px !important;
 }
 
+//styles for delete stage/category reassignment modal
+.item-reassignment-modal{
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    right: 40px;
+    bottom: 40px;
+    border: 1px solid #ccc;
+    background: #fff;
+    overflow: auto;
+    webkit-overflow-scrolling: touch;
+    border-radius: 4px;
+    outline: none;
+    padding: 20px;
+}
+
+.item-reassignment-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(23, 36, 54, 0.75);
+}
+
 //bootstrap overrides
 .btn-warning{
   color: black;
   &:hover{
     color: black;
+  }
+}
+
+.ReactModalPortal{
+  label{
+    margin-right: 3px;
+  }
+  .modalButtons{
+    margin-top: 5px;
+    button{
+      margin-right: 5px;
+    }
   }
 }
 

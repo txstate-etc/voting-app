@@ -1,8 +1,6 @@
 import React from 'react';
-var moment = require('moment');
 import { Link } from 'react-router';
-import $ from 'jquery';
-import EditReply from './EditReply.jsx';
+import EditReply from '../containers/EditReply.jsx';
 
 class EditReplies extends React.Component {
 
@@ -12,12 +10,7 @@ class EditReplies extends React.Component {
                 {
                     this.props.replies.map(reply => {
                         return(
-                            <EditReply
-                                updateReplyState={this.props.updateReplyState} 
-                                removeReply={this.props.removeReply}
-                                reply={reply}
-                                key={reply.id}
-                            />
+                            <EditReply reply={reply} key={reply.id}/>
                         )
                     })
                 }

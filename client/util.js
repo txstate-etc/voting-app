@@ -1,10 +1,41 @@
 var moment = require('moment');
+var browserHistory = require('react-router').browserHistory
 
-function dateToElapsedTime(date){
+
+//helper functions
+
+export const dateToElapsedTime = (date) => {
     return moment(date).fromNow();
 }
 
-function sumCommentsAndReplies(comments){
+
+const isBlank = (str) => {
+  if (str === undefined) return true;
+  if (str.trim === undefined) return false;
+  if (str.trim().length == 0) return true;
+  return false;
+}
+
+export const isEmpty = (obj) => {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return JSON.stringify(obj) === JSON.stringify({});
+}
+
+export const createUrlQuery = (params) => {
+  var pairs = [];
+  for (var key in params) {
+    if (params.hasOwnProperty(key) && !isBlank(params[key])) {
+      pairs.push(encodeURIComponent(key)+'='+encodeURIComponent(params[key]));
+    }
+  }
+  return '?'+pairs.join('&');
+}
+
+export const sumCommentsAndReplies = (comments) => {
     if(comments){
         var sum=comments.length;
         for(var i=0; i<comments.length; i++){
@@ -15,25 +46,7 @@ function sumCommentsAndReplies(comments){
     return 0;
 }
 
-function sumUnapprovedCommentsAndReplies(comments){
-    var numComments = 0;
-    if(comments){
-        for(var i=0; i<comments.length; i++){
-            if(!comments[i].approved){
-                numComments++;
-                var replies = comments[i].replies;
-                for(var j=0; j<replies.length; j++){
-                    if(!replies[j].approved){
-                        numComments++;
-                    }
-                }
-            }
-        }
-    }
-    return numComments;
-}
-
-function getAttachmentIcon(filename){
+export const getAttachmentIcon = (filename) => {
     var extension = filename.substr(filename.lastIndexOf('.')+1).toLowerCase();
     switch(extension){
         case 'jpg':
@@ -53,4 +66,14 @@ function getAttachmentIcon(filename){
     }
 }
 
-export {dateToElapsedTime, sumCommentsAndReplies, sumUnapprovedCommentsAndReplies, getAttachmentIcon};
+export const handleErrors = (response) => {
+    if (!response.ok) {
+      if(response.status == 302) browserHistory.push('/login');
+      throw Error(response.statusText);
+    }
+    return response;
+}
+
+export const parseJSON = (response) => {
+  return response.json()
+}

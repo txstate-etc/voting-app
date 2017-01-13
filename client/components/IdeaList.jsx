@@ -5,16 +5,19 @@ class IdeaList extends React.Component {
     render(){
         return(
             <div>
-                {this.props.ideaList.map(idea => {
-                    return (
-                        <Idea
-                            key = {idea.id}
-                            idea = {idea}
-                        />
-                    )
-                })}
+                {
+                    this.props.ideas.result.map(id => {
+                        var idea = this.props.ideas.entities.ideas[id]
+                        return (
+                            <Idea
+                                key = {idea.id}
+                                idea = {idea}
+                            />
+                        )
+                    })
+                }
             </div>
-        );
+        );   
     }
 }
 

@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-class AddComment extends React.Component {
+class AddComment extends React.Component{
 
     constructor(props) {
         super(props);
@@ -23,7 +23,7 @@ class AddComment extends React.Component {
         this.props.onCommentSubmit({text: text});
         this.setState({text: ''});
     }
-    
+
     render(){
         return(
             <form action="" onSubmit={this.handleSubmit}>
@@ -35,8 +35,8 @@ class AddComment extends React.Component {
                         autoFocus={this.props.focus}></textarea>
                 <button className="btn btn-warning pull-right btn-voting-save">Save Comment</button>
             </form>
-        );
+        )
     }
 }
 
-export default AddComment;
+export default AddComment

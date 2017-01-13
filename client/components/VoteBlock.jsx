@@ -1,15 +1,16 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 
 class VoteBlock extends React.Component {
 
     updateVote(score, evt){
         this.props.updateVote(score)
     }
-    
+
     render(){
         var upvoted = (this.props.userScore == 1) ? " selected" : "";
         var downvoted = (this.props.userScore == -1) ? " selected" : "";
         return(
+            
             <div>
                 <div className="vote-count-box text-center">
                     <div className="vote-count">{this.props.totalScore}</div>
@@ -23,10 +24,14 @@ class VoteBlock extends React.Component {
                     </button>
                 </div>
             </div>
-    
-
         )
     }
+}
+
+VoteBlock.propTypes = {
+  totalScore: PropTypes.number.isRequired,
+  userScore: PropTypes.number.isRequired,
+  updateVote: PropTypes.func.isRequired
 }
 
 export default VoteBlock;
