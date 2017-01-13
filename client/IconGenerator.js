@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 var icons = ['fa-anchor', 'fa-bell', 'fa-flash', 'fa-circle', 'fa-square', 'fa-leaf', 'fa-rocket', 'fa-sun-o', 'fa-moon-o', 'fa-tree'];
 var numcolors = 12;  //12 icon colors specified in CSS
 
