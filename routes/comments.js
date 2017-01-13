@@ -3,6 +3,7 @@ var router = express.Router();
 var models = require('../models');
 var authenticate = require('./auth').authenticate;
 var checkAdmin = require('./auth').admin;
+var Filter = require('bad-words')
 
 router.route('/')
     .get(function(req, res, next) {
@@ -57,7 +58,10 @@ router.route('/')
     .post(authenticate, function(req,res,next){
         var author = req.session["user_id"];
         if(author){
-            models.comment.create({text: req.body.text,
+            //run comment through profanity filter
+            var filter = new Filter();
+            var cleanText = filter.clean(req.body.text)
+            models.comment.create({text: cleanText,
                                     flagged: false,
                                     deleted: false,
                                     user_id: author,
