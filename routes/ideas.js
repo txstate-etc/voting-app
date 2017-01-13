@@ -12,7 +12,7 @@ router.route('/')
         var options = {};
         var eagerLoadedModels = [];
 
-        //make sure query string stuff is encoded.  Make sure user, stage, and category are numbers.
+        //TODO: make sure query string stuff is encoded.  Make sure user, stage, and category are numbers.
         var count_query = "SELECT COUNT(*) as count";
         count_query += " FROM ideas i LEFT JOIN (SELECT idea_id as id, SUM(score) as total_votes FROM votes GROUP BY idea_id) iv ON i.id = iv.id";
         if(req.query.user) count_query += " INNER JOIN users u on i.creator = u.id AND u.id= " + req.query.user;
@@ -46,7 +46,7 @@ router.route('/')
 
                 //at this point, I have the id for the ideas that have been filtered by category, stage, and user
                 //they are sorted by number of votes, descending.  Should be easy to order by date if necessary.
-                 var userAttributes = [];
+                 var userAttributes = ['id', 'affiliation'];
                 //unless they are an admin, we don't want to send back user information with the ideas
                 if(req.session.admin){
                     userAttributes = ['id', 'firstname', 'lastname', 'netid', 'affiliation', 'admin', 'commentMod', 'ideaMod', 'created_at', 'updated_at'];
@@ -62,7 +62,7 @@ router.route('/')
                 
                 //load comments and replies if requested
                 if(req.query.comments && req.query.comments == "true") {
-                    eagerLoadedModels.push({model: models.comment, include: [{model: models.reply}]});
+                    eagerLoadedModels.push({model: models.comment, include: [{model: models.reply, include: [{model: models.user, attributes: userAttributes}]},{model: models.user, attributes: userAttributes}]});
                 }
                 else{
                     //Even if they don't want the comments/replies, they might want the comment count.  This will just return the IDs of 
@@ -149,6 +149,7 @@ router.param('idea_id', function(req, res, next, value){
         include: [{model: models.user},
                   {model: models.stage},
                   {model: models.category},
+                  {model: models.vote},
                   {model: models.comment, required: false, where: {deleted: false}, include: [{model: models.reply, required: false, where: {deleted: false}, required: false, include: [{model: models.user, attributes: ['id', 'affiliation']}]}, 
                                                     {model: models.user, attributes: ['id', 'affiliation']}]},
                   {model: models.file}]
@@ -192,42 +193,57 @@ router.route('/:idea_id')
     //anyone to update anything
     .put(upload.array('attachments'), function(req,res,next){
         var editedIdea;
-        req.idea.updateAttributes(req.body)
-        .then(function(idea){
-            editedIdea = idea;
-            if(req.body.category){
-                return idea.setCategories((typeof req.body.category === "string") ? req.body.category.split(',') : req.body.category )
+        if(req.session.user_id) {
+            req.idea.updateAttributes(req.body)
+            .then(function(idea){
+                editedIdea = idea;
+                if(req.body.category){
+                    return idea.setCategories((typeof req.body.category === "string") ? req.body.category.split(',') : req.body.category )
+                }
+                else{
+                    return Promise.resolve();
+                }
+            })
+            .then(function(category){
+                if(req.files && req.files.length > 0){
+                    //TODO: the creator should probably be the person logged in, not necessarily the
+                    //person who created the idea in the first place
+                    return models.file.saveAttachment(editedIdea.id, editedIdea.creator, "idea", req.files)
+                }
+                else{
+                    return Promise.resolve();
+                }
+            })
+            .then(function(file){
+                if(req.body.deleteAttachments){
+                    return models.file.removeAttachments(req.body.deleteAttachments)
+                }
+                else{
+                    return Promise.resolve();
+                }
+            })
+            .then(function(arg){
+                res.status(200).json(editedIdea);
+                return null;
+            })
+            .catch(function(err){
+                console.error(err);
+                next(err);
+            })
+        }
+        else{
+            //allow unauthenticated users to update the view count
+            if(req.body.views){
+                req.idea.updateAttributes({views: req.body.views})
+                .then(function(idea){
+                    res.status(200).json(idea);
+                })
             }
             else{
-                return Promise.resolve();
+                //anything else they want to update requires them to be logged in
+                res.status(302).json({message: "Login required"});
             }
-        })
-        .then(function(category){
-            if(req.files && req.files.length > 0){
-                //TODO: the creator should probably be the person logged in, not necessarily the
-                //person who created the idea in the first place
-                return models.file.saveAttachment(editedIdea.id, editedIdea.creator, "idea", req.files)
-            }
-            else{
-                return Promise.resolve();
-            }
-        })
-        .then(function(file){
-            if(req.body.deleteAttachments){
-                return models.file.removeAttachments(req.body.deleteAttachments)
-            }
-            else{
-                return Promise.resolve();
-            }
-        })
-        .then(function(arg){
-            res.status(200).json(editedIdea);
-            return null;
-        })
-        .catch(function(err){
-            console.error(err);
-            next(err);
-        })
+        }
     })
      
     .delete(authenticate, checkAdmin, function(req,res,next){
@@ -250,5 +266,42 @@ router.route('/:idea_id')
                 next(error);
             });
     });
+
+router.route('/batch')
+    .patch(function(req, res, next) {
+        models.sequelize.transaction(function (t) {
+            return models.sequelize.Promise.each(req.body, function (itemToUpdate) {
+                var id= itemToUpdate.id
+                var data = itemToUpdate.data
+                console.log("id is " + id  + " and data is " + JSON.stringify(data))
+                return models.idea.find({
+                    where: {
+                        id: id
+                    }
+                })
+                .then(function(idea){
+                    console.log("updating attributes")
+                    return idea.updateAttributes(data,  { transaction: t })
+                })
+                .then(function(idea){
+                    if(data.category){
+                        console.log("updating category")
+                        return idea.setCategories((typeof data.category === "string") ? data.category.split(',') : data.category, { transaction: t } )
+                    }
+                    else{
+                        return Promise.resolve();
+                    }
+                })
+          });
+        }).then(function (result) {
+          // Transaction has been committed
+          // result is whatever the result of the promise chain returned to the transaction callback
+          res.json(result)
+        }).catch(function (err) {
+            console.log(err)
+          // Transaction has been rolled back
+          // err is whatever rejected the promise chain returned to the transaction callback
+        });
+    })
 
 module.exports = router;
