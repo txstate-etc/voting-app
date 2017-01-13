@@ -24,7 +24,7 @@ module.exports = function(grunt) {
         browserify: {
             dist: {
                 options: {
-                   transform: [['babelify', { presets: ["react", "es2015"] }]]
+                   transform: [['babelify', { presets: ["react", "es2015"], plugins: ["transform-object-rest-spread"] }]]
                 },
                 src: ['client/**/*.js','client/**/*.jsx'],
                 dest: 'public/js/bundle.js'
