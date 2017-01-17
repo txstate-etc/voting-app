@@ -19,7 +19,10 @@ router.route('/')
         if(req.query.stage) count_query += " INNER JOIN stages s on i.stage_id = s.id AND s.id= " + req.query.stage;
         if(req.query.category) count_query += " INNER JOIN categories_ideas ci ON ci.idea_id = i.id INNER JOIN categories c ON c.id = ci.category_id AND category_id = " + req.query.category;
         if(!req.query.stageRequired || req.query.stageRequired == "true") count_query += " INNER JOIN stages on stages.id = i.stage_id"
-        
+        if(req.query.search){
+            count_query += " WHERE MATCH(text) AGAINST('" + req.query.search + "') OR MATCH(title) AGAINST('" + req.query.search + "')"
+        }
+
         models.sequelize.query(count_query,{ type: models.sequelize.QueryTypes.SELECT })
         .then(function(result){
             res.set('X-total-count', result[0].count);
@@ -31,6 +34,9 @@ router.route('/')
             if(req.query.stage) query += " INNER JOIN stages s on i.stage_id = s.id AND s.id= " + req.query.stage;
             if(req.query.category) query += " INNER JOIN categories_ideas ci ON ci.idea_id = i.id INNER JOIN categories c ON c.id = ci.category_id AND category_id = " + req.query.category;
             if(!req.query.stageRequired || req.query.stageRequired == "true") query += " INNER JOIN stages on stages.id = i.stage_id"
+            if(req.query.search){
+                query += " WHERE MATCH(text) AGAINST('" + req.query.search + "') OR MATCH(title) AGAINST('" + req.query.search + "')"
+            }
             query += " ORDER BY total_votes DESC";
             //pagination
             if(req.query.offset && req.query.limit){

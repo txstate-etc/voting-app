@@ -6,6 +6,10 @@ module.exports = function(sequelize, DataTypes) {
     text: DataTypes.TEXT(),
     views: DataTypes.INTEGER()
   }, {
+    indexes: [
+      { type: 'FULLTEXT', fields: ['title'] },
+      { type: 'FULLTEXT', fields: ['text']}
+    ],
     classMethods: {
       associate: function(models) {
         Idea.belongsToMany(models.category,{ through: models.categories_ideas});
