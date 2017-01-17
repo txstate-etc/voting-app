@@ -6,6 +6,7 @@ import {fetchCategories} from '../actions/category-actions'
 import Idea from '../components/Idea.jsx'
 import IdeaContainer from './IdeaContainer'
 import SelectCategory from '../components/SelectCategory.jsx'
+import SearchBar from '../containers/SearchBar.jsx'
 import * as types from '../actions/action-types';
 
 class HomePage extends React.Component {
@@ -17,16 +18,16 @@ class HomePage extends React.Component {
 
     componentWillMount(){
         this.props.setPagination(1,10);
-        this.props.updateSearchParameters({votes: true, stageRequired: true})
+        this.props.updateParameters({votes: true, stageRequired: true})
         this.loadData()
     }
 
     updateCategory(newCat){
         if(newCat == 0){
-            this.props.deleteSearchParameter('category')
+            this.props.deleteParameter('category')
         }
         else{
-            this.props.updateSearchParameters({category: newCat})
+            this.props.updateParameters({category: newCat})
         }
         this.props.updatePage(1)
         this.loadData();  
@@ -35,6 +36,17 @@ class HomePage extends React.Component {
     //for pagination
     updatePage(newPage){
         this.props.updatePage(newPage);
+        this.loadData();
+    }
+
+    search(query){
+        if(query.length == 0){
+            this.props.deleteParameter('search')
+        }
+        else{
+            this.props.updateParameters({search: query})
+        }
+        this.props.updatePage(1)
         this.loadData();
     }
 
@@ -69,7 +81,7 @@ class HomePage extends React.Component {
             <div className="container">
                 <div className="row top-buffer">
                     <div className="col-sm-6">
-                        Search Bar goes here
+                        <SearchBar search={this.search.bind(this)}/>
                     </div>
                     <div className="col-sm-6">
                         <div className="add-new">
@@ -122,10 +134,13 @@ const mapDispatchToProps = (dispatch) => {
         setPagination: (currentPage, ideasPerPage) => {
             dispatch({type: types.SET_PAGINATION, currentPage, ideasPerPage})
         },
-        updateSearchParameters: (params) => {
+        updateParameters: (params) => {
             dispatch({type: types.UPDATE_SEARCH_PARAMS, params})
         },
-        deleteSearchParameter: (param) => {
+        updateSearchTerm : (query) => {
+            dispatch({type: types.UPDATE_SEARCH_PARMS, params: query})
+        },
+        deleteParameter: (param) => {
             dispatch({type: types.REMOVE_SEARCH_PARAM, param})
         },
         updatePage: (newPage) => {
