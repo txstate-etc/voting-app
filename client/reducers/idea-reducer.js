@@ -92,7 +92,7 @@ const comments = (state={}, action) => {
         ...state,
         [action.comment.id]: {
           ...state[action.comment.id],
-          edited, flagged, text
+          edited, flagged, text, recentlyEdited: true
         }
       }
     case types.DELETE_COMMENT_SUCCESS:

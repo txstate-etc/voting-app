@@ -114,7 +114,7 @@ class EditComment extends React.Component{
                                 </div>
                             </form>
                             :
-                            <p>{comment.text}</p>
+                            <p className={comment.recentlyEdited? "recent-edit" : ""}>{comment.text}</p>
                     }
                     {
                         <div className="pull-right reply-actions">
