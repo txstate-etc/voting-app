@@ -5,7 +5,6 @@ var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
 var authenticate = require('./auth').authenticate;
 var checkAdmin = require('./auth').admin;
-var formatSearchWords = require('./helpers').formatSearchWords;
 
 router.route('/')
     .get(function(req, res, next) {
