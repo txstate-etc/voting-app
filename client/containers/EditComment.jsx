@@ -12,7 +12,9 @@ class EditComment extends React.Component{
         this.state = {
            repliesOpen: false,
            editMode: false,
-           value: ""
+           rejectMode: false,
+           value: "",
+           note: ""
         };
     }
 
@@ -35,12 +37,25 @@ class EditComment extends React.Component{
         this.setState({editMode: !currentState})
     }
 
+    toggleRejectMode(e){
+        var currentState = this.state.rejectMode;
+        this.setState({rejectMode: !currentState})
+    }
+
     cancelEdit(){
         this.setState({editMode: false})
+        this.setState({rejectMode: false})
+    }
+
+    updateNote(e){
+        this.setState({note: e.target.value})
     }
 
     rejectComment(){
-        this.props.deleteComment(this.props.comment.id)
+        this.props.deleteComment(this.props.comment.id, this.state.note)
+        .then(() => {
+            this.setState({rejectMode: false})
+        })
     }
 
     toggleReplies(){
@@ -73,6 +88,30 @@ class EditComment extends React.Component{
         if(!this.state.editMode && this.state.repliesOpen){
           replyList  = <EditReplies replies={comment.replies}></EditReplies>
         }
+
+        var commentDisplayClass="";
+        if(comment.recentlyEdited) commentDisplayClass = "recent-edit";
+        else if(comment.recentlyRejected) commentDisplayClass = "recent-reject";
+
+        var commentContent = <p className={commentDisplayClass}>{comment.text}</p>
+        if(this.state.editMode){
+            commentContent = <form onSubmit={this.saveComment.bind(this)}>
+                                <textarea autoFocus={true} className="edit-comment" defaultValue={comment.text} onChange={this.updateComment.bind(this)} aria-label="Edit Comment"></textarea>
+                                <div className="edit-buttons pull-right">
+                                    <button aria-label="save changes to comment" type="submit" className="btn btn-sm btn-warning">Save Changes</button>
+                                    <button aria-label="cancel changes to comment" className="btn btn-sm btn-warning" onClick={this.cancelEdit.bind(this)}>Cancel</button>
+                                </div>
+                            </form>
+        }
+        else if(this.state.rejectMode){
+            commentContent = <form onSubmit={this.rejectComment.bind(this, comment.id)}>
+                                <textarea autoFocus={true} className="edit-comment" value={this.state.note} onChange={this.updateNote.bind(this)} aria-label="Add Note Explaining Rejection"></textarea>
+                                <div className="edit-buttons pull-right">
+                                    <button aria-label="reject comment" type="submit" className="btn btn-sm btn-warning">Reject Comment</button>
+                                    <button aria-label="cancel rejection" className="btn btn-sm btn-warning" onClick={this.cancelEdit.bind(this)}>Cancel</button>
+                                </div>
+                            </form>
+        }
         return(
             <li className="media" key={comment.id}>
                 <a id={"comment" + comment.id}/>
@@ -94,32 +133,21 @@ class EditComment extends React.Component{
                             </div>
                             <div className="col-sm-4">
                                 {
-                                    
+                                    !comment.recentlyRejected &&
                                     <div className="admin-buttons">
                                         {comment.flagged && <button onClick={this.unFlagComment.bind(this, comment.id)}><i className="fa fa-flag-o"></i>Unflag</button>}
                                         <button onClick={this.toggleEditMode.bind(this)}><i className="fa fa-edit"></i>Edit</button>
-                                        <button onClick={this.rejectComment.bind(this, comment.id)}><i className="fa fa-ban"></i>Reject</button>
+                                        <button onClick={this.toggleRejectMode.bind(this)}><i className="fa fa-ban"></i>Reject</button>
                                     </div>
                                 }
                             </div>
                         </div>
                     </div>
-                   {
-                        this.state.editMode ?
-                            <form onSubmit={this.saveComment.bind(this)}>
-                                <textarea autoFocus={true} className="edit-comment" defaultValue={comment.text} onChange={this.updateComment.bind(this)} aria-label="Edit Comment"></textarea>
-                                <div className="edit-buttons pull-right">
-                                    <button aria-label="save changes to comment" type="submit" className="btn btn-sm btn-warning">Save Changes</button>
-                                    <button aria-label="cancel changes to comment" className="btn btn-sm btn-warning" onClick={this.cancelEdit.bind(this)}>Cancel</button>
-                                </div>
-                            </form>
-                            :
-                            <p className={comment.recentlyEdited? "recent-edit" : ""}>{comment.text}</p>
-                    }
+                   {commentContent}
                     {
                         <div className="pull-right reply-actions">
                             {this.hasFlaggedReplies(comment.replies) && <span className="flagged-reply"><i className="fa fa-flag" aria-label="Flagged replies"></i></span>}
-                            {comment.replies.length >0 && replyLink}
+                            {(comment.replies.length >0 && !this.state.editMode && !this.state.rejectMode) && replyLink}
                         </div>
                     }
                     {replyList}

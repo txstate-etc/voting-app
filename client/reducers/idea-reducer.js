@@ -96,9 +96,13 @@ const comments = (state={}, action) => {
         }
       }
     case types.DELETE_COMMENT_SUCCESS:
-      var updatedComments = {...state};
-      delete updatedComments[action.comment.id]
-      return updatedComments
+      return {
+        ...state,
+        [action.comment.id]: {
+          ...state[action.comment.id],
+          recentlyRejected: true
+        }
+      }
     case types.ADD_REPLY_SUCCESS:
       return {
         ...state,
@@ -107,19 +111,6 @@ const comments = (state={}, action) => {
           replies: [...state[action.reply.comment_id].replies, action.reply.id]
         }
       }
-    case types.DELETE_REPLY_SUCCESS:
-      console.log("deleting reply")
-      //return state
-      var updatedReplies = state[action.reply.comment_id].replies.filter(id => {
-         return id != action.reply.id
-       })
-       return {
-         ...state,
-         [action.reply.comment_id]: {
-           ...state[action.reply.comment_id],
-           replies: updatedReplies
-         }
-       }
     default:
       return state
   }
@@ -140,7 +131,16 @@ const replies = (state={}, action) => {
       return {
         ...state,
         [action.reply.id]: {
-          ...action.reply
+          ...action.reply,
+          recentlyEdited: true
+        }
+      }
+    case types.DELETE_REPLY_SUCCESS:
+      return {
+        ...state,
+        [action.reply.id]: {
+          ...state[action.reply.id],
+          recentlyRejected: true
         }
       }
     default:
@@ -190,17 +190,6 @@ const ideas = (state = {}, action) => {
         [action.comment.idea_id]: {
           ...state[action.comment.idea_id],
           comments: [...state[action.comment.idea_id].comments, action.comment.id]
-        }
-      }
-    case types.DELETE_COMMENT_SUCCESS:
-      var updatedComments = state[action.comment.idea_id].comments.filter(id => {
-        return id != action.comment.id
-      })
-      return {
-        ...state,
-        [action.comment.idea_id]: {
-          ...state[action.comment.idea_id],
-          comments: updatedComments
         }
       }
     case types.UPDATE_IDEA_VIEWS_SUCCESS:
