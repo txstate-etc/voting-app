@@ -12,6 +12,7 @@ module.exports = function(sequelize, DataTypes) {
         Reply.belongsTo(models.comment);
         Reply.belongsTo(models.user);
         Reply.hasMany(models.file, {foreignKey: 'owner_id', constraints: false, scope: {owner_type: 'reply'}});
+        Reply.hasOne(models.note, {foreignKey: 'owner_id', constraints: false, scope: {owner_type: 'reply'}});
       }
     }
   });

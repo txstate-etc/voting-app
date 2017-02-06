@@ -12,8 +12,8 @@ module.exports = function(sequelize, DataTypes) {
         Comment.belongsTo(models.idea);
         Comment.belongsTo(models.user);
         Comment.hasMany(models.reply);
-        //Comment.hasOne(models.comment,{as: 'ReplyingTo', foreignKey: 'replyTo'}),
         Comment.hasMany(models.file, {foreignKey: 'owner_id', constraints: false, scope: {owner_type: 'comment'}});
+        Comment.hasOne(models.note, {foreignKey: 'owner_id', constraints: false, scope: {owner_type: 'comment'}});
       }
     },
     instanceMethods: {
