@@ -2,18 +2,11 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         sass: {
-            dist: {
-                options : {
-                    style: 'expanded'
-                }
-            },
+          dist: {
             files: {
-                expand: true,
-                cwd: 'public/css',
-                src: ['*.scss'],
-                dest: 'public/css',
-                ext: '.css'
-              }
+              'public/css/style.css': 'public/css/style.scss'
+            }
+          }
         },
         autoprefixer: {
             single_file: {
@@ -49,7 +42,7 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.loadNpmTasks("grunt-contrib-sass");
+    grunt.loadNpmTasks("grunt-sass");
     grunt.loadNpmTasks("grunt-autoprefixer");
     grunt.loadNpmTasks("grunt-browserify");
     grunt.loadNpmTasks("grunt-contrib-watch");
